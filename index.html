@@ -225,6 +225,86 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.freespaceblog.fun/2023/11/24/Transport_Layer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhipeng.qi">
+      <meta itemprop="description" content="我的技术总结">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="但行好事，莫问前程">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/11/24/Transport_Layer/" class="post-title-link" itemprop="url">Transport_Layer</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-11-24 11:50:00 / 修改时间：14:56:47" itemprop="dateCreated datePublished" datetime="2023-11-24T11:50:00+08:00">2023-11-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/network/" itemprop="url" rel="index"><span itemprop="name">network</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/network/%E7%90%86%E8%AE%BA/" itemprop="url" rel="index"><span itemprop="name">理论</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="传输层介绍"><a href="#传输层介绍" class="headerlink" title="传输层介绍"></a>传输层介绍</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>传输层借用下层网络层实现为应用层提供服务。网络层通过IP实现主机到主机的通信，传输层进行接力实现主机到应用的通信；网络层提供数据存在缺陷，传输层在此基础上采取了相关措施提供更高质量的数据传输能力。传输层主要有TCP(有连接，可靠的)协议和UDP(无连接，不可靠)协议。</p>
+<h2 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h2><p>1.进程间的通信<br>我们主机上运行着多个应用进程，传输层需要接收多个进程的报文同时也需要向多个进程传输报文。传输层为能实现这一场景，给每个应用进程都分配了一个唯一端口号（共有256*265个，0~65535）结合IP形成唯一标识用于区分是那个那个主机的应用发送报文，又是那个主机的应用接收报文。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/11/24/Transport_Layer/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://www.freespaceblog.fun/2023/11/21/Network_Layer/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -873,7 +953,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-count">9</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
