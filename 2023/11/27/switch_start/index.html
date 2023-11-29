@@ -265,7 +265,7 @@
 <p><img src="/../images/Switch_start/7.png"></p>
 <p>2、在PC上打开SecureCRTPortable 终端仿真软件，新建连接，设置终端软件的通信参数与设备的缺省值保持一致设置参数分别如下为：传输速率波特率为9600bit&#x2F;s8位数据位1位停止位流控可以适当的进行切换</p>
 <p><img src="/../images/Switch_start/8.png"></p>
-<p>3、交换机连接电源，会自动开机。当出现登录界面的时候输入console口管理密码，华为交换机默认密码为：<a href="mailto:&#x41;&#x64;&#109;&#105;&#x6e;&#64;&#x68;&#117;&#x61;&#119;&#x65;&#x69;&#x2e;&#99;&#x6f;&#109;">&#x41;&#x64;&#109;&#105;&#x6e;&#64;&#x68;&#117;&#x61;&#119;&#x65;&#x69;&#x2e;&#99;&#x6f;&#109;</a></p>
+<p>3、交换机连接电源，会自动开机。当出现登录界面的时候输入console口管理密码，华为交换机默认密码为：<a href="mailto:&#65;&#x64;&#109;&#x69;&#x6e;&#64;&#x68;&#x75;&#97;&#x77;&#x65;&#x69;&#x2e;&#x63;&#x6f;&#109;">&#65;&#x64;&#109;&#x69;&#x6e;&#64;&#x68;&#x75;&#97;&#x77;&#x65;&#x69;&#x2e;&#x63;&#x6f;&#109;</a></p>
 <h4 id="当出现如下状态时请检查console线的连接状态"><a href="#当出现如下状态时请检查console线的连接状态" class="headerlink" title="当出现如下状态时请检查console线的连接状态"></a>当出现如下状态时请检查console线的连接状态</h4><p><img src="/../images/Switch_start/9.png"></p>
 <h4 id="当出现如下状态时显示正常，输入密码可登录到交换机"><a href="#当出现如下状态时显示正常，输入密码可登录到交换机" class="headerlink" title="当出现如下状态时显示正常，输入密码可登录到交换机"></a>当出现如下状态时显示正常，输入密码可登录到交换机</h4><p><img src="/../images/Switch_start/10.png"></p>
 <h3 id="新交换机或者旧交换机跳密码"><a href="#新交换机或者旧交换机跳密码" class="headerlink" title="新交换机或者旧交换机跳密码"></a>新交换机或者旧交换机跳密码</h3><p>疑惑1：交换机的缺省密码都是什么呢？</p>
@@ -286,7 +286,7 @@
 <p>方法二： 通过 BootROM清除Console口密码登录后，修改Console口密码。</p>
 <p>（要是交换机是双主控，小伙伴们就需要在重启交换机之前将备主控板拔下，待按照下面的操作执行完后，将备主控板插上，再执行save操作保证主用主控板和备用主控板配置一致。）</p>
 <p>交换机的BootROM提供了清除Console口密码的功能，可以在用户使用Console口登录的时候跳过密码检查。交换机启动后修改Console口密码，然后保存配置。</p>
-<p>步骤1： 通过Console口连接交换机，然后重启交换机。当出现“Press Ctrl+B to enter Boot Menu…”打印信息时，按下组合键“Ctrl+B”并输入BootROM密码（缺省为“<a href="mailto:&#65;&#x64;&#109;&#x69;&#110;&#x40;&#104;&#x75;&#97;&#x77;&#x65;&#x69;&#x2e;&#99;&#x6f;&#109;">&#65;&#x64;&#109;&#x69;&#110;&#x40;&#104;&#x75;&#97;&#x77;&#x65;&#x69;&#x2e;&#99;&#x6f;&#109;</a>”），进入BootROM主菜单。</p>
+<p>步骤1： 通过Console口连接交换机，然后重启交换机。当出现“Press Ctrl+B to enter Boot Menu…”打印信息时，按下组合键“Ctrl+B”并输入BootROM密码（缺省为“<a href="mailto:&#65;&#100;&#x6d;&#105;&#x6e;&#64;&#104;&#117;&#x61;&#x77;&#101;&#x69;&#46;&#x63;&#x6f;&#x6d;">&#65;&#100;&#x6d;&#105;&#x6e;&#64;&#104;&#117;&#x61;&#x77;&#101;&#x69;&#46;&#x63;&#x6f;&#x6d;</a>”），进入BootROM主菜单。</p>
 <p>步骤2： 在BootROM主菜单下选择“Clear password for console user”清除Console口登录密码。</p>
 <p>步骤3： 根据交换机的提示，在BootROM主菜单下选择“Boot with default mode”启动设备。 (不可以凭自己的想象选择”Reboot”哦，否则此次清除密码将失效。)</p>
 <p>步骤4： 完成系统启动后，通过Console口登录时不需要认证，登录后配置Console口密码，以修改为password认证，并修改密码为“Huawei@123”为例。</p>
@@ -310,7 +310,7 @@
 <p>4、恢复BootROM登录密码</p>
 <p>通过Console口登录交换机重置BootROM密码。</p>
 <p>步骤1： 通过Console口登录交换机。</p>
-<p>步骤2： 在任意视图下使用命令 reset boot password恢复BootROM密码为缺省密码（缺省为<a href="mailto:&#65;&#100;&#109;&#105;&#110;&#x40;&#x68;&#x75;&#x61;&#x77;&#x65;&#x69;&#x2e;&#x63;&#x6f;&#x6d;">&#65;&#100;&#109;&#105;&#110;&#x40;&#x68;&#x75;&#x61;&#x77;&#x65;&#x69;&#x2e;&#x63;&#x6f;&#x6d;</a>）。</p>
+<p>步骤2： 在任意视图下使用命令 reset boot password恢复BootROM密码为缺省密码（缺省为<a href="mailto:&#65;&#x64;&#x6d;&#x69;&#x6e;&#x40;&#104;&#117;&#x61;&#119;&#101;&#105;&#x2e;&#99;&#111;&#x6d;">&#65;&#x64;&#x6d;&#x69;&#x6e;&#x40;&#104;&#117;&#x61;&#119;&#101;&#105;&#x2e;&#99;&#111;&#x6d;</a>）。</p>
 <p>步骤3： 在用户视图下使用命令 reboot重启交换机。</p>
 <p>步骤4： 当重启过程中出现“Press Ctrl+B to enter Boot Menu…”打印信息时，按组合键“Ctrl+B”，输入缺省密码后进入BootROM主菜单。</p>
 <p>步骤5： 在BootROM主菜单下选择“Modify BootROM password”并按照提示修改密码。</p>
@@ -411,7 +411,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-count">15</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
