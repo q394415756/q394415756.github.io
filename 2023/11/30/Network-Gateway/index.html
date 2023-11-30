@@ -23,20 +23,28 @@
     var CONFIG = {"hostname":"www.freespaceblog.fun","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="会话层这一层的东西一般偏向开发，网络工程师可能需要调整的就是一些会话控制的内容，需要写表达式来完成。 会话层是OSI七层模型中的第五层，位于传输层之上，主要负责建立、管理和终止应用程序之间的会话。">
+  <meta name="description" content="网络通讯——网关　　我们上一部分聊了如何在只配置IP地址和子网掩码的情况下搭配vlan进行网络通讯，但是我们实际应用中一般还有一个属性，那就是网关，所以这篇就主要聊一下在有网关的情况下如何实现跨vlan的访问：">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Session_Layer">
-<meta property="og:url" content="https://www.freespaceblog.fun/2023/11/25/Session_Layer/index.html">
+<meta property="og:title" content="Network-Gateway">
+<meta property="og:url" content="https://www.freespaceblog.fun/2023/11/30/Network-Gateway/index.html">
 <meta property="og:site_name" content="但行好事，莫问前程">
-<meta property="og:description" content="会话层这一层的东西一般偏向开发，网络工程师可能需要调整的就是一些会话控制的内容，需要写表达式来完成。 会话层是OSI七层模型中的第五层，位于传输层之上，主要负责建立、管理和终止应用程序之间的会话。">
+<meta property="og:description" content="网络通讯——网关　　我们上一部分聊了如何在只配置IP地址和子网掩码的情况下搭配vlan进行网络通讯，但是我们实际应用中一般还有一个属性，那就是网关，所以这篇就主要聊一下在有网关的情况下如何实现跨vlan的访问：">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-11-25T01:53:00.000Z">
-<meta property="article:modified_time" content="2023-11-25T01:58:16.177Z">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_gateway/1.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_gateway/2.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_gateway/3.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_gateway/4.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_gateway/5.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_gateway/6.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_gateway/7.png">
+<meta property="article:published_time" content="2023-11-30T06:15:00.000Z">
+<meta property="article:modified_time" content="2023-11-30T09:03:42.970Z">
 <meta property="article:author" content="zhipeng.qi">
 <meta property="article:tag" content="network">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.freespaceblog.fun/images/Network_gateway/1.png">
 
-<link rel="canonical" href="https://www.freespaceblog.fun/2023/11/25/Session_Layer/">
+<link rel="canonical" href="https://www.freespaceblog.fun/2023/11/30/Network-Gateway/">
 
 
 <script id="page-configurations">
@@ -49,7 +57,7 @@
   };
 </script>
 
-  <title>Session_Layer | 但行好事，莫问前程</title>
+  <title>Network-Gateway | 但行好事，莫问前程</title>
   
 
 
@@ -165,7 +173,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://www.freespaceblog.fun/2023/11/25/Session_Layer/">
+    <link itemprop="mainEntityOfPage" href="https://www.freespaceblog.fun/2023/11/30/Network-Gateway/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -178,7 +186,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Session_Layer
+          Network-Gateway
         </h1>
 
         <div class="post-meta">
@@ -189,7 +197,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2023-11-25 09:53:00 / 修改时间：09:58:16" itemprop="dateCreated datePublished" datetime="2023-11-25T09:53:00+08:00">2023-11-25</time>
+              <time title="创建时间：2023-11-30 14:15:00 / 修改时间：17:03:42" itemprop="dateCreated datePublished" datetime="2023-11-30T14:15:00+08:00">2023-11-30</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -201,7 +209,11 @@
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/network/%E7%90%86%E8%AE%BA/" itemprop="url" rel="index"><span itemprop="name">理论</span></a>
+                  <a href="/categories/network/%E5%AE%9E%E6%93%8D/" itemprop="url" rel="index"><span itemprop="name">实操</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/network/%E5%AE%9E%E6%93%8D/SWITCH/" itemprop="url" rel="index"><span itemprop="name">SWITCH</span></a>
                 </span>
             </span>
 
@@ -223,21 +235,28 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="会话层"><a href="#会话层" class="headerlink" title="会话层"></a>会话层</h1><p>这一层的东西一般偏向开发，网络工程师可能需要调整的就是一些会话控制的内容，需要写表达式来完成。</p>
-<p>会话层是OSI七层模型中的第五层，位于传输层之上，主要负责建立、管理和终止应用程序之间的会话。</p>
+        <h1 id="网络通讯——网关"><a href="#网络通讯——网关" class="headerlink" title="网络通讯——网关"></a>网络通讯——网关</h1><p>　　我们上一部分聊了如何在只配置IP地址和子网掩码的情况下搭配vlan进行网络通讯，但是我们实际应用中一般还有一个属性，那就是网关，所以这篇就主要聊一下在有网关的情况下如何实现跨vlan的访问：</p>
 <span id="more"></span>
-<h2 id="会话层的主要任务包括："><a href="#会话层的主要任务包括：" class="headerlink" title="会话层的主要任务包括："></a>会话层的主要任务包括：</h2><p>会话管理：会话层负责建立、管理和终止应用程序之间的会话。它提供会话的开始和结束控制，包括会话的建立、认证、维护和关闭等。</p>
-<p>同步：会话层提供同步机制，以确保应用程序之间的数据交换和通信按照正确的顺序进行。它可以在数据流中插入同步点，以便在接收端正确解析和处理数据。</p>
-<p>对话控制：会话层支持应用程序之间的对话控制。它可以定义对话规则和协议，如请求-应答模式、双向通信等，以确保应用程序之间的交互是有序、可靠的。</p>
-<p>会话恢复：会话层提供会话的恢复机制，在会话中断或失败的情况下，能够恢复到之前的状态，以便应用程序能够继续进行数据交换和通信。</p>
-<p>安全性和身份验证：会话层可以提供安全性和身份验证的功能，确保会话中的数据传输和通信是安全的，防止未经授权的访问和数据泄露。</p>
-<h2 id="底层原理是指会话层实现这些任务的基本原理和技术。以下是会话层的底层原理："><a href="#底层原理是指会话层实现这些任务的基本原理和技术。以下是会话层的底层原理：" class="headerlink" title="底层原理是指会话层实现这些任务的基本原理和技术。以下是会话层的底层原理："></a>底层原理是指会话层实现这些任务的基本原理和技术。以下是会话层的底层原理：</h2><p>会话标识：会话层使用会话标识符来唯一标识和管理会话。会话标识可以通过协议的握手过程或会话开始命令来确定，并在会话期间进行传输和验证。</p>
-<p>同步点：会话层在数据流中插入同步点，以确保接收端按照正确的顺序解析和处理数据。同步点可以是特定的数据标识、控制信息或应用程序定义的同步信号。</p>
-<p>对话协议：会话层可以定义对话规则和协议，以确保应用程序之间的交互是有序和可靠的。对话协议可以包括请求-应答模式、双向通信、并行会话等。</p>
-<p>会话恢复：会话层可以提供会话的恢复机制，在会话中断或失败的情况下，能够恢复到之前的状态。这可以通过保存会话状态信息、重连或重新建立会话来实现。</p>
-<p>安全性和身份验证：会话层可以实现安全性和身份验证的机制，如加密、数字签名、证书认证等，以确保会话中的数据传输和通信是安全的，防止未经授权的访问和数据泄露。</p>
-<p>综上所述，会话层主要负责会话的管理、同步、对话控制、会话恢复以及安全性和身份验证等任务，为应用程序提供可靠的会话和交互功能。</p>
-<h2 id="常见的会话层协议"><a href="#常见的会话层协议" class="headerlink" title="常见的会话层协议"></a>常见的会话层协议</h2><p>ADSP：AppleTalk的数据流协议<br>ASP：AppleTalk的动态会话协议<br>H.245, Call Control Protocol for Multimedia Communication<br>ISO-SP, OSI Session Layer Protocol（X.225, ISO 8327）<br>iSNS, Internet Storage Name Service<br>NetBIOS<br>PAP, 密码认证协议<br>PPTP, 点对点隧道协议<br>L2TP, 第二层隧道协议<br>RPC, 远程过程调用<br>RTCP, 实时传输控制协议<br>SMPP, Short Message Peer-to-Peer<br>ZIP, Zone Information Protocol<br>SDP, 套接字直接协议<br>SOCKS</p>
+
+<center>
+  <img src="/images/Network_gateway/1.png" style="margin-bottom: 5px;">
+  <div style="color:orange; border-bottom: 1px solid #d9d9d9; display: inline-block; color: #999; padding: 2px; margin-top: 1px;">
+    网络配置示意图
+  </div>
+</center>
+
+<p>　　这里有个理解就是我们在网络通讯的时候为什么一定要网关，当时有一位大佬是这样给我讲的，参考下图：</p>
+<p><img src="/../images/Network_gateway/2.png"></p>
+<p>　　哈哈，就是下面小弟办事不好使的时候就要找大佬，然后让大佬出门面去沟通。同理的如果一个网段内没有找到我们想要的IP地址，那就要去找网关来帮忙去问问目的地址的信息，包括一些网络安全管理的设备也是基于网关或者网段去管理，通常来讲同网段的网络是不受限制的，当然如果在软件层面（分布式防火墙NSX）有做限制的情况例外。<br>　　这里有个情况就是网关到底配置在什么地方和用哪个IP，这个问题我想了很久，实际自己做一次以后就清楚了，网关的地址可以配置在任何一个三层交换机或者路由器上，当然一些功能多的防火墙也是可以的，这样的话就可以对所有的网络做到一个监管的功能，但是所有的上行访问都会来找，如果忙不过来就会出问题，（想想你让陈浩南天天去收保护费还怎么做洪兴扛把子，早晚得累死。）所以前期对于整个网络架构的上下行带宽要有一个初步的估算，然后确认架构的分配。</p>
+<h2 id="实验一-交换机做网关配置"><a href="#实验一-交换机做网关配置" class="headerlink" title="实验一 交换机做网关配置"></a>实验一 交换机做网关配置</h2><p>实验需求：实验的拓扑如下图，PC1、PC2、PC3、PC4连接同一台交换机，PC1、PC2的人属于同一个部门（如销售部）并且属于192.168.10.0&#x2F;24，PC3、PC4的人属于同一个部门（财务部）并且属于192.168.20.0&#x2F;24，在配置好网关地址以后可以进行互相访问。</p>
+<p><img src="/images/Network_gateway/3.png"></p>
+<p>在配置好IP地址后，由于所有的PC都连接了同一个交换机，在没有配置vlan的情况下，所有的机器都在默认的vlan1下，所以PC和PC2在一个网段，是可以直接ping通的，但是PC3、PC4和PC1不是一个网段的，所以就会找上行的网关地址，从抓包信息上我们能看到有个arp的询问192.168.10.254地址的信息。</p>
+<p><img src="/images/Network_gateway/4.png"></p>
+<h3 id="二层交换机配置计划"><a href="#二层交换机配置计划" class="headerlink" title="二层交换机配置计划"></a>二层交换机配置计划</h3><p><img src="/images/Network_gateway/5.png"></p>
+<p>这里有个反逻辑的点，就是为什么一定要配置vlan。因为如果是一个二层的设备，是不具备三层的转发功能的，所以需要使用一个虚拟接口来替代，也就是使用vlanif接口来配置网关，然后把PC加到对应的vlan中，后面我们会演示三层交换机的配置</p>
+<h3 id="配置过程"><a href="#配置过程" class="headerlink" title="配置过程"></a>配置过程</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">system-view </span><br><span class="line">#创建vlan</span><br><span class="line">[switch]vlan batch 10 20</span><br><span class="line">#创建网关</span><br><span class="line">[switch]interface vlanif 10	</span><br><span class="line">[switch-Vlanif10]undo shutdown </span><br><span class="line">Info: Interface Vlanif10 is not shutdown.</span><br><span class="line">[switch-Vlanif10]ip address 192.168.10.254 255.255.255.0</span><br><span class="line">[switch-Vlanif10]quit</span><br><span class="line">[switch]interface vlanif 20</span><br><span class="line">[switch-Vlanif20]undo shutdown</span><br><span class="line">Info: Interface Vlanif20 is not shutdown.</span><br><span class="line">[switch-Vlanif20]ip address 192.168.20.254 255.255.255.0</span><br><span class="line">[switch-Vlanif20]q</span><br><span class="line">#绑定接口</span><br><span class="line">[switch]interface g0/0/1</span><br><span class="line">[switch-GigabitEthernet0/0/1]port link-type access </span><br><span class="line">[switch-GigabitEthernet0/0/1]port default vlan 10</span><br><span class="line">[switch]interface g0/0/2</span><br><span class="line">[switch-GigabitEthernet0/0/2]port link-type access </span><br><span class="line">[switch-GigabitEthernet0/0/2]port default vlan 10</span><br><span class="line">[switch-GigabitEthernet0/0/2]q</span><br><span class="line">[switch]interface g0/0/3</span><br><span class="line">[switch-GigabitEthernet0/0/3]port link-type access </span><br><span class="line">[switch-GigabitEthernet0/0/3]port default vlan 20</span><br><span class="line">[switch-GigabitEthernet0/0/3]q</span><br><span class="line">[switch]interface g0/0/4</span><br><span class="line">[switch-GigabitEthernet0/0/4]port link-type access </span><br><span class="line">[switch-GigabitEthernet0/0/4]port default vlan 20</span><br><span class="line">display  vlan</span><br></pre></td></tr></table></figure>
+
+<h3 id="结果验证"><a href="#结果验证" class="headerlink" title="结果验证"></a>结果验证</h3><p>ping测试效果<br><img src="/images/Network_gateway/6.png"><br>ping同时抓包效果<br><img src="/images/Network_gateway/7.png"><br>可以看到PC1在对同网段和跨网段发出的ARP是不一样的，同网段就是直接问那个机器是谁，跨网段就是问网关是谁。</p>
 
     </div>
 
@@ -256,13 +275,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2023/11/24/Transport_Layer/" rel="prev" title="Transport_Layer">
-      <i class="fa fa-chevron-left"></i> Transport_Layer
+    <a href="/2023/11/29/%E5%8D%9A%E5%AE%A2%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E5%AE%89%E8%A3%85/" rel="prev" title="博客管理工具安装">
+      <i class="fa fa-chevron-left"></i> 博客管理工具安装
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2023/11/25/Presentation_Layer/" rel="next" title="Presentation_Layer">
-      Presentation_Layer <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -322,7 +338,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BC%9A%E8%AF%9D%E5%B1%82"><span class="nav-number">1.</span> <span class="nav-text">会话层</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%9A%E8%AF%9D%E5%B1%82%E7%9A%84%E4%B8%BB%E8%A6%81%E4%BB%BB%E5%8A%A1%E5%8C%85%E6%8B%AC%EF%BC%9A"><span class="nav-number">1.1.</span> <span class="nav-text">会话层的主要任务包括：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%E6%98%AF%E6%8C%87%E4%BC%9A%E8%AF%9D%E5%B1%82%E5%AE%9E%E7%8E%B0%E8%BF%99%E4%BA%9B%E4%BB%BB%E5%8A%A1%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86%E5%92%8C%E6%8A%80%E6%9C%AF%E3%80%82%E4%BB%A5%E4%B8%8B%E6%98%AF%E4%BC%9A%E8%AF%9D%E5%B1%82%E7%9A%84%E5%BA%95%E5%B1%82%E5%8E%9F%E7%90%86%EF%BC%9A"><span class="nav-number">1.2.</span> <span class="nav-text">底层原理是指会话层实现这些任务的基本原理和技术。以下是会话层的底层原理：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84%E4%BC%9A%E8%AF%9D%E5%B1%82%E5%8D%8F%E8%AE%AE"><span class="nav-number">1.3.</span> <span class="nav-text">常见的会话层协议</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E9%80%9A%E8%AE%AF%E2%80%94%E2%80%94%E7%BD%91%E5%85%B3"><span class="nav-number">1.</span> <span class="nav-text">网络通讯——网关</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E4%B8%80-%E4%BA%A4%E6%8D%A2%E6%9C%BA%E5%81%9A%E7%BD%91%E5%85%B3%E9%85%8D%E7%BD%AE"><span class="nav-number">1.1.</span> <span class="nav-text">实验一 交换机做网关配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E5%B1%82%E4%BA%A4%E6%8D%A2%E6%9C%BA%E9%85%8D%E7%BD%AE%E8%AE%A1%E5%88%92"><span class="nav-number">1.1.1.</span> <span class="nav-text">二层交换机配置计划</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E8%BF%87%E7%A8%8B"><span class="nav-number">1.1.2.</span> <span class="nav-text">配置过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C%E9%AA%8C%E8%AF%81"><span class="nav-number">1.1.3.</span> <span class="nav-text">结果验证</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -472,7 +488,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo        : 'q394415756.github.io',
       owner       : 'q394415756',
       admin       : ['q394415756'],
-      id          : 'b9cf4b996bb55983ac066cf3c8a42438',
+      id          : 'de1faa1a3ab3a294726baa3c051224e0',
         language: 'zh-CN',
       distractionFreeMode: true
     });
