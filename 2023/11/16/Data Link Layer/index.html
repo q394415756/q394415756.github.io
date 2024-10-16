@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.freespaceblog.fun","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="数据链路层物理层控制传输介质和基础的电路信号，数据链路层开始控制通讯的基础信息，例如我们的蓝牙通讯是一种无线个人局域网技术，它在协议栈中包含了数据链路层和物理层。数据链路层负责在蓝牙设备之间建立、维持和断开连接，以及传输数据和语音。数据链路层又分为两个子层：逻辑链路控制和适配协议（L2CAP）和链路管理协议（LMP）。L2CAP提供了数据分段、重组和多路复用的功能，LMP负责配对、认证、加密和功率">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Data_Link_Layer">
+<meta property="og:url" content="https://www.freespaceblog.fun/2023/11/16/Data%20Link%20Layer/index.html">
+<meta property="og:site_name" content="但行好事，莫问前程">
+<meta property="og:description" content="数据链路层物理层控制传输介质和基础的电路信号，数据链路层开始控制通讯的基础信息，例如我们的蓝牙通讯是一种无线个人局域网技术，它在协议栈中包含了数据链路层和物理层。数据链路层负责在蓝牙设备之间建立、维持和断开连接，以及传输数据和语音。数据链路层又分为两个子层：逻辑链路控制和适配协议（L2CAP）和链路管理协议（LMP）。L2CAP提供了数据分段、重组和多路复用的功能，LMP负责配对、认证、加密和功率">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Data_Link_Layer/1.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Data_Link_Layer/2.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Data_Link_Layer/3.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Data_Link_Layer/4.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Data_Link_Layer/5.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Data_Link_Layer/6.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Data_Link_Layer/7.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Data_Link_Layer/8.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Data_Link_Layer/9.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Data_Link_Layer/10.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Data_Link_Layer/11.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Data_Link_Layer/12.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Data_Link_Layer/13.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Data_Link_Layer/14.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Data_Link_Layer/15.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Data_Link_Layer/16.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Data_Link_Layer/17.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Data_Link_Layer/18.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Data_Link_Layer/19.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Data_Link_Layer/20.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Data_Link_Layer/21.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Data_Link_Layer/22.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Data_Link_Layer/23.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Data_Link_Layer/24.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Data_Link_Layer/25.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Data_Link_Layer/26.png">
+<meta property="article:published_time" content="2023-11-16T06:55:00.000Z">
+<meta property="article:modified_time" content="2024-09-17T02:34:32.574Z">
+<meta property="article:author" content="zhipeng.qi">
+<meta property="article:tag" content="network">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.freespaceblog.fun/images/Data_Link_Layer/1.png">
+
+
+<link rel="canonical" href="https://www.freespaceblog.fun/2023/11/16/Data%20Link%20Layer/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://www.freespaceblog.fun/2023/11/16/Data%20Link%20Layer/","path":"2023/11/16/Data Link Layer/","title":"Data_Link_Layer"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Data_Link_Layer | 但行好事，莫问前程</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">但行好事，莫问前程</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82"><span class="nav-number">1.</span> <span class="nav-text">数据链路层</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A5%E5%A4%AA%E5%B8%A7%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.1.</span> <span class="nav-text">以太帧格式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Ethernet-II%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.1.1.</span> <span class="nav-text">Ethernet II格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Netware%E4%BB%A5%E5%A4%AA%E5%B8%A7%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.1.2.</span> <span class="nav-text">Netware以太帧格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#802-3-SAP%E4%BB%A5%E5%A4%AA%E5%B8%A7%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.1.3.</span> <span class="nav-text">802.3 SAP以太帧格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IEEE-802-3-LLC-SNAP-%E4%BB%A5%E5%A4%AA%E5%B8%A7%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.1.4.</span> <span class="nav-text">IEEE 802.3 LLC SNAP 以太帧格式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vlan%E5%B8%A7%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.2.</span> <span class="nav-text">vlan帧格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#QinQ"><span class="nav-number">1.3.</span> <span class="nav-text">QinQ</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VXLAN"><span class="nav-number">1.4.</span> <span class="nav-text">VXLAN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PPP%E5%8D%8F%E8%AE%AE"><span class="nav-number">1.5.</span> <span class="nav-text">PPP协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PPPoE%E5%8D%8F%E8%AE%AE"><span class="nav-number">1.6.</span> <span class="nav-text">PPPoE协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HDLC%E5%8D%8F%E8%AE%AE"><span class="nav-number">1.7.</span> <span class="nav-text">HDLC协议</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhipeng.qi</p>
+  <div class="site-description" itemprop="description">我的技术总结</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.freespaceblog.fun/2023/11/16/Data%20Link%20Layer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhipeng.qi">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="但行好事，莫问前程">
+      <meta itemprop="description" content="我的技术总结">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Data_Link_Layer | 但行好事，莫问前程">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Data_Link_Layer
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-11-16 14:55:00" itemprop="dateCreated datePublished" datetime="2023-11-16T14:55:00+08:00">2023-11-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-09-17 10:34:32" itemprop="dateModified" datetime="2024-09-17T10:34:32+08:00">2024-09-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/network/" itemprop="url" rel="index"><span itemprop="name">network</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/network/%E7%90%86%E8%AE%BA/" itemprop="url" rel="index"><span itemprop="name">理论</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+           
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="数据链路层"><a href="#数据链路层" class="headerlink" title="数据链路层"></a>数据链路层</h1><p>物理层控制传输介质和基础的电路信号，数据链路层开始控制通讯的基础信息，例如我们的蓝牙通讯是一种无线个人局域网技术，它在协议栈中包含了数据链路层和物理层。数据链路层负责在蓝牙设备之间建立、维持和断开连接，以及传输数据和语音。数据链路层又分为两个子层：逻辑链路控制和适配协议（L2CAP）和链路管理协议（LMP）。L2CAP提供了数据分段、重组和多路复用的功能，LMP负责配对、认证、加密和功率控制等功能。</p>
+<p>同样的原理，有很多个协议也是工作在数据链路层，例如 以太帧格式 MPLS（2.5层） VLAN QinQ PPPoE PPP HDLC FR PPPoA PPPoEoA LACP RPR RRPP ERPS LLDP STP&#x2F;RSTP&#x2F;MSTP IS-IS等等<br>后边我们会挨个进行介绍</p>
+<span id="more"></span>
+<h2 id="以太帧格式"><a href="#以太帧格式" class="headerlink" title="以太帧格式"></a>以太帧格式</h2><p>以太帧格式是指以太网链路层传输的数据包的结构，它包括以下几个部分：</p>
+<pre><code>前导码和帧开始符：用于标识帧的开始，前导码由7个字节的0和1交替变换的码流组成，帧开始符为1个字节的10101011。
+
+目的地址和源地址：分别为6个字节的MAC地址，表示帧的发送者和接收者。
+
+类型或长度：2个字节，表示帧的协议类型或数据字段的长度。
+
+数据和填充：46到1500个字节，表示帧的有效载荷，如果不足46个字节则用0填充。
+
+帧校验序列：4个字节，表示帧的CRC校验码，用于检测传输错误。
+
+以太帧格式有四种标准，一种是Ethernet II格式，一种是IEEE 802.3 LLC SNAP 以太帧格式，一种是Netware以太帧格式，一种是802.3 SAP以太帧格式
+</code></pre>
+<h3 id="Ethernet-II格式"><a href="#Ethernet-II格式" class="headerlink" title="Ethernet II格式"></a>Ethernet II格式</h3><p><img src="/../images/Data_Link_Layer/1.png"></p>
+<p><img src="/../images/Data_Link_Layer/2.png"></p>
+<p><img src="/../images/Data_Link_Layer/3.png"></p>
+<h3 id="Netware以太帧格式"><a href="#Netware以太帧格式" class="headerlink" title="Netware以太帧格式"></a>Netware以太帧格式</h3><p><img src="/../images/Data_Link_Layer/4.png"></p>
+<h3 id="802-3-SAP以太帧格式"><a href="#802-3-SAP以太帧格式" class="headerlink" title="802.3 SAP以太帧格式"></a>802.3 SAP以太帧格式</h3><p><img src="/../images/Data_Link_Layer/5.png"></p>
+<p><img src="/../images/Data_Link_Layer/6.png"></p>
+<h3 id="IEEE-802-3-LLC-SNAP-以太帧格式"><a href="#IEEE-802-3-LLC-SNAP-以太帧格式" class="headerlink" title="IEEE 802.3 LLC SNAP 以太帧格式"></a>IEEE 802.3 LLC SNAP 以太帧格式</h3><p><img src="/../images/Data_Link_Layer/7.png"></p>
+<p><img src="/../images/Data_Link_Layer/8.png"></p>
+<p>这几种帧上层的协议的分类取决于它们的类型字段或长度字段的值。一般来说，有以下几种情况：</p>
+<p>如果类型字段的值大于或等于0x0600（十进制1536），则表示该帧是Ethernet II格式，上层的协议由类型字段指定。例如，0x0800表示IP协议，0x0806表示ARP协议，0x86DD表示IPv6协议等。12<br>如果长度字段的值小于或等于0x05DC（十进制1500），则表示该帧是IEEE 802.3格式，上层的协议由LLC&#x2F;SNAP子头部或LLC&#x2F;SAP子头部指定。<br>如果LLC&#x2F;SNAP子头部存在，且组织代码为0x000000，则表示该帧是Netware以太帧格式，上层的协议由SNAP类型字段指定。例如，0x8137表示IPX协议，0x80F3表示AppleTalk协议等。<br>如果LLC&#x2F;SNAP子头部存在，且组织代码不为0x000000，则表示该帧是IEEE 802.3 LLC SNAP格式，上层的协议由组织代码和SNAP类型字段共同指定。例如，0x0000000800表示IP协议，0x00000086DD表示IPv6协议等。<br>如果LLC&#x2F;SNAP子头部不存在，且LLC&#x2F;SAP子头部存在，则表示该帧是802.3 SAP以太帧格式，上层的协议由DSAP和SSAP字段共同指定。例如，0x06和0x06表示IP协议，0xAA和0xAA表示SNAP协议等。</p>
+<p>由于前期美国的网络公司各家都发布自己的产品，所以从以太帧格式这里开始就有了一些区别，后边的网络层协议也有一些区别，虽然有兼容性的补充，但是还是有这个区别。</p>
+<h2 id="vlan帧格式"><a href="#vlan帧格式" class="headerlink" title="vlan帧格式"></a>vlan帧格式</h2><p>也叫 802.1Q Tag</p>
+<p><img src="/../images/Data_Link_Layer/9.png"></p>
+<p>vlan是我们做网络经常 遇到的一个东西，在网络排障，网段通讯时候经常会遇到，vlan是一个二层的协议，通过在帧上打tag的方式来实现数据链路层的通讯，所以vlan的管理是要比IP或者端口的模式更加底层。</p>
+<h2 id="QinQ"><a href="#QinQ" class="headerlink" title="QinQ"></a>QinQ</h2><p><img src="/../images/Data_Link_Layer/10.png"></p>
+<p>在vlan的tag上再打一层tag</p>
+<p>QinQ技术最初主要是为拓展VLAN的数量空间而产生的，它是在原有的802.1Q报文的基础上又增加一层802.1Q标签实现的，使VLAN数量增加到4K×4K。随着城域以太网的发展以及运营商精细化运作的要求，QinQ的双层标签又有了进一步的使用场景，它的内外层标签可以代表不同的信息，如内层标签代表用户，外层标签代表业务。另外，QinQ报文带着两层tag穿越运营商网络，内层tag透明传送，也是一种简单、实用的VPN技术，因此它又可以作为核心MPLSVPN在城域以太网VPN的延伸，最终形成端到端的VPN技术。</p>
+<h2 id="VXLAN"><a href="#VXLAN" class="headerlink" title="VXLAN"></a>VXLAN</h2><p>VLAN（虚拟局域网）技术使用户可以不受距离和物理位置的限制进行通信，极大地简化了网络管理。然而，随着设备和用户数量的大规模增长，由于可扩展性有限，最多只能支持 4094 个 VLAN，以及对可用网络链路的使用效率低下，VLAN 已不能满足日益增长的网络规模需求。<br>于是VXLAN（虚拟可扩展局域网）和QinQ技术应运而生。</p>
+<p>在这篇文章中，将对这三种技术进行说明和比较。</p>
+<p>VLAN、VXLAN、QinQ概述<br><strong>VLAN</strong><br>VLAN 是一种将网络划分为多个广播域的技术。在每个广播域中，用户之间可以自由交流。对于不同 VLAN 之间的连接，VLAN Tagging 和 VLAN 间路由是用户必须知道的两个必要术语。</p>
+<p>VLAN 标记是在帧通过 VLAN 中继端口时在帧中添加一个特殊的标记，允许来自不同 VLAN 的帧通过。其标记方法之一是 IEEE 802.1Q。在 CLI 和 Web 用户界面中，VLAN 配置简单易行。</p>
+<p><strong>QinQ</strong><br>QinQ 也称为堆叠 VLAN 或双 VLAN，由 IEEE 802.1ad 标准化。</p>
+<p>它将VLAN标签封装成两层——私有网络的内层标签和公网的外层标签。</p>
+<p>随着网络中用户的增加，需要大量的 VLAN ID。使用 IEEE 802.1Q 的传统 VLAN 标记无法识别和隔离扩展城域以太网工作中的用户数据。</p>
+<p>因此使用QinQ将VLAN号扩展至4096×4096，可以有效节省公网VLAN ID。</p>
+<p>QinQ 数据包具有固定的格式。通常一个带有 802.11Q 标记的数据包被封装在另一个 802.1Q 标记中，这就是“QinQ”这个名字的由来。</p>
+<p>在传输过程中，报文根据公网外层的VLAN Tag进行转发。</p>
+<p>内层 VLAN 标记被视为也在公共网络上传输的数据。使用这种双标记形式，QinQ 数据包比普通的 802.1Q VLAN 标记数据包多四个字节。</p>
+<p><img src="/../images/Data_Link_Layer/11.png"><br>有两种 QinQ 实现方式:</p>
+<p>基本 QinQ<br>选择性 QinQ。<br>Basic QinQ 是一种基于端口的标记方式。当数据包到达启用了 VLAN VPN 的接口时，交换机将使用其默认 VLAN 标签标记数据包。传入的数据包是否被标记并不重要。如果它已被标记，那么它将具有双 VLAN 标记；如果没有，它将有一个带有交换机端口的 VLAN 标记。</p>
+<p>选择性QinQ 拥有基本QinQ 的功能，但更灵活。它可以根据MAC地址、IP协议、源IP地址和VLAN标签识别数据包的内层VLAN标签，然后确定应该添加哪个标签。</p>
+<p><strong>VXLAN</strong><br>VXLAN，也称为虚拟可扩展局域网，旨在通过使用 MAC 地址用户数据报协议 (MAC-in-UDP) 封装在第 3 层网络之上提供第 2 层覆盖网络。</p>
+<p>简单来说，VXLAN 可以提供与 VLAN 相同的服务，但具有更大的可扩展性和灵活性。与 QinQ 类似，VXLAN 报文也具有相对固定的格式。</p>
+<p>使用 VXLAN MAC-in-UDP 封装，原始数据包将添加到 VXLAN 标头中，然后放入 UDP-IP 数据包中。这是一个简单的说明。</p>
+<p>VXLAN 头：它由一个 24 位的 VNID 组成，用于标识第 2 层段并保持段之间的第 2 层隔离。</p>
+<p>VNID 中的所有 24 位定义了 VXLAN 可以支持的最多 1600 万个 LAN 段数。</p>
+<p><img src="/../images/Data_Link_Layer/12.png"></p>
+<p>外层 UDP 头：VTEP（VXLAN 隧道端点）在 UDP 头中分配源端口，目的端口通常是 UDP 端口 4789。</p>
+<p>外层IP头：它有一个源VETP的源IP地址与内层帧源相关联。</p>
+<p>外部以太网报头：外部以太网报头具有与内部帧源相关联的 VTEP 的源 MAC 地址。</p>
+<p>QinQ vs VLAN vs VXLAN：有什么区别？<br>VLAN 已被用于解决不同的问题，例如第 2 层网络隔离、泛洪和作为路由接口。VLAN支持功能现已在以太网交换机、路由器和防火墙等大多数系统和网络设备中提供。</p>
+<p>但是，本文中的比较主要集中在 VLAN 标记上。要实现不同VLAN之间的通信，VLAN Tagging是必不可少的一环。</p>
+<p>如上所述，VLAN 标记使用协议 IEEE 802.1Q 或 ISL（交换机间链路）来标记流经不同 VLAN 的帧。</p>
+<p>使用此方法标记的帧只有一个标记。但是，与 VLAN 相比，QinQ 技术更加灵活。</p>
+<p>一方面，它可以选择性地为传入的帧或数据包添加标签。</p>
+<p>另一方面，外层 VLAN 标记解决了 VLAN ID 受限的问题。并且独特的内部标签避免了私有 VLAN ID 和公共 VLAN ID 之间的冲突，为小型或大型企业网络提供了一个简单的第 2 层 VPN 解决方案。</p>
+<p><img src="/../images/Data_Link_Layer/13.png"></p>
+<p>注：VLAN 属于公网。</p>
+<p>在VXLAN方面，它在一定程度上提供了与QinQ相同的功能，但它的工作层更具可扩展性。</p>
+<p>VXLAN 通过 MAC-in-UDP 封装数据包，极大地扩展了二层网络。众所周知，随着云计算的进步，租户对网络建设的要求越来越高，尤其是虚拟化数据中心，更加需要二层网络。</p>
+<p>MAC-in-UDP 支持使用 24 位 VIND，这允许数据中心容纳多个租户并打破物理距离限制和部署。</p>
+<p>这就是为什么近年来 VXLAN 在云计算和虚拟化数据中心中变得越来越流行的原因。但是，与 VLAN 和 QinQ 相比，VXLAN 技术更加昂贵和复杂。因此，并非所有 VLAN 交换机都支持此功能。</p>
+<p>结论<br>随着VLAN技术和2&#x2F;3层网络的快速发展，必然会出现更多更高的网络管理技术。</p>
+<p>与 QinQ 和 VXLAN 一样，并非所有技术都是平等创建的。它们都是为解决当前问题而生的，将为今天和未来的网络带来更多便利。</p>
+<h2 id="PPP协议"><a href="#PPP协议" class="headerlink" title="PPP协议"></a>PPP协议</h2><p><img src="/../images/Data_Link_Layer/14.png"></p>
+<p><img src="/../images/Data_Link_Layer/15.png"></p>
+<p>PPP 协议的特点<br>我们知道，互联网用户通常都要连接到某个 ISP 才能接入到互联网。 PPP 协议就是用户计算机和 ISP 进行通信时所使用的数据链路层协议（下图）。</p>
+<p><img src="/../images/Data_Link_Layer/16.png"></p>
+<p>用户到 ISP 的链路使用 PPP 协议<br>PPP 协议是 IETF 在 1992 年制定的。经过 1993 年和 1994 年的修订，现在的 PPP 协议在 1994 年就已成为互联网的正式标准。</p>
+<p>1.1 PPP 协议应满足的需求<br>IETF 认为，在设计 PPP 协议时必须考虑以下多方面的需求：</p>
+<p>（1）简单， IETF 在设计互联网体系结构时把其中最复杂的部分放在 TCP 协议中，而网际协议 IP 则相对比较简单，它提供的是不可靠的数据报服务。在这种情况下，数据链路层没有必要提供比 IP 协议更多的功能。因此，对数据链路层的帧，不需要纠错，不需要序号，也不需要流量控制。 IETF 把“简单”作为首要的需求。</p>
+<p>简单的设计还可使协议在实现时不容易出错，从而使不同厂商在协议的不同实现上的互操作性提高了。我们知道，协议标准化的一个主要目的就是提高协议的互操作性。</p>
+<p>总之，这种数据链路层的协议非常简单：接收方每收到一个帧，就进行 CRC 检验。如CRC 检验正确，就收下这个帧；反之，就丢弃这个帧， 其他什么也不做。</p>
+<p>（2）封装成帧， PPP 协议必须规定特殊的字符作为帧定界符（即标志一个帧的开始和结束的字符），以便使接收端从收到的比特流中能准确地找出帧的开始和结束位置。</p>
+<p>（3）透明性， PPP 协议必须保证数据传输的透明性。这就是说，如果数据中碰巧出现了和帧定界符一样的比特组合时，就要采取有效的措施来解决这个问题</p>
+<p>（4）多种网络层协议， PPP 协议必须能够在在同一条物理链路上同时支持多种网络层协议（如 IP 和 IPX 等）的运行。当点对点链路所连接的是局域网或路由器时， PPP 协议必须同时支持在链路所连接的局域网或路由器上运行的各种网络层协议。</p>
+<p>（5）多种类型链路， 除了要支持多种网络层的协议外， PPP 还必须能够在多种类型的链路上运行。例如，串行的（一次只发送一个比特）或并行的（一次并行地发送多个比特），同步的或异步的，低速的或高速的，电的或光的，交换的（动态的）或非交换的（静态的）点对点链路。</p>
+<p>（6）差错检测(error detection)， PPP 协议必须能够对接收端收到的帧进行检测，并立即丢弃有差错的帧。若在数据链路层不进行差错检测，那么已出现差错的无用帧就还要在网络中继续向前转发，因而会白白浪费许多的网络资源。</p>
+<p>（7）检测连接状态， PPP 协议必须具有一种机制能够及时（不超过几分钟）自动检测出链路是否处于正常工作状态。当出现故障的链路隔了一段时间后又重新恢复正常工作时，就特别需要有这种及时检测功能。</p>
+<p>（8）最大传送单元， PPP 协议必须对每一种类型的点对点链路设置最大传送单元MTU 的标准默认值 ①。这样做是为了促进各种实现之间的互操作性。如果高层协议发送的分组过长并超过 MTU 的数值， PPP 就要丢弃这样的帧，并返回差错。需要强调的是， MTU是数据链路层的帧可以载荷的数据部分的最大长度，而不是帧的总长度。</p>
+<p>（9）网络层地址协商， PPP 协议必须提供一种机制使通信的两个网络层（例如，两个IP 层）的实体能够通过协商知道或能够配置彼此的网络层地址。协商的算法应尽可能简单，并且能够在所有的情况下得出协商结果。这对拨号连接的链路特别重要，因为如果仅仅在链路层建立了连接而不知道对方网络层地址，则还不能够保证网络层可以传送分组。</p>
+<p>（10）数据压缩协商， PPP 协议必须提供一种方法来协商使用数据压缩算法。但 PPP协议并不要求将数据压缩算法进行标准化。</p>
+<p>在 TCP&#x2F;IP 协议族中，可靠传输由运输层的 TCP 协议负责，因此数据链路层的 PPP 协议不需要进行纠错，不需要设置序号，也不需要进行流量控制。 PPP 协议不支持多点线路（即一个主站轮流和链路上的多个从站进行通信），而只支持点对点的链路通信。此外，PPP 协议只支持全双工链路。</p>
+<p>1.2 PPP 协议的组成<br>PPP 协议有三个组成部分：</p>
+<p>（1）一个将 IP 数据报封装到串行链路的方法。 PPP 既支持异步链路（无奇偶检验的 8 比特数据），也支持面向比特的同步链路。 IP 数据报在 PPP 帧中就是其信息部分。这个信息部分的长度受最大传送单元 MTU 的限制。</p>
+<p>（2）一个用来建立、配置和测试数据链路连接的链路控制协议 LCP (Link ControlProtocol)。通信的双方可协商一些选项。在 RFC 1661 中定义了 11 种类型的 LCP 分组。</p>
+<p>（3）一套网络控制协议 NCP (Network Control Protocol)②，其中的每一个协议支持不同的网络层协议，如 IP、 OSI 的网络层、 DECnet，以及 AppleTalk 等。</p>
+<p>二、PPP 协议的帧格式<br>2.1 各字段的意义<br>PPP 的帧格式如下图所示。 PPP 帧的首部和尾部分别为四个字段和两个字段。</p>
+<p>首部的第一个字段和尾部的第二个字段都是标志字段 F (Flag)，规定为 0x7E（符号“ 0x ” 表 示它 后 面 的 字符 是 用 十 六进 制 表 示 的。 十 六 进 制的 7E 的 二进 制 表 示是01111110）。标志字段表示一个帧的开始或结束。因此标志字段就是 PPP 帧的定界符。连续两帧之间只需要用一个标志字段。如果出现连续两个标志字段，就表示这是一个空帧，应当丢弃。</p>
+<p><img src="/../images/Data_Link_Layer/17.png"></p>
+<p>PPP 帧的格式<br>首部中的地址字段 A 规定为 0xFF（即 11111111），控制字段 C 规定为 0x03（即00000011）。最初曾考虑以后再对这两个字段的值进行其他定义，但至今也没有给出。可见这两个字段实际上并没有携带 PPP 帧的信息。</p>
+<p>PPP 首部的第四个字段是 2 字节的协议字段。当协议字段为 0x0021 时， PPP 帧的信息字段就是 IP 数据报。若为 0xC021， 则信息字段是 PPP 链路控制协议 LCP 的数据，而0x8021 表示这是网络层的控制数据。</p>
+<p>信息字段的长度是可变的，不超过 1500 字节。</p>
+<p>尾部中的第一个字段（2 字节）是使用 CRC 的帧检验序列 FCS。</p>
+<p>2.2 字节填充<br>当信息字段中出现和标志字段一样的比特(0x7E)组合时，就必须采取一些措施使这种形式上和标志字段一样的比特组合不出现在信息字段中。</p>
+<p>当 PPP 使用异步传输时，它把转义符定义为 0x7D（即 01111101），并使用字节填充，RFC 1662 规定了如下所述的填充方法：</p>
+<p>（1）把信息字段中出现的每一个 0x7E 字节转变成为 2 字节序列(0x7D, 0x5E)。</p>
+<p>（2）若信息字段中出现一个 0x7D 的字节（即出现了和转义字符一样的比特组合） , 则把 0x7D 转变成为 2 字节序列(0x7D, 0x5D)。</p>
+<p>（3）若信息字段中出现 ASCII 码的控制字符（即数值小于 0x20 的字符），则在该字符前面要加入一个 0x7D 字节，同时将该字符的编码加以改变。例如，出现 0x03（在控制字符中是“传输结束” ETX）就要把它转变为 2 字节序列(0x7D, 0x23)。</p>
+<p>由于在发送端进行了字节填充，因此在链路上传送的信息字节数就超过了原来的信息字节数。但接收端在收到数据后再进行与发送端字节填充相反的变换，就可以正确地恢复出原来的信息。</p>
+<p>2.3 零比特填充<br>PPP 协议用在 SONET&#x2F;SDH 链路时，使用同步传输（一连串的比特连续传送）而不是异步传输（逐个字符地传送）。在这种情况下， PPP 协议采用零比特填充方法来实现透明传输。</p>
+<p>零比特填充的具体做法是：在发送端，先扫描整个信息字段（ 通常用硬件实现，但也可用软件实现，只是会慢些）。只要发现有 5 个连续 1，则立即填入一个 0。因此经过这种零比特填充后的数据，就可以保证在信息字段中不会出现 6 个连续 1。接收端在收到一个帧时，先找到标志字段 F 以确定一个帧的边界，接着再用硬件对其中的比特流进行扫描。每当发现 5 个连续 1 时，就把这 5 个连续 1 后的一个 0 删除，以还原成原来的信息比特流（下图）。这样就保证了透明传输：在所传送的数据比特流中可以传送任意组合的比特流，而不会引起对帧边界的错误判断。</p>
+<p><img src="/../images/Data_Link_Layer/18.png"></p>
+<p>零比特的填充与删除<br>三、PPP 协议的工作状态<br>前面通过 PPP 帧的格式讨论了 PPP 帧是怎样组成的。但 PPP 链路一开始是怎被初始化的？当用户拨号接入 ISP 后，就建立了一条从用户个人电脑到 ISP 的物理连接。这时，用户个人电脑向 ISP 发送一系列的链路控制协议 LCP 分组（封装成多个 PPP 帧），以便建立 LCP 连接。这些分组及其响应选择了将要使用的一些 PPP 参数。接着还要进行网络层配置，网络控制协议 NCP 给新接入的用户个人电脑分配一个临时的 IP 地址。这样，用户个人电脑就成为互联网上的一个有 IP 地址的主机了。</p>
+<p>当用户通信完毕时， NCP 释放网络层连接，收回原来分配出去的 IP 地址。接着， LCP释放数据链路层连接。最后释放的是物理层的连接。</p>
+<p>上述过程可用下图的状态图来描述。</p>
+<p>PPP 链路的起始和终止状态永远是下图中的“链路静止” (Link Dead)状态，这时在用户个人电脑和 ISP 的路由器之间并不存在物理层的连接。</p>
+<p>当用户个人电脑通过调制解调器呼叫路由器时（通常是在屏幕上用鼠标点击一个连接按钮），路由器就能够检测到调制解调器发出的载波信号。在双方建立了物理层连接后，PPP 就进入“链路建立” (Link Establish)状态，其目的是建立链路层的 LCP 连接。</p>
+<p>这时 LCP 开始协商一些配置选项，即发送 LCP 的配置请求帧(Configure-Request)。这是个 PPP 帧，其协议字段置为 LCP 对应的代码，而信息字段包含特定的配置请求。链路的另一端可以发送以下几种响应中的一种：</p>
+<p>（1）配置确认帧(Configure-Ack) 所有选项都接受</p>
+<p>（2）配置否认帧(Configure-Nak) 所有选项都理解但不能接受。</p>
+<p>（3）配置拒绝帧(Configure-Reject) 选项有的无法识别或不能接受，需要协商。</p>
+<p><img src="/../images/Data_Link_Layer/19.png"></p>
+<p>PPP 协议的状态图<br>LCP 配置选项包括链路上的最大帧长、所使用的鉴别协议(authentication protocol)的规约（如果有的话），以及不使用 PPP 帧中的地址和控制字段（因为这两个字段的值是固定的，没有任何信息量，可以在 PPP 帧的首部中省略这两个字节）。</p>
+<p>协商结束后双方就建立了 LCP 链路，接着就进入“鉴别” (Authenticate)状态。在这一状态，只允许传送 LCP 协议的分组、鉴别协议的分组以及监测链路质量的分组。若使用口令鉴别协议 PAP (Password Authentication Protocol)，则需要发起通信的一方发送身份标识符和口令。系统可允许用户重试若干次。如果需要有更好的安全性，则可使用更加复杂的口令握手鉴别协议 CHAP (Challenge-Handshake Authentication Protocol)。若鉴别身份失败，则转到“链路终止” (Link Terminate)状态。若鉴别成功，则进入“网络层协议” (Network-LayerProtocol)状态。</p>
+<p>在“网络层协议”状态， PPP 链路的两端的网络控制协议 NCP 根据网络层的不同协议互相交换网络层特定的网络控制分组。这个步骤是很重要的，因为现在的路由器都能够同时支持多种网络层协议。总之， PPP 协议两端的网络层可以运行不同的网络层协议，但仍然可使用同一个 PPP 协议进行通信。</p>
+<p>如果在 PPP 链路上运行的是 IP 协议，则对 PPP 链路的每一端配置 IP 协议模块（如分配 IP 地址）时就要使用 NCP 中支持 IP 的协议—IP 控制协议 IPCP (IP Control Protocol)。IPCP 分组也封装成 PPP 帧（其中的协议字段为 0x8021）在 PPP 链路上传送。在低速链路上运行时，双方还可以协商使用压缩的 TCP 和 IP 首部，以减少在链路上发送的比特数。</p>
+<p>当网络层配置完毕后，链路就进入可进行数据通信的“链路打开” (Link Open)状态。链路的两个 PPP 端点可以彼此向对方发送分组。两个 PPP 端点还可发送回送请求 LCP 分组(Echo-Request)和回送回答 LCP 分组(Echo-Reply)， 以检查链路的状态。</p>
+<p>数据传输结束后，可以由链路的一端发出终止请求 LCP 分组(Terminate-Request)请求终止链路连接，在收到对方发来的终止确认 LCP 分组(Terminate-Ack)后，转到“链路终止”状态。如果链路出现故障，也会从“链路打开”状态转到“链路终止”状态。当调制解调器的载波停止后，则回到“链路静止”状态。</p>
+<p>上图右方的灰色方框给出了对 PPP 协议的几个状态的说明。从设备之间无链路开始，到先建立物理链路，再建立链路控制协议 LCP 链路。经过鉴别后再建立网络控制协议NCP 链路，然后才能交换数据。由此可见， PPP 协议已不是纯粹的数据链路层的协议，它还包含了物理层和网络层的内容。</p>
+<h2 id="PPPoE协议"><a href="#PPPoE协议" class="headerlink" title="PPPoE协议"></a>PPPoE协议</h2><p><img src="/../images/Data_Link_Layer/20.png"></p>
+<p><img src="/../images/Data_Link_Layer/21.png"></p>
+<p><img src="/../images/Data_Link_Layer/22.png"></p>
+<p><img src="/../images/Data_Link_Layer/23.png"></p>
+<p><img src="/../images/Data_Link_Layer/24.png"></p>
+<p>1.定义<br>PPPoE（PPP over Ethernet）协议是一种把PPP帧封装到以太网帧中的链路层协议。PPPoE可以使以太网网络中的多台主机连接到远端的宽带接入服务器。<br>2.目的<br>运营商希望把一个站点上的多台主机连接到同一台远程接入设备，同时接入设备能够提供与拨号上网类似的访问控制和计费功能。在众多的接入技术中，把多个主机连接到接入设备的最经济的方法就是以太网，而PPP协议可以提供良好的访问控制和计费功能，于是产生了在以太网上传输PPP报文的技术，即PPPoE。<br>PPPoE利用以太网将大量主机组成网络，通过一个远端接入设备连入因特网，并运用PPP协议对接入的每个主机进行控制，具有适用范围广、安全性高、计费方便的特点。<br>3.PPPoE拨号的过程<br><img src="/../images/Data_Link_Layer/25.png"><br>3.1.Discovery阶段<br>1)PPPoE Client广播发送一个PADI（PPPoE Active Discovery Initial）报文，在此报文中包含PPPoE Client想要得到的服务类型信息。<br>2)所有的PPPoE Server收到PADI报文之后，将其中请求的服务与自己能够提供的服务进行比较，如果可以提供，则单播回复一个PADO（PPPoE Active Discovery Offer）报文。<br>3)根据网络的拓扑结构，PPPoE Client可能收到多个PPPoE Server发送的PADO报文，PPPoE Client选择最先收到的PADO报文对应的PPPoE Server做为自己的PPPoE Server，并单播发送一个PADR（PPPoE Active Discovery Request）报文。<br>4)PPPoE Server产生一个唯一的会话ID（Session ID），标识和PPPoE Client的这个会话，通过发送一个PADS（PPPoE Active Discovery Session-confirmation）报文把会话ID发送给PPPoE Client，会话建立成功后便进入PPPoE Session阶段。<br>完成之后通信双方都会知道PPPoE的Session_ID以及对方的以太网地址，它们共同确定了唯一的PPPoE Session。<br>3.2.Session阶段<br>PPPoE Session上的PPP协商和普通的PPP协商方式一致，分为LCP、认证、NCP三个阶段。<br>1)LCP阶段主要完成建立、配置和检测数据链路连接。<br>2)LCP协商成功后，开始进行认证，认证协议类型由LCP协商结果（CHAP或者PAP）决定。<br>3)认证成功后，PPP进入NCP阶段。NCP是一个协议族，用于配置不同的网络层协议，常用的是IP控制协议（IPCP），它主要负责协商用户的IP地址和DNS服务器地址。<br>PPPoE Session的PPP协商成功后，就可以承载PPP数据报文。<br>在PPPoE Session阶段所有的以太网数据包都是单播发送的。<br>3.3.Terminate阶段<br>PPP通信双方可以使用PPP协议自身来结束PPPoE会话，当无法使用PPP协议结束会话时可以使用PADT（PPPoE Active Discovery Terminate）报文。<br>进入PPPoE Session阶段后，PPPoE Client和PPPoE Server都可以通过发送PADT报文的方式来结束PPPoE连接。PADT数据包可以在会话建立以后的任意时刻单播发送。在发送或接收到PADT后，就不允许再使用该会话发送PPP流量了。</p>
+<h2 id="HDLC协议"><a href="#HDLC协议" class="headerlink" title="HDLC协议"></a>HDLC协议</h2><p><img src="/../images/Data_Link_Layer/26.png"></p>
+<p>一 HDLC概述<br>1.1 HDLC的发展历史<br>高级数据链路控制(High-Level Data Link Control或简称HDLC)，是一个在同步网上传输数据、面向比特的数据链路层协议，它是由国际标准化组织(ISO)根据IBM公司的SDLC(SynchronousData Link Control)协议扩展开发而成的.其最大特点是不需要数据必须是规定字符集，对任何一种比特流，均可以实现透明的传输。1974年，IBM公司率先提出了面向比特的同步数据链路控制规程SDLC(Synchronous Data Link Control)。</p>
+<p>随后，ANSI和ISO均采纳并发展了SDLC，并分别提出了自己的标准：<br>1* ANSI的高级通信控制过程ADCCP(Advanced DataControl Procedure)，<br>2* ISO的高级数据链路控制规程HDLC(High-level Data LinkContl)。<br>从此，HDLC协议开始得到了人们的广泛关注，并开始应用于通信领域的各个方面。</p>
+<p>1.2 HDLC的特点<br>HDLC是面向比特的数据链路控制协议的典型代表，有着很大的优势：<br>1* HDLC协议不依赖于任何一种字符编码集;<br>2* 数据报文可透明传输，用于实现透明传输的“0比特插入法”易于硬件实现;<br>3<em>全双工通信，有较高的数据链路传输效率;<br>4</em>所有帧采用CRC检验，对信息帧进行顺序编号，可防止漏收或重份，传输可靠性高;<br>5*传输控制功能与处理功能分离，具有较大灵活性。<br>由于以上特点，目前网络设计及整机内部通讯设计普遍使用HDLC数据链路控制协议。HDLC已经成为通信领域额不可缺少的一个重要协议。</p>
+<p>二 数据链路层的控制规程<br>2.1数据链路结构<br>数据链路结构可以分为两种：点-点链路和点-多点链路。<br>在点-点链路中，发送信息和命令的站称为主站，接收信息和命令而发出确认信息或响应的站称为从站，兼有主、从功能可发送命令与响应的站称为复合站。在点-多点链路中，往往有一个站为控制站，主管数据链路的信息流，并处理链路上出现的不可恢复的差错情况，其余各站则为受控站。</p>
+<p>2.2 数据链路控制规程功能<br>数据链路层是OSI参考模型的第二层，它在物理层提供的通信接口与电路连接服务的基础上，将易出错的数据电路构筑成相对无差错的数据链路，以确保DTE与DTE之间、DTE与网络之间有效、可靠地传送数据信息。为了实现这个目标，数据链路控制规程的功能应包括以下几个部分：</p>
+<p>1*帧控制<br>数据链路上传输的基本单位是帧。帧控制功能要求发送站把网络送来的数据信息分成若干码组，在每个码组中加入地址字段、控制字段、校验字段以及帧开始和结束标志，组成帧来发送;要求接收端从收到的帧中去掉标志字段，还原成原始数据信息后送到网络层。</p>
+<p>2*帧同步<br>在传输过程中必须实现帧同步，以保证对帧中各个字段的正确识别。</p>
+<p>3*差错控制<br>当数据信息在物理链路中传输出现差错，数据链路控制规程要求接收端能检测出差错并予以恢复，通常采用的方法有自动请求重发ARQ和前向纠错两种。采用ARQ方法时，为了防止帧的重收和漏收，常对帧采用编号发送和接收。当检测出无法恢复的差错时，应通知网络层做相应处理。</p>
+<p>4*流量控制<br>流量控制用于克服链路的拥塞。它能对链路上信息流量进行调节，确保发送端发送的数据速率与接收端能够接收的数据速率相容。常用的流量控制方法是滑动窗口控制法。</p>
+<p>5*链路管理<br>数据链路的建立、维持和终止，控制信息的传输方向，显示站的工作状态，这些都属于链路管理的范畴。</p>
+<p>6*透明传输<br>规程中采用的标志和一些字段必须独立于要传输的信息，这就意味着数据链路能够传输各种各样的数据信息，即传输的透明性。</p>
+<p>7*寻址<br>在多点链路中，帧必须能到达正确的接收站。</p>
+<p>8*异常状态恢复<br>当链路发生异常情况时，如收到含义不清的序列或超时收不到响应等，能自动重新启动，恢复到正常工作状态。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/network/" rel="tag"># network</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/11/13/physical_layer/" rel="prev" title="physical_layer">
+                  <i class="fa fa-angle-left"></i> physical_layer
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/11/21/Network_Layer/" rel="next" title="Network_Layer">
+                  Network_Layer <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">zhipeng.qi</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

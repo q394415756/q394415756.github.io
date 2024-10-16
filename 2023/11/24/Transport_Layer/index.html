@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.freespaceblog.fun","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="传输层介绍概述传输层借用下层网络层实现为应用层提供服务。网络层通过IP实现主机到主机的通信，传输层进行接力实现主机到应用的通信；网络层提供数据存在缺陷，传输层在此基础上采取了相关措施提供更高质量的数据传输能力。传输层主要有TCP(有连接，可靠的)协议和UDP(无连接，不可靠)协议。 工作原理1.进程间的通信我们主机上运行着多个应用进程，传输层需要接收多个进程的报文同时也需要向多个进程传输报文。传输">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Transport_Layer">
+<meta property="og:url" content="https://www.freespaceblog.fun/2023/11/24/Transport_Layer/index.html">
+<meta property="og:site_name" content="但行好事，莫问前程">
+<meta property="og:description" content="传输层介绍概述传输层借用下层网络层实现为应用层提供服务。网络层通过IP实现主机到主机的通信，传输层进行接力实现主机到应用的通信；网络层提供数据存在缺陷，传输层在此基础上采取了相关措施提供更高质量的数据传输能力。传输层主要有TCP(有连接，可靠的)协议和UDP(无连接，不可靠)协议。 工作原理1.进程间的通信我们主机上运行着多个应用进程，传输层需要接收多个进程的报文同时也需要向多个进程传输报文。传输">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Transport_Layer/1.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Transport_Layer/2.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Transport_Layer/3.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Transport_Layer/4.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Transport_Layer/5.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Transport_Layer/6.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Transport_Layer/7.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Transport_Layer/8.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Transport_Layer/9.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Transport_Layer/10.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Transport_Layer/11.png">
+<meta property="article:published_time" content="2023-11-24T03:50:00.000Z">
+<meta property="article:modified_time" content="2024-09-17T02:34:32.410Z">
+<meta property="article:author" content="zhipeng.qi">
+<meta property="article:tag" content="network">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.freespaceblog.fun/images/Transport_Layer/1.png">
+
+
+<link rel="canonical" href="https://www.freespaceblog.fun/2023/11/24/Transport_Layer/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://www.freespaceblog.fun/2023/11/24/Transport_Layer/","path":"2023/11/24/Transport_Layer/","title":"Transport_Layer"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Transport_Layer | 但行好事，莫问前程</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">但行好事，莫问前程</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BC%A0%E8%BE%93%E5%B1%82%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">传输层介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-number">1.2.</span> <span class="nav-text">工作原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%8F%E8%AE%AE"><span class="nav-number">1.3.</span> <span class="nav-text">协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP"><span class="nav-number">1.3.1.</span> <span class="nav-text">TCP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UDP"><span class="nav-number">1.3.2.</span> <span class="nav-text">UDP</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhipeng.qi</p>
+  <div class="site-description" itemprop="description">我的技术总结</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.freespaceblog.fun/2023/11/24/Transport_Layer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhipeng.qi">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="但行好事，莫问前程">
+      <meta itemprop="description" content="我的技术总结">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Transport_Layer | 但行好事，莫问前程">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Transport_Layer
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-11-24 11:50:00" itemprop="dateCreated datePublished" datetime="2023-11-24T11:50:00+08:00">2023-11-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-09-17 10:34:32" itemprop="dateModified" datetime="2024-09-17T10:34:32+08:00">2024-09-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/network/" itemprop="url" rel="index"><span itemprop="name">network</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/network/%E7%90%86%E8%AE%BA/" itemprop="url" rel="index"><span itemprop="name">理论</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+           
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="传输层介绍"><a href="#传输层介绍" class="headerlink" title="传输层介绍"></a>传输层介绍</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>传输层借用下层网络层实现为应用层提供服务。网络层通过IP实现主机到主机的通信，传输层进行接力实现主机到应用的通信；网络层提供数据存在缺陷，传输层在此基础上采取了相关措施提供更高质量的数据传输能力。传输层主要有TCP(有连接，可靠的)协议和UDP(无连接，不可靠)协议。</p>
+<h2 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h2><p>1.进程间的通信<br>我们主机上运行着多个应用进程，传输层需要接收多个进程的报文同时也需要向多个进程传输报文。传输层为能实现这一场景，给每个应用进程都分配了一个唯一端口号（共有256*265个，0~65535）结合IP形成唯一标识用于区分是那个那个主机的应用发送报文，又是那个主机的应用接收报文。</p>
+<span id="more"></span>
+<p>socket</p>
+<p>套接字（socket）是通信的基石，是支持TCP&#x2F;IP协议的网络通信的基本操作单元，它是网络通信过程中端点的抽象表示，进程间通过建立socket连接通信。它是应用层与传输层间的抽象层，是一组接口供应用层调用实现进程在网络中通信。</p>
+<p>tcp协议中socket包含本地IP和本地应用端口，远程IP和远程应用端口。<br>udp协议中socket包含本地IP和本地应用端口<br>为简化通信的数据结构，socket可以用一个整型的数表示，可以通过映射表将这个整型的数映射为本地IP和本地应用端口，tcp协议还包含远程IP和远程应用端口。使得在通信过程中无需封装完整的IP端口信息，可以通过这个整型数映射为完整的IP端口信息。</p>
+<p>2.可靠数据传输<br>以下场景都已停等协议为例，即发送端确认接收端正常接收到信息后才会继续发送下一条信息。</p>
+<p>场景一：传输层以下的通信信道是可靠没有数据丢失，那么我们的处理就十分简单。发送方发报文，接收方接报文。</p>
+<p><img src="/../images/Transport_Layer/1.png"></p>
+<p>场景二：实际环境中，下层网络通信是不可靠，会因为各种因素导致数据发送改变出现差错。因此我们需要接收方对数据进行数据检测是否出现错误，错误就告诉发送方你数据有问题重发，正确就告诉发送方我收到了正确的报文，你继续发送新的报文。</p>
+<p>逻辑很简单，但是我们要如何判断你发送过来的数据是正确的还是错误的呢？我们这里以UDP协议的校验方式介绍一种方法。</p>
+<pre><code>假设发送方发了2组16bit的数据如：1010 1100 1111 0000 和 1001 0110 0101 0011
+第一步：2组16bit数据相加
+1010 1100 1111 0000 + 1001 0110 0101 0011 = 1 0100 0011 0100 0011
+第二步：若存在溢出，将其回卷加到序列尾部
+0100 0011 0100 0100
+第三部：取反
+1011 1100 1011 1011
+第四步：发送2组16bit的原数据和一组16bit的校验码
+1010 1100 1111 0000 1001 0110 0101 0011 1011 1100 1011 1011
+第五步：接收方接收到数据，将2组16bit数据进行第一步，第二步操作，然后与校验码相加
+0100 0011 0100 0100 + 1011 1100 1011 1011 = 1111 1111 1111 1111
+第六步：判断结果是否为1111 1111 1111 1111，否则告诉发送方收到错误报文，反之告诉发送方收到正确报文
+</code></pre>
+<center>
+  <img src="/images/Transport_Layer/2.png"  style="margin-bottom: 5px;">
+  <div style="color:orange; border-bottom: 1px solid #d9d9d9; display: inline-block; color: #999; padding: 2px; margin-top: 1px;">
+    场景二
+  </div>
+</center>
+
+
+<p>场景三：在场景二中我们忽略了一个问题，进程间的通信是双向的，我保证了发送报文的正确性，但是答复报文也可能出错。于是我们约定只要答复报文是含糊不清，发送端就进行重传。</p>
+<center>
+  <img src="/images/Transport_Layer/3.png"  style="margin-bottom: 5px;">
+  <div style="color:orange; border-bottom: 1px solid #d9d9d9; display: inline-block; color: #999; padding: 2px; margin-top: 1px;">
+    含糊不清重传
+  </div>
+</center>
+
+<p>大家在想想若仅做如此规定能够保证报文的正确性吗？并不能，若接收端发送一个确认报文，发生多接收报文含糊不清触发重传，接收端接收重传报文。接收端无法判断报文是重传的还是新发的，若确认接收可能导致重复接收，若放弃接收可能导致数据丢失。因此发送端会给每组报文编号（0或1），前后相邻的报文编号不同，组成相互交替的报文序列（0 1 0 1 0 1）。若接收端收到的报文序号和上一个接收的报文序号一致表示重复了，丢弃报文，然后发送一个正确收到信息的答复。若接收报文序号与上一次接收的不一致那就是新的报文。</p>
+<p>到这里问题完全解决了吗？也没有，想一想上面场景无论是重复接收还是正确解接收收端都回复正确，但若发送端发送的是一条新的信息被接收端误认为是重复信息给丢掉并回复正确接收信息，发送端会继续发送下一条新的信息其实对于接收端来说已经出现了信息丢失的情况。因此接收端在发送正确回复是会带上接收信息的序号，这样发送端就能够得知你是重复接收还是正确接收了。</p>
+<p>场景四：场景三中发送端不仅要判断序号还要判断接收端是正确答复还是错误答复等。流程比较繁琐，为了简化流程，我们可以将错误答复去掉，用目前已经接收到的报文序列的正确答复替代，发送端不仅不用判断你是正确答复还是错误答复，我只需要判断你发送过来的报文序列和我上一组报文的序列是否一致，一致表示接收端接收到错误信息，不一致表示正确接收到信息了。不仅简化了流程还使语义更加明确。</p>
+<p>场景五：我试想一下有没有这种情况，发送端发送了信息结果中途丢失了，接收端收不到信息就一直等，发送端也一直收不到回复也一直等，导致整个系统堵塞。或者接收端成功接收并回复了但是也中途丢失了，发送端还是收不到回复还是一直等。因此我们需要引入定时器，若接收端长时间收不到信息就发送一条回复告知发送端避免回复丢失，接收端长时间收不到信息也发送重新发送一条消息保证消息不会丢失。</p>
+<p>上述5个场景其实就是分别对应可靠传输协议（RDT）的五个版本：RDT1.0，RDT2.0，RDT2.1，RDT2.2，RDT3.0。rdt协议是早期的可靠传输协议为后来的协议打下了基础。后续的GBN协议，SR协议，TCP协议都是在RDT协议的基础上发展的。</p>
+<p>GBN协议引入了窗口概念，发送端维护着一个大小为N的窗口存储不同分组是否被接收端正确解释，以此解决了RDT协议不能并发发送多条信息的问题，提供了网络资源利用率。SR协议又在GBN协议上做了修改，接收端也维护一个和发送端大小一致的窗口缓存信息，这样就不必想GBN协议一样收到乱序数据就丢掉知道收到正确序号信息，节约了一定的网络资源。TCP协议又结合GBN和SR协议做了一些修改。这里就不做详细介绍了，感兴趣的小伙伴可以自行查找资料学习。</p>
+<p>3.流量控制 &amp; 拥塞控制</p>
+<p>●流量控制：如果发送方把数据发送得过快，接收方可能会来不及接收，这就会造成数据的丢失。</p>
+<p>●拥塞控制：拥塞控制就是防止过多的数据注入到网络中，这样可以使网络中的路由器或链路不致过载。</p>
+<p>●：流量控制是为了预防拥塞，流量控制指点对点通信量的控制。而拥塞控制是全局性的，涉及到所有的主机和降低网络性能的因素。</p>
+<h2 id="协议"><a href="#协议" class="headerlink" title="协议"></a>协议</h2><h3 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h3><p>TCP传输流程是在RDT的基础上上演化而成的，同时也吸收了一些GBN和SR的特性。TCP协议很复杂，以下主要介绍TCP的基础内容。</p>
+<p>TCP数据报格式</p>
+<center>
+  <img src="/images/Transport_Layer/4.png"  style="margin-bottom: 5px;">
+  <div style="color:orange; border-bottom: 1px solid #d9d9d9; display: inline-block; color: #999; padding: 2px; margin-top: 1px;">
+    TCP数据报格式
+  </div>
+</center>
+
+<p>●端口号：源端口加上目标端口号和IP首部中的源端IP地址和目的端IP地址唯一确定一个TCP连接。</p>
+<p>●序列号：本报文段所发送的数据项目组第一个字节的序号。若上一组发送数据序号为300，长度100，那么本报文段序号为400。注意：序号是32bit的无符号数，序号到达2^32-1后从0开始</p>
+<p>●确认应答号：是期望收到对方下次发送的数据的第一个字节的序号，也就是期望收到的下一个报文段的首部中的序号。注意：确认序号应该是上次已成功收到数据字节序号+1，且只有ACK标志为1时，确认序号才有效。</p>
+<p>●首部长度：首部长度是不确定的，因此需要通过首部长度标识首部数据的偏移量确认首部长度。注意：数据偏移以32位为长度单位，也就是4个字节，因此TCP首部的最大长度是60个字节。</p>
+<p>●保留位：为以后预留的位置</p>
+<p>●URG：当URG&#x3D;1时，注解此报文应尽快传送，而不要按本来的列队次序来传送。与“紧急指针”字段共同应用，紧急指针指出在本报文段中的紧急数据的最后一个字节的序号，使接收方可以知道紧急数据共有多长。</p>
+<p>●ACK：只有当ACK&#x3D;1时，确认序号字段才有效。</p>
+<p>●PSH：当PSH&#x3D;1时，接收方应该尽快将本报文段立即传送给其应用层。</p>
+<p>●RST：当RST&#x3D;1时，表示出现连接错误，必须释放连接，然后再重建传输连接。复位比特还用来拒绝一个不法的报文段或拒绝打开一个连接。</p>
+<p>●SYN：SYN&#x3D;1,ACK&#x3D;0时表示请求建立一个连接，携带SYN标志的TCP报文段为同步报文段；</p>
+<p>●FIN：发端完成发送任务。</p>
+<p>●窗口大小：TCP通过滑动窗口的概念来进行流量控制，窗口大小是一个16bit字段，因而窗口大小最大为65535字节。</p>
+<p>●校验和：检验和覆盖了整个TCP报文段：TCP首部和数据。由发送端计算和存储，并由接收端进行验证。</p>
+<p>●紧急指针：只有当URG标志置1时紧急指针才有效。紧急指针是一个正的偏移量，和序号字段中的值相加表示紧急数据最后一个字节的序号。</p>
+<p>●选项：选择填入部分，长度不确定。</p>
+<p>●数据：数据报部分。</p>
+<p><strong>建立连接（三次握手）</strong></p>
+<p>●前置条件：客户端和服务端连接处于CLOSE状态（关闭状态），并且服务端处于LISTEN状态（监听状态）。</p>
+<p>●第一次握手：客户端会随机初始化序列号，将此序列号置于TCP首部的序列号字段中，同时将SYN标志位置为1，表示该报文为SYN报文。然后将SYN报文发送给服务端，表示向服务端发起连接，该报文不包含应用层数据，之后客户端处于SYN-SENT状态（SYN报文发送状态）。</p>
+<p>●第二次握手：服务端收到客户端的SYN报文后，首先服务端随机初始化自己的序列号，将此序号填入TCP首部的序号字段中，其次把TCP首部的确认应答号字段填入客户端序列号+1，接着把 SYN 和 ACK 标志位置为1。最后把该报文发给客户端，该报文也不包含应用层数据，之后服务端处于 SYN-RCVD 状态（SYN报文收到状态）。</p>
+<p>●第三次握手：客户端收到服务端报文后，还要向服务端回应最后一个报文，首先应答报文 TCP 首部 ACK 标志位置为1，其次确认应答号字段填入服务端序列号+1，最后把报文发送给服务端，这次报文可以携带客户端到服务器的数据，之后客户端处于ESTABLISHED状态（连接建立状态）。</p>
+<p>●最后服务端收到最后一个报文也进入ESTABLISHED状态（连接建立状态）。</p>
+<center>
+  <img src="/images/Transport_Layer/5.png"  style="margin-bottom: 5px;">
+  <div style="color:orange; border-bottom: 1px solid #d9d9d9; display: inline-block; color: #999; padding: 2px; margin-top: 1px;">
+    三次握手
+  </div>
+</center>
+
+<p>三次握手连接方式可以保证连接的正确建立，且为目前理论上最少可靠连接方式。</p>
+<p><strong>传输控制</strong></p>
+<p>TCP采用应答的模式保证数据的可靠性，与RDT不一样的是TCP无需收到上一条消息确认的ACK就可以发送下一条消息。因为TCP可以一次性发送多组报文段，为了保证接收段应用程序拿到正确顺序的报文，TCP给每个bit编号每组报文段都会包含一个上次发送报文段序列号+上次发送报文段大小的序列号。</p>
+<p>接收端收到报文后会答复一个带有正确顺序下次应该收到报文段序列号的ACK。接收端收到报文段1应答ACK 2；接收端继续接收到报文段2应答ACK 3；此时发送错误报文段3错误接收端丢弃发送ACK 3，或者丢失接收端没有收到报文段3，此时接收端收到报文段4错误顺序不算报文段3，接收端将报文段4缓存并应答ACK 3，后续收到报文段5，报文段6接收端同样缓存应答ACK 3。</p>
+<p>当发送端收到3此重复的ACK 3时就知道报文段错误或者丢失立刻重传报文段3，后续接收端接收到报文3后将缓存的报文段4，5，6交给应用层并清除4，5，6的缓存并应答ACK 7。</p>
+<p><img src="/../images/Transport_Layer/6.png"></p>
+<p>TCP除了3次重复应答进行快速重传外也设置有超时重传，值得一提的时TCP超时重传的时间不是固定的是根据网络延迟动态变化的，内容比较多这里不做介绍。</p>
+<p>但是如果ACK在回传的时候丢失了怎么办，不用担心TCP使用的是累计确认法，若ACK 600丢失了，但ACK 700没有丢失，发送方就会认为前700的bit都接收成功了。</p>
+<p><strong>关闭连接（四次挥手）</strong></p>
+<p>●第一次挥手：接收端发送一个 FIN 报文，告诉被发送端：我已经不会再给你发数据了，但此时接收端还是可以继续接受数据，例如接收处理FIN包发送之前还未接收到的数据包。客户端进入FIN_WIAT_1状态。</p>
+<p>●第二次挥手：发送端收到 FIN 报文后，发送一个 ACK 给接收端，确认序号为收到序号 + 1，此时发送端进入 CLOSED_WAIT 状态。接收端接收到 ACK 报文后，进入 FIN_WAIT_2 状态。</p>
+<p>●第三次挥手：当发送端发送完应该发送的报文后，发送端发送一个 FIN 报文，告诉接收方，我的数据也发送完了，不会再给你发数据了，接下来服务端进入 LAST_ACK 状态。</p>
+<p>●第四次挥手：接收端收到 FIN 报文之后，发送一个 ACK 给发送端，确认应答号为收到序号 + 1，此时接收端进入 TIME_WAIT 状态。</p>
+<p>接收端收到 ACK报文后，就直接进入了 CLOSED 状态，连接资源将被释放，四次挥手到此结束。</p>
+<p>发送端在经过 2MSL 时间后，自动进入CLOSED 状态，连接关闭。</p>
+<p><strong>流量控制</strong></p>
+<p>流量控制是作用于接收者的，它是控制发送者的发送速度从而使接收者来得及接收，防止分组丢失的。</p>
+<p>上文中我们介绍了TCP协议不是采用停等的方式发送报文段，而是连续发送多个报文段的方式，这种发送确实很快但是我们的网络是动态的有时卡顿有时通畅，而且发送端面对的接收端的接收速度也是不一致，若不加以限制很容易造成大规模的分组丢失。所以TCP协议维护着一个动态的滑动窗口，不仅保证分组无差错、有序接收，也实现了流量控制。</p>
+<p>滑动窗口拥有四个部分：已发送已确认，已发送未确认，未发送待发送，未发送不可发送。</p>
+<p>●已发送已确认：发送端发送了，接收端也确认接收了的部分。</p>
+<p>●已发送未确认：发送端发送了，接收端还未确实接收的部分。</p>
+<p>●未发送待发送：发送端还没有发送，但准备发送的部分。</p>
+<p>●未发送不可发送：发送端还没有发送且超过窗口大小的部分。</p>
+<center>
+  <img src="/images/Transport_Layer/7.png"  style="margin-bottom: 5px;">
+  <div style="color:orange; border-bottom: 1px solid #d9d9d9; display: inline-block; color: #999; padding: 2px; margin-top: 1px;">
+    窗口结构图
+  </div>
+</center>
+
+
+<p>接收方接收到报文段后会传回一个待接收窗口大小的ACK给发送方，发送方可以通过整个窗口大小来调整自己的窗口大小，预防网络堵塞。</p>
+<p>注意：当接收方返回窗口大小为0时，发送方会停止发送，等待接收方发送一个不为0的ACK，但是若这个不为0的ACK丢失，接收方会等待一段时间后询问接收方的窗口大小。</p>
+<p><strong>拥塞控制</strong></p>
+<p>拥塞控制作用于网络，它是防止过多的数据注入到网络中，避免出现网络负载过大的情况；常用的方法就是：慢开始、拥塞避免、快重传、快恢复。</p>
+<p><strong>慢开始算法</strong></p>
+<p>发送方维持一个叫做拥塞窗口cwnd（congestion window）的状态变量。拥塞窗口的大小取决于网络的拥塞程度，并且动态地在变化。发送方让自己的发送窗口等于拥塞窗口，另外考虑到接受方的接收能力，发送窗口可能小于拥塞窗口。</p>
+<p>慢开始算法的思路就是，不要一开始就发送大量的数据，由小到大逐渐增加拥塞窗口的大小。初始cwnd为1，每次发送且接收到确认后cwnd加倍。</p>
+<center>
+  <img src="/images/Transport_Layer/8.png"  style="margin-bottom: 5px;">
+  <div style="color:orange; border-bottom: 1px solid #d9d9d9; display: inline-block; color: #999; padding: 2px; margin-top: 1px;">
+    cwnd的动态变化
+  </div>
+</center>
+
+<p><strong>拥塞避免算法</strong>：每轮数据的发送cwnd+1</p>
+<p>若使用慢开始算法每轮数据的发送cwnd加倍，若一直放任它一直加倍后面只会是一个天文数字。但若使用拥塞避免算法cwnd又加得太慢。所以TCP设置有一个ssthresh变量来决定TCP使用什么算法增长。</p>
+<p>当cwnd&lt;ssthresh时cwnd成倍增长；当cwnd&lt;&#x3D;ssthresh时可以成倍增长也可以+1，cwnd&gt;ssthresh时每次cwnd+1。</p>
+<p>若在慢开始阶段或者拥塞避免阶段出现了超时情况即规定时间内没有收到接收端的回应，发送方就会认为网络拥塞了将sstresh置为当前cwnd的一半（sstresh至少为2），cwnd置为1。</p>
+<p><img src="/../images/Transport_Layer/9.png"></p>
+<p>快速重传：上面已经提到过来，接收方收到3次重复ACK就立即触发重传。</p>
+<p><strong>快恢复算法</strong></p>
+<p>当收到3次重复ACK是，此时能够收到ACK说明网络情况还比较不错，因此我们没有必要重满开始开始。此时我们将cwnd置为当前的cwnd的一半，并更新sstresh为当前cwnd的一半，cwnd+3（3表示已经收到了的重ACK数量）。后续若继续收到重复ACK，cwnd+1；若收到新的ACK，cwnd置为当前sstresh。</p>
+<p><img src="/../images/Transport_Layer/10.png"></p>
+<p>当收到3个重复ACK时为什么要加3，收到重复ACK为什么要加1。比如我们接收端发送了1，2，3，4个报文段，接收端发送了3个重复ACK，此时接收端拥有4个待确认的报文段。若cwnd直接减半，可能会导致窗口大小小于待确认的报文段数量。若cwnd减半+3，无论什么情况都能够保证窗口大小大于待确认报文段数量。而且加3的扩容量已经确认被接收端接收离开了网络，是不会对网络造成影响的。后续收到重复ACK加一也是相同的道理。</p>
+<p>那为什么收到新的ACK时要将cwnd置为ssthresh。上述可以扩容是因为确认接收端已经接收了报文段，我此处扩容不会对网络造成影响。但是若收到新的ACK，TCP采用累计确实法会让窗口右移空出很多空间，若不将cwnd置为ssthresh会导致瞬时产生很多发送报文段导致网络拥塞</p>
+<h3 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a>UDP</h3><p>UDP是一个简单的面向消息的传输层协议，不会保留UDP 消息的状态，且没有应答机制，不会保证报文段的顺序。因此UDP是不可靠的，因此也比TCP更轻量更快速。下述对UDP的基础做简单的介绍。</p>
+<p><strong>UDP数据报格式</strong></p>
+<center>
+  <img src="/images/Transport_Layer/11.png"  style="margin-bottom: 5px;">
+  <div style="color:orange; border-bottom: 1px solid #d9d9d9; display: inline-block; color: #999; padding: 2px; margin-top: 1px;">
+    UDP数据报格式
+  </div>
+</center>
+
+<p><strong>UPD长度</strong>：UDP的数据报的长度（包括首部和数据）其最小值为8（只有首部），最大2^16。</p>
+<p>UPD数据传输非常简单无需建立连接，仅仅进行简单传输数据和接收数据，接收端接收数据校验数据是否正确，正确保留错误丢弃，也不会应答发送端。同样也没有流量控制和拥塞控制，因此网络资源利用率在某些情况不如TCP。</p>
+<p>UPD协议常用于实时直播，实时新闻等场景，这些场景要求实时性能够容忍部分数据的丢失。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/network/" rel="tag"># network</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/11/21/Network_Layer/" rel="prev" title="Network_Layer">
+                  <i class="fa fa-angle-left"></i> Network_Layer
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/11/25/Session_Layer/" rel="next" title="Session_Layer">
+                  Session_Layer <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">zhipeng.qi</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

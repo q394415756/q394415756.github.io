@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.freespaceblog.fun","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="终端网络监控工具GlassWire有一个客户场景需要对比两款软件对于网络带宽的占用情况，由于客户环境没有带宽监控类软件，所以就从终端侧监控软件入手。终端监控软件GlassWire，可以实时监控网络流量，包括上传和下载。 功能">
+<meta property="og:type" content="article">
+<meta property="og:title" content="终端网络监控工具GlassWire">
+<meta property="og:url" content="https://www.freespaceblog.fun/2024/04/29/%E7%BB%88%E7%AB%AF%E7%BD%91%E7%BB%9C%E7%9B%91%E6%8E%A7%E5%B7%A5%E5%85%B7GlassWire/index.html">
+<meta property="og:site_name" content="但行好事，莫问前程">
+<meta property="og:description" content="终端网络监控工具GlassWire有一个客户场景需要对比两款软件对于网络带宽的占用情况，由于客户环境没有带宽监控类软件，所以就从终端侧监控软件入手。终端监控软件GlassWire，可以实时监控网络流量，包括上传和下载。 功能">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/GlassWire/1.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/GlassWire/2.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/GlassWire/3.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/GlassWire/4.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/GlassWire/5.png">
+<meta property="article:published_time" content="2024-04-29T06:27:00.000Z">
+<meta property="article:modified_time" content="2024-09-17T02:34:31.879Z">
+<meta property="article:author" content="zhipeng.qi">
+<meta property="article:tag" content="windows">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.freespaceblog.fun/images/GlassWire/1.png">
+
+
+<link rel="canonical" href="https://www.freespaceblog.fun/2024/04/29/%E7%BB%88%E7%AB%AF%E7%BD%91%E7%BB%9C%E7%9B%91%E6%8E%A7%E5%B7%A5%E5%85%B7GlassWire/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://www.freespaceblog.fun/2024/04/29/%E7%BB%88%E7%AB%AF%E7%BD%91%E7%BB%9C%E7%9B%91%E6%8E%A7%E5%B7%A5%E5%85%B7GlassWire/","path":"2024/04/29/终端网络监控工具GlassWire/","title":"终端网络监控工具GlassWire"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>终端网络监控工具GlassWire | 但行好事，莫问前程</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">但行好事，莫问前程</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%88%E7%AB%AF%E7%BD%91%E7%BB%9C%E7%9B%91%E6%8E%A7%E5%B7%A5%E5%85%B7GlassWire"><span class="nav-number">1.</span> <span class="nav-text">终端网络监控工具GlassWire</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%9F%E8%83%BD"><span class="nav-number">1.1.</span> <span class="nav-text">功能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%8F%AF%E8%A7%86%E5%8C%96%E7%BD%91%E7%BB%9C%E7%9B%91%E6%8E%A7"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.可视化网络监控</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BA%92%E8%81%94%E7%BD%91%E5%AE%89%E5%85%A8"><span class="nav-number">1.1.2.</span> <span class="nav-text">2.互联网安全</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%BA%92%E8%81%94%E7%BD%91%E9%9A%90%E7%A7%81%E4%BF%9D%E6%8A%A4"><span class="nav-number">1.1.3.</span> <span class="nav-text">3.互联网隐私保护</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E7%BD%91%E7%BB%9C%E6%97%B6%E5%85%89%E6%9C%BA-%E8%B0%A8%E6%85%8E%E8%AD%A6%E6%8A%A5"><span class="nav-number">1.1.4.</span> <span class="nav-text">4.网络时光机&amp;谨慎警报</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E5%B8%A6%E5%AE%BD%E4%BD%BF%E7%94%A8%E7%9B%91%E8%A7%86%E5%99%A8"><span class="nav-number">1.1.5.</span> <span class="nav-text">5.带宽使用监视器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E5%A4%9A%E8%BF%9C%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9B%91%E6%8E%A7"><span class="nav-number">1.1.6.</span> <span class="nav-text">6.多远程服务器监控</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF%E6%A8%A1%E6%8B%9F"><span class="nav-number">1.2.</span> <span class="nav-text">使用场景模拟</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhipeng.qi</p>
+  <div class="site-description" itemprop="description">我的技术总结</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.freespaceblog.fun/2024/04/29/%E7%BB%88%E7%AB%AF%E7%BD%91%E7%BB%9C%E7%9B%91%E6%8E%A7%E5%B7%A5%E5%85%B7GlassWire/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhipeng.qi">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="但行好事，莫问前程">
+      <meta itemprop="description" content="我的技术总结">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="终端网络监控工具GlassWire | 但行好事，莫问前程">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          终端网络监控工具GlassWire
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-04-29 14:27:00" itemprop="dateCreated datePublished" datetime="2024-04-29T14:27:00+08:00">2024-04-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-09-17 10:34:31" itemprop="dateModified" datetime="2024-09-17T10:34:31+08:00">2024-09-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/windows/" itemprop="url" rel="index"><span itemprop="name">windows</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/windows/network/" itemprop="url" rel="index"><span itemprop="name">network</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+           
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="终端网络监控工具GlassWire"><a href="#终端网络监控工具GlassWire" class="headerlink" title="终端网络监控工具GlassWire"></a>终端网络监控工具GlassWire</h1><p>有一个客户场景需要对比两款软件对于网络带宽的占用情况，由于客户环境没有带宽监控类软件，所以就从终端侧监控软件入手。<br>终端监控软件GlassWire，可以实时监控网络流量，包括上传和下载。</p>
+<h2 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h2><span id="more"></span>
+<h3 id="1-可视化网络监控"><a href="#1-可视化网络监控" class="headerlink" title="1.可视化网络监控"></a>1.可视化网络监控</h3><p>使用 GlassWire 简单易用的界面，在图表上查看您过去和现在的所有网络活动。 单击图表可查看哪些应用程序启动了传入或传出带宽，并立即查看应用程序正在与哪些主机通信。 主机会自动解析，并且还包括其原籍国&#x2F;地区。单击“应用程序”和“流量”选项，按应用程序细分网络活动 和流量类型。</p>
+<p><img src="/../images/GlassWire/1.png"></p>
+<h3 id="2-互联网安全"><a href="#2-互联网安全" class="headerlink" title="2.互联网安全"></a>2.互联网安全</h3><p>GlassWire 通过在易于理解的图表中可视化所有过去和现在的网络数据，为您的计算机或服务器增加了额外的互联网安全性。 立即查看通过 Internet 进行通信的每个应用程序或进程，然后更深入地了解您的计算机正在与谁或与什么进行通信。 每当计算机上的任何新内容访问网络时，GlassWire 都会通过谨慎的警报通知您，不会中断您的工作流程或服务器。</p>
+<p>GlassWire 还有一个网络安全检查工具箱，例如系统文件更改检测、设备列表更改检测、应用程序信息更改检测、 ARP 欺骗监控，我们才刚刚开始。如果您的计算机或服务器正在与已知 IP 通信，我们的软件还会提醒您，或者 域威胁。我们正在努力在未来向 GlassWire 添加更多入侵检测规则。</p>
+<p>不幸的是，全面的恶意软件检测和完美的网络入侵检测并不存在。我们的软件并不完美，但我们希望 GlassWire 将易于使用的网络可视化、防火墙管理和网络监控规则相结合，将在永无止境的战争中发挥重要作用。 间谍软件和恶意软件。GlassWire 的 Internet Security 是第二道防线，应始终与单独的主要防病毒产品一起使用。</p>
+<p><img src="/../images/GlassWire/2.png"></p>
+<h3 id="3-互联网隐私保护"><a href="#3-互联网隐私保护" class="headerlink" title="3.互联网隐私保护"></a>3.互联网隐私保护</h3><p>您的网络感觉慢吗？也许您的邻居已登录您的 WiFi 并观看 Netflix。查看网络上的设备列表 并在设备加入或离开时通过我们新的网络设备列表功能收到警报。</p>
+<p><img src="/../images/GlassWire/3.png"></p>
+<h3 id="4-网络时光机-谨慎警报"><a href="#4-网络时光机-谨慎警报" class="headerlink" title="4.网络时光机&amp;谨慎警报"></a>4.网络时光机&amp;谨慎警报</h3><p>GlassWire 是一款易于使用的工具，可以查看您过去和现在的网络活动。使用滑块回到过去并分析过去的网络 图表上的活动。使用已解析的主机按天、周和月详细检查带宽使用情况。</p>
+<p>转到“流量监视器”选项卡或“日志分析”选项卡的图形视图，以准确查看应用首次访问 Internet 的时间、与哪些主机通信以及任何可用的 geoip 国家信息用一面小旗表示。查看图表，了解过去的安全警报以及详细的主机信息。 使用 GlassWire 可以很容易地在简单易懂的图表上查看过去的网络活动以及详细的网络活动。</p>
+<p>我们专门设计了 GlassWire 警报系统，因此它不会打扰用户。重要的是要了解您的网络正在发生哪些变化 计算机或服务器，但需要关闭的不断弹出窗口令人沮丧。如果您正在制作截屏视频或根本不想要任何警报 period 转到 GlassWire 菜单并选择“暂停”以停止接收警报 24 小时。我们理解，在某些情况下，来自软件的警报可能是 很烦人。GlassWire 警报会短暂出现，然后消失在后台。您可以随时转到“日志分析”选项卡或查看图表 稍后详细查看警报。如果您根本不喜欢警报，可以在设置中禁用我们的安全警报，或者直接禁用我们的警报 在主设置窗口中。如果安全警报不是您的事，您可以将其全部禁用，只需将 GlassWire 用作网络监视器，但我们不会 推荐这个。</p>
+<p><img src="/../images/GlassWire/4.png"></p>
+<h3 id="5-带宽使用监视器"><a href="#5-带宽使用监视器" class="headerlink" title="5.带宽使用监视器"></a>5.带宽使用监视器</h3><p>使用 GlassWire 可以轻松跟踪您的每日、每周或每月带宽使用情况。转到“流量监控”选项卡的“使用情况表”视图，查看内容 应用、流量或主机使用的带宽最多。看到奇怪的东西了吗？单击应用程序或流量类型的图标，查看有关您的位置的更多详细信息 带宽与任何可用的 GeoIP 国家 IP 信息一起使用。通过将数据导出为 CSV 来独立分析流量。 请记住，GlassWire 仅跟踪安装它的计算机和服务器的带宽，而不会跟踪网络上的总带宽使用情况。</p>
+<p><img src="/../images/GlassWire/5.png"></p>
+<h3 id="6-多远程服务器监控"><a href="#6-多远程服务器监控" class="headerlink" title="6.多远程服务器监控"></a>6.多远程服务器监控</h3><p>您是否监控商业、游戏、VOIP 应用程序或 Web 应用程序的远程服务器？GlassWire 可轻松安装在服务器上 因此，您可以通过我们的远程访问功能在本地计算机上监控他们的网络活动。转到 GlassWire 的设置，然后选择 “remote server”用于在本地计算机和远程服务器上安装 GlassWire 后登录到服务器。<br>GlassWire 在远程服务器上的工作方式与在本地计算机上的工作方式完全相同。查看安全警报、新的应用网络活动、 还有更多！</p>
+<h2 id="使用场景模拟"><a href="#使用场景模拟" class="headerlink" title="使用场景模拟"></a>使用场景模拟</h2>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/windows/" rel="tag"># windows</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/04/10/powershell_6/" rel="prev" title="Powershell_6">
+                  <i class="fa fa-angle-left"></i> Powershell_6
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/05/27/%E5%9C%A8Excel%E4%B8%AD%E4%BD%BF%E7%94%A8VBA/" rel="next" title="在Excel中使用VBA">
+                  在Excel中使用VBA <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">zhipeng.qi</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

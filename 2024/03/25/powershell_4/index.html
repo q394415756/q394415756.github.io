@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.freespaceblog.fun","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="powershell_4 扩展命令这章就主要介绍使用powershell调用三方的一些扩展文件，可以实现控制windows系列的软件，例如office、mssql等，下面举一个例子，可以查看这些应用的状态：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Powershell_4">
+<meta property="og:url" content="https://www.freespaceblog.fun/2024/03/25/powershell_4/index.html">
+<meta property="og:site_name" content="但行好事，莫问前程">
+<meta property="og:description" content="powershell_4 扩展命令这章就主要介绍使用powershell调用三方的一些扩展文件，可以实现控制windows系列的软件，例如office、mssql等，下面举一个例子，可以查看这些应用的状态：">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/powershell_4/1.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/powershell_4/2.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/powershell_4/3.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/powershell_4/4.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/powershell_4/5.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/powershell_4/6.png">
+<meta property="article:published_time" content="2024-03-25T06:13:37.000Z">
+<meta property="article:modified_time" content="2024-09-17T02:34:32.902Z">
+<meta property="article:author" content="zhipeng.qi">
+<meta property="article:tag" content="windows">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.freespaceblog.fun/images/powershell_4/1.png">
+
+
+<link rel="canonical" href="https://www.freespaceblog.fun/2024/03/25/powershell_4/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://www.freespaceblog.fun/2024/03/25/powershell_4/","path":"2024/03/25/powershell_4/","title":"Powershell_4"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Powershell_4 | 但行好事，莫问前程</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">但行好事，莫问前程</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#powershell-4-%E6%89%A9%E5%B1%95%E5%91%BD%E4%BB%A4"><span class="nav-number">1.</span> <span class="nav-text">powershell_4 扩展命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0"><span class="nav-number">1.1.</span> <span class="nav-text">练习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AD%94%E6%A1%88"><span class="nav-number">1.2.</span> <span class="nav-text">答案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E6%88%AA%E5%9B%BE"><span class="nav-number">1.3.</span> <span class="nav-text">测试截图</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhipeng.qi</p>
+  <div class="site-description" itemprop="description">我的技术总结</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.freespaceblog.fun/2024/03/25/powershell_4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhipeng.qi">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="但行好事，莫问前程">
+      <meta itemprop="description" content="我的技术总结">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Powershell_4 | 但行好事，莫问前程">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Powershell_4
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-03-25 14:13:37" itemprop="dateCreated datePublished" datetime="2024-03-25T14:13:37+08:00">2024-03-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-09-17 10:34:32" itemprop="dateModified" datetime="2024-09-17T10:34:32+08:00">2024-09-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/windows/" itemprop="url" rel="index"><span itemprop="name">windows</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/windows/powershell/" itemprop="url" rel="index"><span itemprop="name">powershell</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+           
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="powershell-4-扩展命令"><a href="#powershell-4-扩展命令" class="headerlink" title="powershell_4 扩展命令"></a>powershell_4 扩展命令</h1><p>这章就主要介绍使用powershell调用三方的一些扩展文件，可以实现控制windows系列的软件，例如office、mssql等，下面举一个例子，可以查看这些应用的状态：</p>
+<span id="more"></span>
+
+
+<p><img src="/../images/powershell_4/1.png"><br>其中，文件的位置在如下的路径：</p>
+<p><img src="/../images/powershell_4/2.png"></p>
+<p>我们进入到这个目录可以看到有很多的dll文件，这个就是三方的一些调用，在我们需要用powershell调用这些扩展命令的时候，申明路径，而且导入即可使用<br><img src="/../images/powershell_4/3.png"></p>
+<p><img src="/../images/powershell_4/4.png"></p>
+<h2 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h2><p>运行网络故障诊断包。如果可能成功，寻找“实例ID” 运行Web连接测试，并从一个指定的页面中寻求帮助。使用“<a target="_blank" rel="noopener" href="http://videotraning.interfacett.com"作为测试地址/">http://videotraning.interfacett.com&quot;作为测试地址</a></p>
+<h2 id="答案"><a href="#答案" class="headerlink" title="答案"></a>答案</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">#获取故障诊断的扩展命令清单</span><br><span class="line">get-module *trouble* -list</span><br><span class="line">#导入故障诊断的扩展命令</span><br><span class="line">import-module -name TroubleshootingPack</span><br><span class="line">#获取故障诊断命令</span><br><span class="line">get-command -module TroubleshootingPack</span><br><span class="line">#获取所有故障诊断命令帮助</span><br><span class="line">help get-troubleshootingpack -full</span><br><span class="line">#获取导入所有命令的帮助</span><br><span class="line">help invoke-troubleshootingpack -full</span><br><span class="line">#创建变量为$pack，指定执行命令为get-troubleshootingpack，指定路径为C:\windows\diagnostics\system\Networking</span><br><span class="line">$pack = get-troubleshootingpack -Path &quot;C:\windows\diagnostics\system\Networking&quot;</span><br><span class="line">#执行故障诊断命令</span><br><span class="line">Invoke-TroubleshootingPack $pack</span><br><span class="line">&lt;#在实例 ID</span><br><span class="line">请勿指定 MSDT 以外的应用程序。输入回车#&gt;</span><br><span class="line">#按照提示选择1，2</span><br><span class="line">#按照提示输入测试url</span><br><span class="line">https://www.pluralsight.com/browse/it-ops</span><br></pre></td></tr></table></figure>
+<h2 id="测试截图"><a href="#测试截图" class="headerlink" title="测试截图"></a>测试截图</h2><p><img src="/../images/powershell_4/5.png"></p>
+<p><img src="/../images/powershell_4/6.png"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/windows/" rel="tag"># windows</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/03/14/powershell_3/" rel="prev" title="Powershell_3">
+                  <i class="fa fa-angle-left"></i> Powershell_3
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/04/02/powershell_5/" rel="next" title="Powershell_5">
+                  Powershell_5 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">zhipeng.qi</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

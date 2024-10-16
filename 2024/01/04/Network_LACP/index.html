@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.freespaceblog.fun","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="LACP链路聚合技术什么是LACP？LACP（Link Aggregation Control Protocol，链路聚合控制协议）是一种基于IEEE802.3ad标准的实现链路动态聚合与解聚合的协议，它是链路聚合中常用的一种协议。链路聚合组中启用了LACP协议的成员端口通过发送LACPDU报文进行交互，双方对哪些端口能够发送和接收报文达成一致，确定承担业务流量的链路。此外，当聚合条件发生变化时，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LACP配置">
+<meta property="og:url" content="https://www.freespaceblog.fun/2024/01/04/Network_LACP/index.html">
+<meta property="og:site_name" content="但行好事，莫问前程">
+<meta property="og:description" content="LACP链路聚合技术什么是LACP？LACP（Link Aggregation Control Protocol，链路聚合控制协议）是一种基于IEEE802.3ad标准的实现链路动态聚合与解聚合的协议，它是链路聚合中常用的一种协议。链路聚合组中启用了LACP协议的成员端口通过发送LACPDU报文进行交互，双方对哪些端口能够发送和接收报文达成一致，确定承担业务流量的链路。此外，当聚合条件发生变化时，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_LACP/1.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_LACP/2.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_LACP/3.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_LACP/4.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_LACP/5.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_LACP/6.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_LACP/7.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_LACP/8.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_LACP/9.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_LACP/10.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_LACP/11.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_LACP/12.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_LACP/13.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_LACP/14.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_LACP/15.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_LACP/16.png">
+<meta property="article:published_time" content="2024-01-04T06:09:04.000Z">
+<meta property="article:modified_time" content="2024-09-17T02:34:33.518Z">
+<meta property="article:author" content="zhipeng.qi">
+<meta property="article:tag" content="network">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.freespaceblog.fun/images/Network_LACP/1.png">
+
+
+<link rel="canonical" href="https://www.freespaceblog.fun/2024/01/04/Network_LACP/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://www.freespaceblog.fun/2024/01/04/Network_LACP/","path":"2024/01/04/Network_LACP/","title":"LACP配置"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>LACP配置 | 但行好事，莫问前程</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">但行好事，莫问前程</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#LACP%E9%93%BE%E8%B7%AF%E8%81%9A%E5%90%88%E6%8A%80%E6%9C%AF"><span class="nav-number">1.</span> <span class="nav-text">LACP链路聚合技术</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFLACP%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">什么是LACP？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LACP%E4%B8%8ELAG%E6%98%AF%E4%BB%80%E4%B9%88%E5%85%B3%E7%B3%BB%EF%BC%9F"><span class="nav-number">1.2.</span> <span class="nav-text">LACP与LAG是什么关系？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E7%94%A8LACP%EF%BC%9F"><span class="nav-number">1.3.</span> <span class="nav-text">为什么要用LACP？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#LACP%E6%A8%A1%E5%BC%8F%E5%AF%B9%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93%E6%9B%B4%E5%8A%A0%E7%A8%B3%E5%AE%9A%E5%92%8C%E5%8F%AF%E9%9D%A0"><span class="nav-number">1.3.1.</span> <span class="nav-text">LACP模式对数据传输更加稳定和可靠</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LACP%E6%A8%A1%E5%BC%8F%E5%AF%B9%E8%81%9A%E5%90%88%E9%93%BE%E8%B7%AF%E7%BB%84%E7%9A%84%E6%95%85%E9%9A%9C%E6%A3%80%E6%B5%8B%E6%9B%B4%E5%8A%A0%E5%87%86%E7%A1%AE%E5%92%8C%E6%9C%89%E6%95%88"><span class="nav-number">1.3.2.</span> <span class="nav-text">LACP模式对聚合链路组的故障检测更加准确和有效</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%92%E5%8F%91LACPDU%E6%8A%A5%E6%96%87"><span class="nav-number">1.3.3.</span> <span class="nav-text">互发LACPDU报文</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A1%AE%E5%AE%9A%E4%B8%BB%E5%8A%A8%E7%AB%AF"><span class="nav-number">1.3.4.</span> <span class="nav-text">确定主动端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A1%AE%E5%AE%9A%E6%B4%BB%E5%8A%A8%E9%93%BE%E8%B7%AF"><span class="nav-number">1.3.5.</span> <span class="nav-text">确定活动链路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%93%BE%E8%B7%AF%E5%88%87%E6%8D%A2"><span class="nav-number">1.3.6.</span> <span class="nav-text">链路切换</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LACP%E5%92%8CPAGP%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="nav-number">1.4.</span> <span class="nav-text">LACP和PAGP有什么区别？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%B6%E6%9E%84%E5%9B%BE"><span class="nav-number">1.4.1.</span> <span class="nav-text">架构图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%80%9D%E8%B7%AF"><span class="nav-number">1.4.2.</span> <span class="nav-text">配置思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.4.3.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhipeng.qi</p>
+  <div class="site-description" itemprop="description">我的技术总结</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.freespaceblog.fun/2024/01/04/Network_LACP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhipeng.qi">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="但行好事，莫问前程">
+      <meta itemprop="description" content="我的技术总结">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="LACP配置 | 但行好事，莫问前程">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          LACP配置
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-01-04 14:09:04" itemprop="dateCreated datePublished" datetime="2024-01-04T14:09:04+08:00">2024-01-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-09-17 10:34:33" itemprop="dateModified" datetime="2024-09-17T10:34:33+08:00">2024-09-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/network/" itemprop="url" rel="index"><span itemprop="name">network</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/network/%E5%AE%9E%E6%93%8D/" itemprop="url" rel="index"><span itemprop="name">实操</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/network/%E5%AE%9E%E6%93%8D/SWITCH/" itemprop="url" rel="index"><span itemprop="name">SWITCH</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+           
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="LACP链路聚合技术"><a href="#LACP链路聚合技术" class="headerlink" title="LACP链路聚合技术"></a>LACP链路聚合技术</h1><h2 id="什么是LACP？"><a href="#什么是LACP？" class="headerlink" title="什么是LACP？"></a>什么是LACP？</h2><p>LACP（Link Aggregation Control Protocol，链路聚合控制协议）是一种基于IEEE802.3ad标准的实现链路动态聚合与解聚合的协议，它是链路聚合中常用的一种协议。链路聚合组中启用了LACP协议的成员端口通过发送LACPDU报文进行交互，双方对哪些端口能够发送和接收报文达成一致，确定承担业务流量的链路。此外，当聚合条件发生变化时，如某个链路发生故障，LACP模式会自动调整聚合组中的链路，组内其他可用成员链路接替故障链路维持负载平衡。这样在不进行硬件升级的情况下，可以增加设备之间的逻辑带宽，提高网络的可靠性。</p>
+<h2 id="LACP与LAG是什么关系？"><a href="#LACP与LAG是什么关系？" class="headerlink" title="LACP与LAG是什么关系？"></a>LACP与LAG是什么关系？</h2><p>链路聚合组LAG（Link Aggregation Group）是指将若干条以太链路捆绑在一起形成一条逻辑链路，也称Eth-Trunk链路。每个聚合组对应一个链路聚合接口或Eth-Trunk接口，组成Eth-Trunk接口的各个物理接口称为成员接口，成员接口对应的链路称为成员链路。链路聚合接口可以作为普通的以太网接口来使用，与普通以太网接口的差别在于：转发的时候链路聚合组需要从成员接口中选择一个或多个接口来进行数据转发。</p>
+<span id="more"></span>
+<center>
+  <img src="/images/Network_LACP/1.png"  style="margin-bottom: 5px;">
+  <div style="color:orange; border-bottom: 1px solid #d9d9d9; display: inline-block; color: #999; padding: 2px; margin-top: 1px;">
+    链路聚合组与链路聚合接口、成员接口和成员链路关系示意图
+  </div>
+</center>
+
+<p>LAG是一种链路聚合技术，当在两台交换机之间并行连接多个端口并将它们配置为LAG时，链路聚合组就会形成，而LACP是一种自动建立LAG的控制协议，用于启用LAG自动配置网络交换机端口、分离链路故障和激活故障切换。</p>
+<p>LAG主要有两种模式，分别是手工模式和LACP模式。</p>
+<ul>
+<li><p>手工模式：指LAG不启用任何链路聚合协议，Eth-Trunk的建立、成员接口的加入由手工配置。</p>
+</li>
+<li><p>LACP模式：指LAG启用LACP链路聚合协议，Eth-Trunk的建立、成员接口的加入基于LACP协议协商完成。<br>部分设备支持手工模式，但不支持LACP模式，LACP模式需要本端和对端设备同时启用LACP协议，所选择的活动接口必须保持一致，才能建立LAG，如果对端设备未启用LACP协议，本端LAG会尝试将数据包传输到远程单个接口，可能导致通信失败。</p>
+<center>
+<img src="/images/Network_LACP/2.png"  style="margin-bottom: 5px;">
+<div style="color:orange; border-bottom: 1px solid #d9d9d9; display: inline-block; color: #999; padding: 2px; margin-top: 1px;">
+  手工模式与LACP模式的对比
+</div>
+</center></li>
+</ul>
+<h2 id="为什么要用LACP？"><a href="#为什么要用LACP？" class="headerlink" title="为什么要用LACP？"></a>为什么要用LACP？</h2><h3 id="LACP模式对数据传输更加稳定和可靠"><a href="#LACP模式对数据传输更加稳定和可靠" class="headerlink" title="LACP模式对数据传输更加稳定和可靠"></a>LACP模式对数据传输更加稳定和可靠</h3><p>手工模式下，所有链路都是活动链路，所有活动链路均参与数据转发，平均分担流量。如果某条活动链路故障，链路聚合组自动在剩余的活动链路中平均分担流量。</p>
+<p>LACP模式下，由LACP确定聚合组中的活动和非活动链路，又称为M:N模式，即M条活动链路与N条备份链路的模式。这种模式提供了更高的链路可靠性，并且可以在M条链路中实现不同方式的负载均衡。</p>
+<p>如下图所示，两台设备间有M+N条链路，在聚合链路上转发流量时在M条链路上分担负载，即活动链路，不在另外的N条链路转发流量，这N条链路提供备份功能，即备份链路。此时链路的实际带宽为M条链路的总和，但是能提供的最大带宽为M+N条链路的总和。当M条链路中有一条链路故障时，LACP会从N条备份链路中找出一条优先级高的可用链路替换故障链路。此时链路的实际带宽还是M条链路的总和，但是能提供的最大带宽就变为M+N-1条链路的总和。</p>
+<center>
+  <img src="/images/Network_LACP/3.png"  style="margin-bottom: 5px;">
+  <div style="color:orange; border-bottom: 1px solid #d9d9d9; display: inline-block; color: #999; padding: 2px; margin-top: 1px;">
+    M:N备份示意图
+  </div>
+</center>
+
+<h3 id="LACP模式对聚合链路组的故障检测更加准确和有效"><a href="#LACP模式对聚合链路组的故障检测更加准确和有效" class="headerlink" title="LACP模式对聚合链路组的故障检测更加准确和有效"></a>LACP模式对聚合链路组的故障检测更加准确和有效</h3><p>手工模式只能检测到同一聚合组内的成员链路有断路等有限故障，LACP模式不仅能够检测到同一聚合组内的成员链路有断路等有限故障，还可以检测到链路故障、链路错连等故障。</p>
+<p>如下图所示，DeviceA与DeviceB之间创建Eth-Trunk，需要将DeviceA上的四个接口与DeviceB捆绑成一个Eth-Trunk。由于错将DeviceA上的一个接口与DeviceC相连，这将会导致DeviceA向DeviceB传输数据时可能会将本应该发到DeviceB的数据发送到DeviceC上。</p>
+<p>手工模式的Eth-trunk不能及时检测到该故障，如果在DeviceA和DeviceB上都启用LACP协议，经过协商后，Eth-Trunk就会选择正确连接的链路作为活动链路来转发数据，从而DeviceA发送的数据能够正确到达DeviceB。</p>
+<center>
+  <img src="/images/Network_LACP/4.png"  style="margin-bottom: 5px;">
+  <div style="color:orange; border-bottom: 1px solid #d9d9d9; display: inline-block; color: #999; padding: 2px; margin-top: 1px;">
+    Eth-Trunk错连示意图
+  </div>
+</center>
+## LACP是如何工作的？
+LACP为数据交换设备提供一种标准的协商方式，系统根据自身配置自动形成聚合链路，并启动聚合链路收发数据。LACP通过链路聚合控制协议数据单元LACPDU（Link Aggregation Control Protocol Data Unit）与对端交互信息，LACPDU报文中包含设备的系统优先级、MAC地址、接口优先级、接口号和操作Key等信息，对端接收到这些信息后，将这些信息与其它端口所保存的信息比较以选择能够汇聚的端口，双方对端口加入或退出某个动态聚合组达成一致，确定承担业务流量的链路。
+
+<p>LACP主要工作主要包含互发LACPDU报文、确定主动端、确定活动链路、链路切换，具体实现如下。</p>
+<h3 id="互发LACPDU报文"><a href="#互发LACPDU报文" class="headerlink" title="互发LACPDU报文"></a>互发LACPDU报文</h3><p>在对接的两台设备上创建Eth-Trunk并配置为LACP模式，然后向Eth-Trunk中手工加入成员接口。此时成员接口上便启用了LACP协议，两端互发LACPDU报文，LACPDU报文中包含设备的系统优先级、MAC地址、接口优先级、接口号和操作Key等信息。</p>
+<center>
+  <img src="/images/Network_LACP/5.png"  style="margin-bottom: 5px;">
+  <div style="color:orange; border-bottom: 1px solid #d9d9d9; display: inline-block; color: #999; padding: 2px; margin-top: 1px;">
+    互发LACPDU报文
+  </div>
+</center>
+
+<h3 id="确定主动端"><a href="#确定主动端" class="headerlink" title="确定主动端"></a>确定主动端</h3><p>两端设备均会收到对端发来的LACPDU报文。以DeviceB为例，当DeviceB收到DeviceA发送的报文时，DeviceB会查看并记录对端信息，然后比较系统优先级字段，如果DeviceA的系统优先级高于本端的系统优先级，则确定DeviceA为LACP主动端。如果DeviceA和DeviceB的系统优先级相同，比较两端设备的MAC地址，MAC地址小的一端为LACP主动端。</p>
+<center>
+  <img src="/images/Network_LACP/6.png"  style="margin-bottom: 5px;">
+  <div style="color:orange; border-bottom: 1px solid #d9d9d9; display: inline-block; color: #999; padding: 2px; margin-top: 1px;">
+    确定主动端
+  </div>
+</center>
+
+<h3 id="确定活动链路"><a href="#确定活动链路" class="headerlink" title="确定活动链路"></a>确定活动链路</h3><p>选出主动端后，设备两端会以主动端的接口优先级来选择活动接口，如果主动端的接口优先级都相同则选择接口编号比较小的为活动接口。LACP模式支持设置活动接口数上限阈值以在保证带宽的情况下提高网络可靠性，当前活动接口数目达到上限阈值时，再向Eth-Trunk中添加成员接口，不会增加Eth-Trunk活动接口的数目，超过上限阈值的链路状态将被置为Down，作为备份链路。两端设备选择了一致的活动接口，活动链路组便可以建立起来，这些活动链路以负载分担的方式转发数据。</p>
+<p>如下图所示，LACP模式下，如果活动链路数上限阈值为2，通过LACP协商后，链路1和链路2因为优先级较高被选作活动链路，链路3则为备份链路。聚合链路中的活动链路参与数据转发，总带宽等于被选中的活动链路带宽之和。</p>
+<center>
+  <img src="/images/Network_LACP/7.png"  style="margin-bottom: 5px;">
+  <div style="color:orange; border-bottom: 1px solid #d9d9d9; display: inline-block; color: #999; padding: 2px; margin-top: 1px;">
+    确定活动链路
+  </div>
+</center>
+
+<h3 id="链路切换"><a href="#链路切换" class="headerlink" title="链路切换"></a>链路切换</h3><p>LACP模式链路聚合组中如果某条活动链路故障，链路聚合组自动在备份链路中选择一条优先级最高的链路作为活动链路接替故障链路，参与数据转发的链路数目不变，保证数据传输的可靠性。LACP模式链路聚合组两端设备中任何一端检测到以下事件，都会触发聚合组的链路切换：</p>
+<ul>
+<li>链路Down事件。</li>
+<li>以太网OAM检测到链路失效。</li>
+<li>LACP协议发现链路故障。</li>
+<li>接口不可用。</li>
+<li>在使能了LACP抢占功能的前提下，更改备份接口的优先级高于当前活动接口的优先级。</li>
+</ul>
+<p>当满足上述切换条件其中之一时，按照如下步骤进行切换：</p>
+<ol>
+<li>关闭故障链路。</li>
+<li>从N条备份链路中选择优先级最高的链路接替活动链路中的故障链路。</li>
+<li>优先级最高的备份链路转为活动状态并转发数据，完成切换。<center>
+  <img src="/images/Network_LACP/8.png"  style="margin-bottom: 5px;">
+  <div style="color:orange; border-bottom: 1px solid #d9d9d9; display: inline-block; color: #999; padding: 2px; margin-top: 1px;">
+ 链路切换
+  </div>
+</center></li>
+</ol>
+<h2 id="LACP和PAGP有什么区别？"><a href="#LACP和PAGP有什么区别？" class="headerlink" title="LACP和PAGP有什么区别？"></a>LACP和PAGP有什么区别？</h2><p>LACP和PAGP（Port Aggregation Protocol，端口汇聚协议）是链路聚合中使用最广泛的两种协商协议。LACP和PAgP的功能类似，都是通过捆绑链路并协商成员链路之间的流量提高网络的可用性和稳定性。LACP和PAgP数据包在交换机之间通过支持以太网通道的端口交换。</p>
+<p>它们之间最大的区别是支持的供应商不同，LACP是开放标准，可以在大多数交换机上运行，如华为S5700系列交换机，而PAgP是Cisco专有协议，只能在Cisco或支持PAgP的第三方交换机上运行。</p>
+<center>
+  <img src="/images/Network_LACP/9.png"  style="margin-bottom: 5px;">
+  <div style="color:orange; border-bottom: 1px solid #d9d9d9; display: inline-block; color: #999; padding: 2px; margin-top: 1px;">
+    LACP vs PAgP
+  </div>
+</center>
+## 实验
+
+<h3 id="架构图"><a href="#架构图" class="headerlink" title="架构图"></a>架构图</h3><p><img src="/../images/Network_LACP/10.png"></p>
+<h3 id="配置思路"><a href="#配置思路" class="headerlink" title="配置思路"></a>配置思路</h3><p><img src="/../images/Network_LACP/11.png"></p>
+<p>###开始配置</p>
+<p>第一台配置：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line">interface Eth-trunk 1</span><br><span class="line">mode lacp-static</span><br><span class="line">port link-type trunk</span><br><span class="line">quit</span><br><span class="line">interface eth-trunk 1</span><br><span class="line">port trunk allow-pass vlan 10</span><br><span class="line">trunkport GigabiEthernet 0/0/1 to 0/0/4</span><br><span class="line">dis cu </span><br><span class="line">dis eth-trunk 1</span><br></pre></td></tr></table></figure>
+<p>检查：<br><img src="/../images/Network_LACP/12.png"><br>更改优先级</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">lacp priority 4096</span><br><span class="line">interface eth-trunk 1</span><br><span class="line">max active-linknumber 2</span><br><span class="line">lacp preempt enable</span><br><span class="line">lacp preempt delay 10</span><br><span class="line">interface g0/0/1</span><br><span class="line">lacp priority 1000</span><br><span class="line">interface g0/0/2</span><br><span class="line">lacp priority 2000</span><br><span class="line">interface g0/0/3</span><br><span class="line">lacp priority 3000</span><br><span class="line">interface g0/0/4</span><br><span class="line">lacp priority 3500</span><br></pre></td></tr></table></figure>
+
+<p>检查：<br><img src="/../images/Network_LACP/13.png"></p>
+<p>第二台配置：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line">interface eth-trunk 1</span><br><span class="line">mode lacp-static</span><br><span class="line">port link-type trunk</span><br><span class="line">quit</span><br><span class="line">interface eth-trunk 1</span><br><span class="line">port trunk allow-pass vlan 10</span><br><span class="line">trunkport GigabitEthernet 0/0/1 to 0/0/4</span><br></pre></td></tr></table></figure>
+
+<p>检查配置<br><img src="/../images/Network_LACP/14.png"></p>
+<p>禁用目前活跃的第二口</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">interface g0/0/2</span><br><span class="line">shutdown</span><br></pre></td></tr></table></figure>
+
+<p>检查<br><img src="/../images/Network_LACP/15.png"></p>
+<p>重新恢复第二口</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">interface g0/0/2</span><br><span class="line">undo shutdown</span><br></pre></td></tr></table></figure>
+<p>检查<br><img src="/../images/Network_LACP/16.png"></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>LACP是链路聚合的一种技术，通常用在交换机之间，和交换机的堆叠或者高可用不是一个概念，这点要分清楚。只是一种链路高可用的手段，在交换机上的有一种VRRP的后面再说。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/network/" rel="tag"># network</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/12/21/Network_STP/" rel="prev" title="STP配置">
+                  <i class="fa fa-angle-left"></i> STP配置
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/02/25/Remote_tool/" rel="next" title="远程监控管理工具">
+                  远程监控管理工具 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">zhipeng.qi</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

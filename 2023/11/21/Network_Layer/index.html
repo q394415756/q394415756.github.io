@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.freespaceblog.fun","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="网络层网络层开始就算是进入我们网工的领域（二层有一堆不属于网络的东西，我们也改变不了厂商出场的配置）。在这一层我们可以开始规划设计我们的网络架构，并使用二层的协议和三层的一些协议配置企业内部的网络通讯。这里介绍几个主要工作在三层的协议：ARP、GRE、ICMP、ICMPv6、IGMP、IP、IPv6、OSPF、MPLS（这个比较特殊，后边再说）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Network_Layer">
+<meta property="og:url" content="https://www.freespaceblog.fun/2023/11/21/Network_Layer/index.html">
+<meta property="og:site_name" content="但行好事，莫问前程">
+<meta property="og:description" content="网络层网络层开始就算是进入我们网工的领域（二层有一堆不属于网络的东西，我们也改变不了厂商出场的配置）。在这一层我们可以开始规划设计我们的网络架构，并使用二层的协议和三层的一些协议配置企业内部的网络通讯。这里介绍几个主要工作在三层的协议：ARP、GRE、ICMP、ICMPv6、IGMP、IP、IPv6、OSPF、MPLS（这个比较特殊，后边再说）">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_Layer/1.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_Layer/2.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_Layer/3.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_Layer/4.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_Layer/5.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_Layer/6.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_Layer/7.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_Layer/8.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_Layer/9.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_Layer/10.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_Layer/11.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_Layer/12.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_Layer/13.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_Layer/14.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_Layer/15.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_Layer/16.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_Layer/17.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_Layer/18.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_Layer/19.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_Layer/20.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_Layer/21.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_Layer/22.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_Layer/23.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_Layer/24.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_Layer/25.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_Layer/26.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_Layer/27.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_Layer/28.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_Layer/29.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_Layer/30.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_Layer/31.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_Layer/32.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_Layer/33.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_Layer/34.png">
+<meta property="article:published_time" content="2023-11-21T06:08:00.000Z">
+<meta property="article:modified_time" content="2024-09-17T02:34:33.350Z">
+<meta property="article:author" content="zhipeng.qi">
+<meta property="article:tag" content="network">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.freespaceblog.fun/images/Network_Layer/1.png">
+
+
+<link rel="canonical" href="https://www.freespaceblog.fun/2023/11/21/Network_Layer/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://www.freespaceblog.fun/2023/11/21/Network_Layer/","path":"2023/11/21/Network_Layer/","title":"Network_Layer"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Network_Layer | 但行好事，莫问前程</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">但行好事，莫问前程</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E5%B1%82"><span class="nav-number">1.</span> <span class="nav-text">网络层</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ARP"><span class="nav-number">1.1.</span> <span class="nav-text">ARP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GRE"><span class="nav-number">1.2.</span> <span class="nav-text">GRE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ICMP"><span class="nav-number">1.3.</span> <span class="nav-text">ICMP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IGMP"><span class="nav-number">1.4.</span> <span class="nav-text">IGMP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFIGMP"><span class="nav-number">1.4.1.</span> <span class="nav-text">什么是IGMP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IGMP%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="nav-number">1.4.2.</span> <span class="nav-text">IGMP的作用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IGMP%E7%9A%84%E7%89%88%E6%9C%AC"><span class="nav-number">1.4.3.</span> <span class="nav-text">IGMP的版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E6%92%AD%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%88%86%E7%B1%BB"><span class="nav-number">1.4.4.</span> <span class="nav-text">组播模型的分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E6%92%AD%E5%8D%8F%E8%AE%AE"><span class="nav-number">1.4.5.</span> <span class="nav-text">组播协议</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IP"><span class="nav-number">1.5.</span> <span class="nav-text">IP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#IP%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86"><span class="nav-number">1.5.1.</span> <span class="nav-text">IP基本原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IP%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="nav-number">1.5.2.</span> <span class="nav-text">IP的作用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IP%E5%9C%B0%E5%9D%80%E5%88%86%E7%B1%BB"><span class="nav-number">1.5.3.</span> <span class="nav-text">IP地址分类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IPv6"><span class="nav-number">1.6.</span> <span class="nav-text">IPv6</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OSPF"><span class="nav-number">1.7.</span> <span class="nav-text">OSPF</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B7%AF%E7%94%B1"><span class="nav-number">1.8.</span> <span class="nav-text">路由</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhipeng.qi</p>
+  <div class="site-description" itemprop="description">我的技术总结</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.freespaceblog.fun/2023/11/21/Network_Layer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhipeng.qi">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="但行好事，莫问前程">
+      <meta itemprop="description" content="我的技术总结">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Network_Layer | 但行好事，莫问前程">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Network_Layer
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-11-21 14:08:00" itemprop="dateCreated datePublished" datetime="2023-11-21T14:08:00+08:00">2023-11-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-09-17 10:34:33" itemprop="dateModified" datetime="2024-09-17T10:34:33+08:00">2024-09-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/network/" itemprop="url" rel="index"><span itemprop="name">network</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/network/%E7%90%86%E8%AE%BA/" itemprop="url" rel="index"><span itemprop="name">理论</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+           
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="网络层"><a href="#网络层" class="headerlink" title="网络层"></a>网络层</h1><p>网络层开始就算是进入我们网工的领域（二层有一堆不属于网络的东西，我们也改变不了厂商出场的配置）。在这一层我们可以开始规划设计我们的网络架构，并使用二层的协议和三层的一些协议配置企业内部的网络通讯。这里介绍几个主要工作在三层的协议：ARP、GRE、ICMP、ICMPv6、IGMP、IP、IPv6、OSPF、MPLS（这个比较特殊，后边再说）</p>
+<span id="more"></span>
+
+<h2 id="ARP"><a href="#ARP" class="headerlink" title="ARP"></a>ARP</h2><p>什么是ARP</p>
+<p>地址解析协议，即ARP（Address Resolution Protocol），是根据IP地址获取物理地址的一个TCP&#x2F;IP协议。主机发送信息时将包含目标IP地址的ARP请求广播到局域网络上的所有主机，并接收返回消息，以此确定目标的物理地址；收到返回消息后将该IP地址和物理地址存入本机ARP缓存中并保留一定时间，下次请求时直接查询ARP缓存以节约资源。地址解析协议是建立在网络中各个主机互相信任的基础上的，局域网络上的主机可以自主发送ARP应答消息，其他主机收到应答报文时不会检测该报文的真实性就会将其记入本机ARP缓存；</p>
+<p>最直白的说法是：在IP以太网中，当一个上层协议要发包时，有了该节点的IP地址，ARP就能提供该节点的MAC地址。</p>
+<p>大家都知道，OSI模式把网络工作分为七层，彼此不直接打交道，只通过接口(layre interface). IP地址在第三层（网络层）, MAC地址在第二层（数据链路层）。协议在发送数据包时，首先要封装第三层（IP地址）和第二层 （MAC地址）的报头, 但协议只知道目的节点的IP地址，不知道其物理地址，又不能跨第二、三层，所以得用ARP的服务拿到MAC地址。</p>
+<p>ARP工作过程</p>
+<p>假设主机A和B在同一个网段，主机A要向主机B发送信息，具体的地址解析过程如下：</p>
+<p>主机A首先查看自己的ARP缓存表，确定其中是否包含有主机B对应的ARP表项。如果找到了对应的MAC地址，则主机A直接利用ARP表中的MAC地址，对IP数据包进行帧封装，并将数据包发送给主机B。<br>如果主机A在ARP表中找不到对应的MAC地址，则将缓存该数据报文，然后以广播方式发送一个ARP请求报文。ARP请求报文中的发送端IP地址和发送端MAC地址为主机A的IP地址和MAC地址，目标IP地址和目标MAC地址为主机B的IP地址和全0的MAC地址。由于ARP请求报文以广播方式发送，该网段上的所有主机都可以接收到该请求，但只有被请求的主机（即主机B）会对该请求进行处理。<br>主机B比较自己的IP地址和ARP请求报文中的目标IP地址，当两者相同时进行如下处理：将ARP请求报文中的发送端（即主机A）的IP地址和MAC地址存入自己的ARP表中。之后以单播方式发送ARP响应报文给主机A，其中包含了自己的MAC地址。<br>主机A收到ARP响应报文后，将主机B的MAC地址加入到自己的ARP表中以用于后续报文的转发，同时将IP数据包进行封装后发送出去。<br>当主机A和主机B不在同一网段时，主机A就会先向网关发出ARP请求，ARP请求报文中的目标IP地址为网关的IP地址。当主机A从收到的响应报文中获得网关的MAC地址后，将报文封装并发给网关。如果网关没有主机B的ARP表项，网关会广播ARP请求，目标IP地址为主机B的IP地址，当网关从收到的响应报文中获得主机B的MAC地址后，就可以将报文发给主机B；如果网关已经有主机B的ARP表项，网关直接把报文发给主机B。</p>
+<p>ARP缓存表和TTL</p>
+<p>ARP表</p>
+<p>网络设备一般都有一个ARP缓存（ARP Cache），ARP缓存用来存放IP地址和MAC地址的关联信息。在发送数据前，设备会先查找ARP缓存表。如果缓存表中存在对方设备的MAC地址，则直接采用该MAC地址来封装帧，然后将帧发送出去。如果缓存表中不存在相应的信息，则通过发送ARP request报文来获得它。学习到的IP地址和MAC地址的映射关系会被放入ARP缓存表中存放一段时间。在有效期内，设备可以直接从这个表中查找目的MAC地址来进行数据封装，而无需进行ARP查询。过了这段有效期，ARP表现会被自动删除。如果目标设备位于其他网络则源设备会在ARP缓存表中查找网关的MAC地址，然后将数据发送给网关，网关再把数据转发给目的设备。</p>
+<p>ARP表项又分为动态ARP表项和静态ARP表项。</p>
+<p>动态ARP表项<br>动态ARP表项由ARP协议通过ARP报文自动生成和维护，可以被老化，可以被新的ARP报文更新，可以被静态ARP表项覆盖。每个动态ARP缓存项的潜在生命周期是10分钟。新加到缓存中的项目带有时间戳，如果某个项目添加后2分钟内没有再使用，则此项目过期并从ARP缓存中删除；如果某个项目已在使用，则又收到2分钟的生命周期；如果某个项目始终在使用，则会另外收到2分钟的生命周期，一直到10分钟的最长生命周期。</p>
+<p>静态ARP表项</p>
+<p>静态ARP表项通过手工配置和维护，不会被老化，不会被动态ARP表项覆盖。直到重新启动计算机为止。</p>
+<p>配置静态ARP表项可以增加通信的安全性。静态ARP表项可以限制和指定IP地址的设备通信时只使用指定的MAC地址，此时攻击报文无法修改此表项的IP地址和MAC地址的映射关系，从而保护了本设备和指定设备间的正常通信。</p>
+<p>静态ARP表项分为短静态ARP表项和长静态ARP表项。</p>
+<p>在配置长静态ARP表项时，除了配置IP地址和MAC地址项外，还必须配置该ARP表项所在VLAN和出接口。长静态ARP表项可以直接用于报文转发。<br>在配置短静态ARP表项时，只需要配置IP地址和MAC地址项。如果出接口是三层以太网接口，短静态ARP表项可以直接用于报文转发；如果出接口是VLAN虚接口，短静态ARP表项不能直接用于报文转发，当要发送IP数据包时，先发送ARP请求报文，如果收到的响应报文中的源IP地址和源MAC地址与所配置的IP地址和MAC地址相同，则将接收ARP响应报文的接口加入该静态ARP表项中，之后就可以用于IP数据包的转发。<br>一般情况下，ARP动态执行并自动寻求IP地址到以太网MAC地址的解析，无需管理员的介入。</p>
+<p>当希望设备和指定用户只能使用某个固定的IP地址和MAC地址通信时，可以配置短静态ARP表项，当进一步希望限定这个用户只在某VLAN内的某个特定接口上连接时就可以配置长静态ARP表项。</p>
+<p>ARP报文格式</p>
+<p>在局域网中，当主机或其它网络设备有数据要发送给另一个主机或设备时，它必须知道对方的网络层地址（即IP地址）。但是仅仅有IP地址是不够的，因为IP数据报文必须封装成帧才能通过物理网络发送，因此发送站还必须有接收站的物理地址，所以需要一个从IP地址到物理地址的映射。APR就是实现这个功能的协议。</p>
+<p>ARP协议是通过报文进行工作的，是一个独立的三层协议，所以ARP报文在向数据链路层传输时不需要经过IP协议的封装，而是直接生成自己的报文，其中包括ARP报头，到数据链路层后再由对应的数据链路层协议（如以太网协议）进行封装。ARP报文分为ARP请求和ARP应答报文两种，它们的报文格式可以统一为下图所示。</p>
+<p>前面Ethernet Address of destination， Ethernet Address of sender 和 Frame Type属于数据链路层的封装，往后的就是真正的ARP报文数据结构。</p>
+<p><img src="/../images/Network_Layer/1.png"></p>
+<p>ARP请求</p>
+<p>下面是Wireshark抓的ARP请求报文，大家可以看到数据链路层的Ethernet Address of destination是全ff，说明这是一个广播包，是为了获取指定IP的MAC地址，可以看到ARP包中的Target IP address是192.168.0.7，但Target MAC address是全0，说明当前还不知道目标主机的MAC地址，Opcode为1，说明这是一个ARP请求报文。</p>
+<p><img src="/../images/Network_Layer/2.png"></p>
+<p>ARP响应</p>
+<p>下面是Wireshark抓的ARP响应报文，大家参照上面的报文格式解析一下咯：</p>
+<p><img src="/../images/Network_Layer/3.png"></p>
+<p>免费ARP</p>
+<p>免费 ARP（Gratuitous ARP）包是一种特殊的ARP请求，它并非期待得到IP对应的 MAC 地址，而是当主机启动的时候，发送一个 Gratuitous ARP请求，即请求自己的IP地址的MAC地址。</p>
+<p><img src="/../images/Network_Layer/4.png"></p>
+<p>免费ARP报文与普通ARP请求报文的区别在于报文中的目标IP地址。普通ARP报文中的目标IP地址是其他主机的IP地址；而免费ARP的请求报文中，目标IP地址是自己的IP地址。</p>
+<p>免费 ARP 数据包有以下 3 个作用。</p>
+<p>该类型报文起到一个宣告作用。它以广播的形式将数据包发送出去，不需要得到回应，只为了告诉其他计算机自己的IP地址和MAC地址。<br>可用于检测IP地址冲突。当一台主机发送了免费ARP请求报文后，如果收到了ARP响应报文，则说明网络内已经存在使用该IP地址的主机。<br>可用于更新其他主机的ARP缓存表。如果该主机更换了网卡，而其他主机的ARP缓存表仍然保留着原来的MAC地址。这时，可以发送免费的 ARP数据包。其他主机收到该数据包后，将更新ARP缓存表，将原来的 MAC地址替换为新的MAC地址。</p>
+<p>ARP代理</p>
+<p>当局域网内部主机发起跨网段的ARP请求时，出口路由器&#x2F;网关设备将自身MAC地址回复该请求时，这个过程称为代理ARP。（eg：1.没有路由功能的主机；2.有路由功能，目的地指向本地出口）</p>
+<p>地址解析协议工作在一个网段中，而代理ARP（Proxy ARP，也被称作混杂ARP（Promiscuous ARP））工作在不同的网段间，其一般被像路由器这样的设备使用，用来代替处于另一个网段的主机回答本网段主机的ARP请求。</p>
+<p>例如，主机PC1（192.168.20.66&#x2F;24）需要向主机PC2（192.168.20.20&#x2F;24）发送报文，因为主机PC1不知道子网的存在且和目标主机PC2在同一主网络网段，所以主机PC1将发送ARP协议请求广播报文请求192.168.20.20的MAC地址。这时，路由器将识别出报文的目标地址属于另一个子网（注意，路由器的接口IP地址配置的是28位的掩码），因此向请求主机回复自己的硬件地址（0004.dd9e.cca0）。之后，PC1将发往PC2的数据包都发往MAC地址0004.dd9e.cca0（路由器的接口E0&#x2F;0），由路由器将数据包转发到目标主机PC2。（接下来路由器将为PC2做同样的代理发送数据包的工作）。代理ARP协议使得子网化网络拓扑对于主机来说是透明的（或者可以说是路由器以一个不真实的PC2的MAC地址欺骗了源主机PC1）。</p>
+<p>ARP欺骗<br>地址解析协议是建立在网络中各个主机互相信任的基础上的，它的诞生使得网络能够更加高效的运行，但其本身也存在缺陷：</p>
+<p>ARP地址转换表是依赖于计算机中高速缓冲存储器动态更新的，而高速缓冲存储器的更新是受到更新周期的限制的，只保存最近使用的地址的映射关系表项，这使得攻击者有了可乘之机，可以在高速缓冲存储器更新表项之前修改地址转换表，实现攻击。ARP请求为广播形式发送的，网络上的主机可以自主发送ARP应答消息，并且当其他主机收到应答报文时不会检测该报文的真实性就将其记录在本地的MAC地址转换表，这样攻击者就可以向目标主机发送伪ARP应答报文，从而篡改本地的MAC地址表。ARP欺骗可以导致目标计算机与网关通信失败，更会导致通信重定向，所有的数据都会通过攻击者的机器，因此存在极大的安全隐患。</p>
+<p>「防御措施」</p>
+<p>不要把网络安全信任关系建立在IP基础上或MAC基础上（RARP同样存在欺骗的问题），理想的关系应该建立在IP+MAC基础上。<br>设置静态的MAC–&gt;IP对应表，不要让主机刷新设定好的转换表。<br>除非很有必要，否则停止使用ARP，将ARP做为永久条目保存在对应表中。<br>使用ARP服务器。通过该服务器查找自己的ARP转换表来响应其他机器的ARP广播。确保这台ARP服务器不被黑。<br>使用“proxy”代理IP的传输。<br>使用硬件屏蔽主机。设置好路由，确保IP地址能到达合法的路径（静态配置路由ARP条目），注意，使用交换集线器和网桥无法阻止ARP欺骗。<br>管理员定期用响应的IP包中获得一个RARP请求，然后检查ARP响应的真实性。<br>管理员定期轮询，检查主机上的ARP缓存。<br>使用防火墙连续监控网络。注意有使用SNMP的情况下，ARP的欺骗有可能导致陷阱包丢失。<br>若感染ARP病毒，可以通过清空ARP缓存、指定ARP对应关系、添加路由信息、使用防病毒软件等方式解决。</p>
+<p>ARP攻击</p>
+<p>ARP协议的基本功能就是通过目标设备的IP地址，查询目标设备的MAC地址，以保证通信的进行。基于ARP协议的这一工作特性，黑客向对方计算机不断发送有欺诈性质的ARP数据包，数据包内包含有与当前设备重复的Mac地址，使对方在回应报文时，由于简单的地址重复错误而导致不能进行正常的网络通信，或者如果不及时处理，便会造成网络通道阻塞、网络设备的承载过重、网络的通讯质量不佳等情况。。</p>
+<p>一般情况下，受到ARP攻击的计算机会出现两种现象：</p>
+<p>不断弹出“本机的XXX段硬件地址与网络中的XXX段地址冲突”的对话框。<br>计算机不能正常上网，出现网络中断的症状。<br>因为这种攻击是利用ARP请求报文进行“欺骗”的，所以防火墙会误以为是正常的请求数据包，不予拦截。因此普通的防火墙很难抵挡这种攻击。</p>
+<p>NDP</p>
+<p>地址解析协议是IPv4中必不可少的协议，但在IPv6中将不再存在地址解析协议。在IPv6中，地址解析协议的功能将由NDP（邻居发现协议，Neighbor Discovery Protocol）实现，它使用一系列IPv6控制信息报文（ICMPv6）来实现相邻节点（同一链路上的节点）的交互管理，并在一个子网中保持网络层地址和数据链路层地址之间的映射。邻居发现协议中定义了5种类型的信息：路由器宣告、路由器请求、路由重定向、邻居请求和邻居宣告。与ARP相比，NDP可以实现路由器发现、前缀发现、参数发现、地址自动配置、地址解析（代替ARP和RARP）、下一跳确定、邻居不可达检测、重复地址检测、重定向等更多功能。</p>
+<p>「NDP与ARP的区别」</p>
+<p>IPv4中地址解析协议是独立的协议，负责IP地址到MAC地址的转换，对不同的数据链路层协议要定义不同的地址解析协议。IPv6中NDP包含了ARP的功能，且运行于因特网控制信息协议ICMPv6上，更具有一般性，包括更多的内容，而且适用于各种数据链路层协议；<br>地址解析协议以及ICMPv4路由器发现和ICMPv4重定向报文基于广播，而NDP的邻居发现报文基于高效的组播和单播。</p>
+<h2 id="GRE"><a href="#GRE" class="headerlink" title="GRE"></a>GRE</h2><p>通用路由封装协议GRE 提供了将一种协议报文封装在另一种协议报文中的机制，是一种三层隧道封装技术；可以对IPv4协议的数据报文进行再封装，使这些被封装的数据报文能够在另一个网络层协议（如IPv4）中传输；报文通过GRE隧道透明的传输，可以解决外网主动访问内网的问题；GRE可以封装组播数据和路由选择协议，结合IP Sec使用，从而保证语音、视频等组播业务的安全。</p>
+<p>GRE实现机制简单，对隧道两端的设备负担小；GRE隧道可以有效利用了原有的网络架构，降低成本；GRE隧道扩展了跳数受限网络协议的工作范围，支持企业灵活设计网络拓扑；GRE隧道支持MPLS LDP，使用GRE隧道承载MPLS LDP报文，建立LDP LSP，实现MPLS骨干网的互通；GRE隧道将不连续的子网连接起来，用于组建VPN，实现企业总部和分支间安全的连接。</p>
+<p>GRE的工作原理：</p>
+<p><img src="/../images/Network_Layer/5.png"></p>
+<p>GRE是VPN的三层隧道协议，即在协议层之间采用了一种被称之为Tunnel（隧道）的技术。Tunnel是一个虚拟的点对点的连接，在实际中可以看成仅支持点对点连接的虚拟接口，这个接口提供了一条通道使封装的数据报能够在这个通路上传输，并在一个Tunnel的两端分别对数据报进行封装及解封装 。</p>
+<p>GRE报头封装：Ethernet2&#x2F;IPv4（公网地址）&#x2F;GRE&#x2F;IPv4（私网地址）&#x2F;Payload&#x2F;FCS</p>
+<p>GRE报文载荷：</p>
+<p><img src="/../images/Network_Layer/6.png"></p>
+<p>1、C–校验和标志位；如配置了checksun则该位置为1，同时校验和（可选）、偏离（可选）部分的共4 bytes出现在GRE头部；如不配置checksun则该位置为0，同时校验和（可选）、偏离（可选）部分不出现在GRE头部。</p>
+<p>2、R–路由标志位；如R为1，校验和（可选）、偏离（可选）、路由（可选）部分的共8 bytes出现在GRE头部；如R为0, 校验和（可选）、偏离（可选）、路由（可选）部分不出现在GRE头部。</p>
+<p>3、K–密钥标志位；如配置了KEY则该位置为1，密钥（可选）部分出现在GRE头部；如不配置KEY则该位置为0，密钥（可选）部分不出现在GRE头部。</p>
+<p>4、S–序列好同步标志位；如配置了sequence-datagrams则该位置为1，同时序列号（可选）部分的共4 bytes出现在GRE头部。如不配置sequence-datagrams则该位置为0，同时序列号（可选）部分不出现在GRE头部。</p>
+<p>5、s:严格源路由标志位。所有的路由都符合严格源路由，该位为1。通常为0。</p>
+<p>6、递归控制：该位置需为0</p>
+<p>7、标志位：未定义，需为0</p>
+<p>8、版本：需为0</p>
+<p>9、协议类型：常用的协议，例如IP协议为0800</p>
+<p>▶报文封装和解封装过程：</p>
+<p>GRE封装报文时，封装前的报文称为净荷，封装前的报文协议称为乘客协议，然后先封装GRE头部，GRE成为封装协议，也叫运载协议，最后负责对封装后的报文进行转发的协议称为传输协议。</p>
+<p>1）路由器从连接私网的接口接收到报文后，检查报文头中的目的IP地址字段，在路由表查找出接口，发现出接口是隧道接口，将报文发送给隧道模块进行处理。</p>
+<p>2）隧道模块接收到报文后首先根据乘客协议的类型和当前GRE隧道配置的校验和参数，对报文进行GRE封装，添加GRE报头。</p>
+<p>3）路由器给报文添加传输协议报头即IP报头（公网地址）；该IP报头的源地址就是隧道源地址，目的地址就是隧道目的地址。</p>
+<p>4）路由器根据新添加的IP报头目的地址，在路由表中查找相应的出接口并发送报文，封装后的报文将在公网中传输。</p>
+<p>5、接收端路由器从连接公网的接口收到报文后，首先分析IP报文头，如果发现协议类型字段的值为47，表示协议为GRE，于是出接口将报文交给GRE模块处理。GRE模块去掉IP报文头和GRE报文头，并根据GRE报文头的协议类型字段，发现此报文的乘客协议为私网中运行的协议，于是将报文交给该协议处理。</p>
+<p>▶Keepalive检测：</p>
+<p>1）Keepalive检测功能用于在任意时刻检测隧道链路是否处于Keepalive状态，即检测隧道对端是否可达。如果对端不可达，隧道连接就会及时关闭，避免形成数据空洞；Keepalive检测功能开启后，GRE隧道本端会定期（默认值为5秒，deadtime为15秒）向对端发送Keepalive探测报文；若对端可达，则本端会收到对端的回应报文；若对端不可达，则收不到对端的回应报文。</p>
+<p>2）如果在隧道一端配置了Keepalive功能，无论对端是否配置Keepalive，配置的Keepalive功能在该端都生效；隧道对端收到Keepalive探测报文，无论是否配置Keepalive，都会给源端发送一个回应报文。</p>
+<p>3）Keepalive检测功能开启后，源端会创建一个计数器并周期性地发送Keepalive探测报文同时进行计数；每发送一个探测报文，不可达计数加1。</p>
+<p>4）如果源端在计数器值达到预先设置的值之前收到回应报文，则表明对端可达。如果计数器值达到预先设置的重试次数，源端还是没有收到回应报文，则认为对端不可达。此时，源端将关闭隧道连接。</p>
+<p>▶GRE over IPsec</p>
+<p>1）GRE本身并不支持加密，因而通过GRE隧道传输的流量是不加密的。将IPSec技术与GRE相结合，可以先建立GRE隧道对报文进行GRE封装，然后再建立IPSec隧道对报文进行加密，以保证报文传输的完整性和私密性。</p>
+<p>2）IPSec VPN技术可以创建一条跨越共享公网的隧道，从而实现私网互联；IPSec VPN能够安全传输IP报文，但无法在隧道的两个端点之间运行RIP和OSPF等路由协议；而GRE可以将路由协议信息封装在另一种协议报文（IPv4）中进行传输。3）使用GRE可以克服IGP协议的一些局限性。例如，RIP路由协议是一种距离矢量路由协议，最大跳数为15。如果网络直径超过15，设备将无法通信。这种情况下，可以使用GRE技术在两个网络节点之间搭建隧道，隐藏它们之间的跳数，扩大网络的工作范围。</p>
+<h2 id="ICMP"><a href="#ICMP" class="headerlink" title="ICMP"></a>ICMP</h2><p>为了更有效地转发 IP 数据报和提高交付成功的机会，在网际层使用了网际控制报文协议 ICMP (Internet Control Message Protocol) 。 ICMP 允许主机或路由器报告差错情况和提供有关异常情况的报告。 ICMP 是互联网的标准协议。但 ICMP 不是高层协议（看起来好像是高层协议，因为 ICMP 报文是装在 IP 数据报中，作为其中的数据部分），而是 IP层的协议。 ICMP 报文作为 IP 层数据报的数据，加上数据报的首部，组成 IP 数据报发送出去。 ICMP 报文格式如下图所示。</p>
+<p><img src="/../images/Network_Layer/7.png"></p>
+<p>一、ICMP 报文的种类<br>ICMP 报文的种类有两种，即 ICMP 差错报告报文和 ICMP 询问报文。</p>
+<p>ICMP 报文的前 4 个字节是统一的格式，共有三个字段：类型、代码和检验和。接着的4 个字节的内容与 ICMP 的类型有关。最后面是数据字段，其长度取决于 ICMP 的类型。下表给出了几种常用的 ICMP 报文类型。</p>
+<p><img src="/../images/Network_Layer/8.png"></p>
+<p>ICMP 标准在不断更新。已不再使用的 ICMP 报文有：“信息请求与回答报文”、“地址掩码请求与回答报文”、“路由器请求与通告报文”以及“源点抑制报文”。 现在不再把这几种报文列入。</p>
+<p>ICMP 报文的代码字段是为了进一步区分某种类型中的几种不同情况。检验和字段用来检验整个 ICMP 报文。我们应当还记得， IP 数据报首部的检验和并不检验 IP 数据报的内容，因此不能保证经过传输的 ICMP 报文不产生差错。</p>
+<p>上表给出的 ICMP 差错报告报文共有四种，即：</p>
+<p>（1）终点不可达 当路由器或主机不能交付数据报时就向源点发送终点不可达报文。</p>
+<p>（2）时间超过 当路由器收到生存时间为零的数据报时，除丢弃该数据报外，还要向源点发送时间超过报文。当终点在预先规定的时间内不能收到一个数据报的全部数据报片时，就把已收到的数据报片都丢弃，并向源点发送时间超过报文。</p>
+<p>（3）参数问题 当路由器或目的主机收到的数据报的首部中有的字段的值不正确时，就丢弃该数据报，并向源点发送参数问题报文。</p>
+<p>（4）改变路由（重定向） 路由器把改变路由报文发送给主机，让主机知道下次应将数据报发送给另外的路由器（可通过更好的路由）。</p>
+<p>解释。我们知道，在互联网的主机中也要有一个路由表。当主机要发送数据报时，首先是查找主机自己的路由表，看应当从哪一个接口把数据报发送出去。在互联网中主机的数量远大于路由器的数量，出于效率的考虑，这些主机不和连接在网络上的路由器定期交换路由信息。在主机刚开始工作时，一般都在路由表中设置一个默认路由器的 IP 地址。不管数据报要发送到哪个目的地址，都一律先把数据报传送给这个默认路由器，而这个默认路由器知道到每一个目的网络的最佳路由（通过和其他路由器交换路由信息）。如果默认路由器发现主机发往某个目的地址的数据报的最佳路由应当经过网络上的另一个路由器 R 时，就用改变路由报文把这情况告诉主机。于是，该主机就在其路由表中增加一个项目：到某某目的地址应经过路由器 R（而不是默认路由器）。</p>
+<p>所有的 ICMP 差错报告报文中的数据字段都具有同样的格式（下图）。把收到的需要进行差错报告的 IP 数据报的首部和数据字段的前 8 个字节提取出来，作为 ICMP 报文的数据字段。再加上相应的 ICMP 差错报告报文的前 8 个字节，就构成了 ICMP 差错报告报文。提取收到的数据报的数据字段前 8 个字节是为了得到运输层的端口号（对于 TCP 和 UDP）以及运输层报文的发送序号（对于 TCP）。</p>
+<p><img src="/../images/Network_Layer/9.png"></p>
+<p>下面是不应发送 ICMP 差错报告报文的几种情况。</p>
+<p>●对 ICMP 差错报告报文，不再发送 ICMP 差错报告报文。</p>
+<p>●对第一个分片的数据报片的所有后续数据报片，都不发送 ICMP 差错报告报文。</p>
+<p>●对具有多播地址的数据报，都不发送 ICMP 差错报告报文。</p>
+<p>●对具有特殊地址（如 127.0.0.0 或 0.0.0.0）的数据报，不发送 ICMP 差错报告报文。</p>
+<p>常用的 ICMP 询问报文有两种，即：</p>
+<p>（1）回送请求和回答 ICMP 回送请求报文是由主机或路由器向一个特定的目的主机发出的询问。收到此报文的主机必须给源主机或路由器发送 ICMP 回送回答报文。这种询问报文用来测试目的站是否可达以及了解其有关状态。</p>
+<p>（2）时间戳请求和回答 ICMP 时间戳请求报文是请某台主机或路由器回答当前的日期和时间。在 ICMP 时间戳回答报文中有一个 32 位的字段，其中写入的整数代表从 1900 年1 月 1 日起到当前时刻一共有多少秒。时间戳请求与回答可用于时钟同步和时间测量。</p>
+<p>二、ICMP 的应用举例<br>ICMP 的一个重要应用就是分组网间探测 PING (Packet InterNet Groper)，用来测试两台主机之间的连通性。 PING 使用了 ICMP 回送请求与回送回答报文。 PING 是应用层直接使用网络层 ICMP 的一个例子。它没有通过运输层的 TCP 或 UDP。</p>
+<p>Windows 操作系统的用户可在接入互联网后转入 MS DOS（点击“开始”，点击“运行”，再键入“cmd”）。看见屏幕上的提示符后，就键入“ping hostname”（这里的 hostname是要测试连通性的主机名或它的 IP 地址），按回车键后就可看到结果。</p>
+<p>下图给出了从南京的一台 PC 到新浪网的邮件服务器 <a target="_blank" rel="noopener" href="http://mail.sina.com.cn/">http://mail.sina.com.cn</a> 的连通性的测试结果。 PC 一连发出四个 ICMP 回送请求报文。如果邮件服务器 <a target="_blank" rel="noopener" href="http://mail.sina.com.cn/">http://mail.sina.com.cn</a> 正常工作而且响应这个 ICMP 回送请求报文（有的主机为了防止恶意攻击就不理睬外界发送过来的这种报文），那么它就发回 ICMP 回送回答报文。由于往返的 ICMP 报文上都有时间戳，因此很容易得出往返时间。最后显示出的是统计结果：发送到哪个机器（IP 地址），发送的、收到的和丢失的分组数（但不给出分组丢失的原因），以及往返时间的最小值、最大值和平均值。从得到的结果可以看出，第三个测试分组丢失了。</p>
+<center>
+  <img src="/images/Network_Layer/10.png"  style="margin-bottom: 5px;">
+  <div style="color:orange; border-bottom: 1px solid #d9d9d9; display: inline-block; color: #999; padding: 2px; margin-top: 1px;">
+    用 PING 测试主机的连通性
+  </div>
+</center>
+
+
+<p>另一个非常有用的应用是 traceroute（这是 UNIX 操作系统中名字），它用来跟踪一个分组从源点到终点的路径。在 Windows 操作系统中这个命令是 tracert。下面简单介绍这个程序的工作原理。</p>
+<p>Traceroute 从源主机向目的主机发送一连串的 IP 数据报，数据报中封装的是无法交付的UDP 用户数据报 。第一个数据报 P1的生存时间 TTL 设置为 1。当 P1到达路径上的第一个路由器 R1 时，路由器 R1先收下它，接着把 TTL 的值减 1。由于 TTL 等于零了， R1就把 P1丢弃了，并向源主机发送一个 ICMP 时间超过差错报告报文。</p>
+<p>源主机接着发送第二个数据报 P2，并把 TTL 设置为 2。 P2先到达路由器 R1， R1收下后把 TTL 减 1 再转发给路由器 R2。 R2收到 P2时 TTL 为 1，但减 1 后 TTL 变为零了。 R2就丢弃 P2，并向源主机发送一个 ICMP 时间超过差错报告报文。这样一直继续下去。当最后一个数据报刚刚到达目的主机时，数据报的 TTL 是 1。主机不转发数据报，也不把 TTL 值减1。但因 IP 数据报中封装的是无法交付的运输层的 UDP 用户数据报，因此目的主机要向源主机发送 ICMP 终点不可达差错报告报文。</p>
+<p>这样，源主机达到了自己的目的，因为这些路由器和最后目的主机发来的 ICMP 报文正好给出了源主机想知道的路由信息—到达目的主机所经过的路由器的 IP 地址，以及到达其中的每一个路由器的往返时间。下图是从南京的一个 PC 向新浪网的邮件服务器<a target="_blank" rel="noopener" href="http://mail.sina.com.cn/">http://mail.sina.com.cn</a> 发出的 tracert 命令后所获得的结果。图中每一行有三个时间出现，是因为对应于每一个 TTL 值，源主机要发送三次同样的 IP 数据报。</p>
+<p>我们还应注意到，从原则上讲， IP 数据报经过的路由器越多，所花费的时间也会越多。但从下图可看出，有时正好相反。这是因为互联网的拥塞程度随时都在变化，也很难预料到。因此，完全有这样的可能：经过更多的路由器反而花费更少的时间。</p>
+<center>
+  <img src="/images/Network_Layer/11.png" style="margin-bottom: 5px;">
+  <div style="color:orange; border-bottom: 1px solid #d9d9d9; display: inline-block; color: #999; padding: 2px; margin-top: 1px;">
+    用 tracert 命令获得到目的主机的路由信息
+  </div>
+</center>
+
+<h2 id="IGMP"><a href="#IGMP" class="headerlink" title="IGMP"></a>IGMP</h2><h3 id="什么是IGMP"><a href="#什么是IGMP" class="headerlink" title="什么是IGMP"></a>什么是IGMP</h3><p>IGMP是Internet Group Management Ptotocol的简称，被称为互联网组管理协议，是TCP&#x2F;IP协议族中负责IPV4组播成员管理的协议。</p>
+<h3 id="IGMP的作用"><a href="#IGMP的作用" class="headerlink" title="IGMP的作用"></a>IGMP的作用</h3><p>作用1<br>IGMP用来在接收者主机和直接相邻的组播路由器之间建立和维护组播组成员的关系。</p>
+<p>作用2<br>IGMP通过在接收者主机和组播路由器之间交互IGMP报文实现组成员管理功能，</p>
+<p>IGMP报文封装在IP报文中。</p>
+<p><img src="/../images/Network_Layer/12.png"></p>
+<h3 id="IGMP的版本"><a href="#IGMP的版本" class="headerlink" title="IGMP的版本"></a>IGMP的版本</h3><p>到目前为止，IGMP 有三个版本：IGMPv1、IGMPv2、IGMPv3。</p>
+<p>●IGMPv1 ：主机可以加入组播组。没有离开信息（leave messages）。路由器使用基于超时的机制去发现其成员不关注的组。</p>
+<p>●IGMPv2 ：该协议包含了离开信息，允许迅速向路由协议报告组成员终止情况，这对高带宽组播组或易变型组播组成员而言是非常重要的。</p>
+<p>●IGMPv3 ：与以上两种协议相比，该协议的主要改动为：允许主机指定它要接收通信流量的主机对象。来自网络中其它主机的流量是被隔离的。IGMPv3 也支持主机阻止那些来自于非要求的主机发送的网络数据包。</p>
+<p><img src="/../images/Network_Layer/13.png"></p>
+<p>所有版本的IGMP 都支持ASM（Any-Source Multicast，任意信源组播）模型；IGMPv3 可以直接应用于SSM（Source-Specific Multicast，指定信源组播）模型，而IGMPv1 和IGMPv2 则需要在IGMP SSM Mapping 技术的支持下才能应用于SSM 模型。</p>
+<h3 id="组播模型的分类"><a href="#组播模型的分类" class="headerlink" title="组播模型的分类"></a>组播模型的分类</h3><p>根据接收者对组播源处理方式的不同，组播模型分为以下三类：</p>
+<p>●ASM 模型：Any-Source Multicast，任意信源组播。</p>
+<p>在ASM 模型中，任意一个发送者都可以作为组播源向某组播组地址发送信息。众多接收者通过加入由该组播组地址标识的组播组以获得发往该组播组的组播信息。在ASM 模型中，接收者无法预先知道组播源的位置，但可以在任意时间加入或离开该组播组。</p>
+<p>●SFM 模型：Source-Filtered Multicast，信源过滤组播。</p>
+<p>该模型继承了ASM 模型，从发送者角度来看，两者的组播组成员关系完全相同。SFM 模型在功能上对ASM 模型进行了扩展。在SFM 模型中，上层软件对收到的组播报文的源地址进行检查，允许或禁止来自某些组播源的报文通过。因此，接收者只能收到来自部分组播源的组播数据。从接收者的角度来看，只有部分组播源是有效的，组播源被经过了筛选。</p>
+<p>●SSM 模型：Source-Specific Multicast，指定信源组播。</p>
+<p>在现实生活中，用户可能只对某些组播源发送的组播信息感兴趣，而不愿接收其它源发送的信息。该模型为用户提供了一种能够在客户端指定组播源的传输服务。</p>
+<p>SSM 模型与ASM 模型的根本区别在于：SSM 模型中的接收者已经通过其它手段预先知道了组播源的具体位置。SSM 模型使用与ASM&#x2F;SFM 模型不同的组播地址范围，直接在接收者与其指定的组播源之间建立专用的组播转发路径。</p>
+<h3 id="组播协议"><a href="#组播协议" class="headerlink" title="组播协议"></a>组播协议</h3><p>通常，我们把工作在网络层的IP 组播称为“三层组播”，相应的组播协议称为“三层组播协议”，包括IGMP、PIM、MSDP、MBGP等。</p>
+<p>把工作在数据链路层的IP 组播称为“二层组播”，相应的组播协议称为“二层组播协议”，包括IGMP Snooping、组播VLAN 等。</p>
+<p>三层组播协议</p>
+<p>三层组播协议包括组播组管理协议和组播路由协议两种类型，它们在网络中的应用位置如下图</p>
+<p><img src="/../images/Network_Layer/14.png"></p>
+<p>(1) 组播组管理协议</p>
+<p>在主机和与其直接相连的三层组播设备之间通常采用组播组的管理协议IGMP（Internet Group Management Protocol，互联网组管理协议），该协议规定了主机与三层组播设备之间建立和维护组播组成员关系的机制。</p>
+<p>(2) 组播路由协议</p>
+<p>组播路由协议运行在三层组播设备之间，用于建立和维护组播路由，并正确、高效地转发组播数据包。</p>
+<p>组播路由建立了从一个数据源端到多个接收端的无环（loop-free）数据传输路径，即组播分发树。</p>
+<p>二层组播协议<br>二层组播协议包括IGMP Snooping和组播VLAN等，它们在网络中的应用位置如下图。</p>
+<p><img src="/../images/Network_Layer/15.png"></p>
+<p>(1) IGMP Snooping</p>
+<p>IGMP Snooping（Internet Group Management Protocol Snooping，互联网组管理协议窥探）是运行在二层设备上的组播约束机制，通过窥探和分析主机与三层组播设备之间交互的IGMP 报文来管理和控制组播组，从而可以有效抑制组播数据在二层网络中的扩散。</p>
+<p>(2) 组播VLAN</p>
+<p>在二层网络设备上进行跨VLAN组播复制。</p>
+<p>在交换机上部署了组播VLAN功能后，上游路由器不必在每个用户VLAN（VLAN2和VLAN3）内都复制一份组播流，而是数据流在组播VLAN（VLAN4）内复制一份后发送给二层设备。这样就避免了组播流在上游设备的重复复制，不仅节省了网络带宽，又减轻了上游路由器的负担。</p>
+<p>六、IGMP应用场景</p>
+<p>IGMP最常见的应用是IPTV：</p>
+<p>●视频源端发送UDP组播数据流，客户端通过加入组播接收数据流播放节目<br>●Client 发送IGMP Join Group封包加入组播才能接收到数据</p>
+<p><img src="/../images/Network_Layer/16.png"></p>
+<p>●Client不想要接收此组播数据时,发送一个IGMP Leave Group封包离开组播<br><img src="/../images/Network_Layer/17.png"></p>
+<h2 id="IP"><a href="#IP" class="headerlink" title="IP"></a>IP</h2><h3 id="IP基本原理"><a href="#IP基本原理" class="headerlink" title="IP基本原理"></a>IP基本原理</h3><p><img src="/../images/Network_Layer/18.png"></p>
+<h3 id="IP的作用"><a href="#IP的作用" class="headerlink" title="IP的作用"></a>IP的作用</h3><p>标识节点和链路<br>用唯一的IP地址标识每一个节点<br>用唯一的IP网络号标识每一个链路</p>
+<p>寻址和转发<br>确定节点所在网络的位置，进而确定节点所在的位置<br>IP路由器选择适当的路径将IP包转发到目的节点</p>
+<p>适应各种数据链路<br>根据链路的MTU对IP包进行分片和重组<br>为了通过实际的数据链路传递信息，须建立IP地址到数据链路层地址的映射</p>
+<p>IP地址<br>定义<br>分类<br>特殊地址<br>公网&#x2F;私网地址<br>IP地址格式</p>
+<p><img src="/../images/Network_Layer/19.png"></p>
+<h3 id="IP地址分类"><a href="#IP地址分类" class="headerlink" title="IP地址分类"></a>IP地址分类</h3><p><img src="/../images/Network_Layer/20.png"></p>
+<p>●A类</p>
+<p>地址范围：0.X.X.X-127.X.X.X<br>网络位划分：前8位为网络位，后24位为主机位</p>
+<p>●B类</p>
+<p>地址范围：128.X.X.X-191.X.X.X<br>网络位划分：前16位为网络位，后16位为主机位</p>
+<p>●C类</p>
+<p>地址范围：192.X.X.X-223.X.X.X<br>网络位划分：前24位为网络位，后8位为主机位</p>
+<p>●D类</p>
+<p>地址范围：224.X.X.X-239.XXX<br>作用：组播地址，不可用于配置为主机地址</p>
+<p>●E类</p>
+<p>地址范围：240XXX-255XXX<br>作用：科研用地址，不对公开放<br>IP分类用来划分不同的网络规模<br>网络号用于区分不同的IP网络<br>主机号用于标识该网络内的一个IP节点</p>
+<p>●特殊地址</p>
+<p>127.X.XX：本地环回地址，用于标识本机<br>主机位全0的地址：网络地址，用来标识某个网段<br>主机位全1的地址：本网段广播地址<br>255.255.255.255：全网广播地址<br>0.0.0.0：任意IP地址（默认路由）</p>
+<p>●公网&#x2F;私网地址</p>
+<p>●公网地址</p>
+<p>可以在互联网上寻址的地址，全球唯一，需要运营商分配</p>
+<p>●私网地址</p>
+<p>本地随意使用，无法在互联网上寻址<br>地址范围：<br>A类:10.X.X.X<br>B类:172.16.X.X-172.31.X.X<br>C类:192.168.X.X<br>自动私有地址:169.254.X.X<br>运营商专用私有地址:100.64.X.X-100.127.X.X</p>
+<p>IP定义</p>
+<p>IP头部封装格式</p>
+<p>version:版本，用于标识封装是IPv4还是IPv6</p>
+<p>IHL:头部长度，描述了数据包头的内容长度</p>
+<p>Type of service:服务类型，用于标识DSCP或IP优先级，用于</p>
+<p>QOs识别</p>
+<p>Total length:数据包总长度</p>
+<p>ldentification:标识符(用于标识某个分片来自于哪个数据包)</p>
+<p>Flag(标志)s:</p>
+<p>保留</p>
+<p>标识数据包是否禁止分片</p>
+<p>标识是否为最后一个分片</p>
+<p>Fragment offset:分片偏移(用于描述分片在数据包中的位置)</p>
+<p>Time to Live:TTL，生存时间(该数据包允许经过的路由器的最大跳数)</p>
+<p>Protocol:协议(用于标识上层协议是TCP&#x2F;UDP&#x2F;CMP)</p>
+<p>Header Checksum:头部校验序列(用于头部信息差错校验)</p>
+<p>Source Address:源IP地址</p>
+<p>Destination Address:目的IP地址</p>
+<p>Options:可选项</p>
+<p>Padding:填充</p>
+<p>MTU</p>
+<p>最大传输单元</p>
+<p>接口收发数据支持的单个包的最大长度</p>
+<p>以太网接口默认MTU1500Byte</p>
+<p>PPPOE默认MTU1492Byte</p>
+<h2 id="IPv6"><a href="#IPv6" class="headerlink" title="IPv6"></a>IPv6</h2><p>IPv6（Internet Protocol Version 6）是网络层协议的第二代标准协议，也被称为IPng（IP Next Generation）。它是互联网工程任务组IETF设计的一套规范，用于替代IPV4的下一代IP协议。</p>
+<p>IPv4协议是目前广泛部署的因特网协议，在因特网发展初期，IPv4以其协议简单、易于实现、互操作性好的优势而得到快速发展。但随着因特网的迅猛发展，IPv4设计的不足也日益明显。</p>
+<p>随着万物互联时代的到来，IPv4地址空间不足，2011年2月3日，IANA（因特网地址分配组织）宣布将其最后的468万个IPv4地址平均分配到全球5个RIR（区域互联网注册管理机构），此后IANA再没有可分配的IPv4地址。</p>
+<p>由于IPv4最大的问题在于网络地址资源不足，严重制约了互联网的应用和发展。IPv6的出现，不仅能解决网络地址资源数量的问题，同时也解决了IPv4的一些弊端。</p>
+<p>在2012年6月6日，国际互联网协会举行了世界IPv6启动纪念日，这一天，全球IPv6网络正式启动。多家知名网站，于当天全球标准时间0点（北京时间8点整）开始永久性支持IPv6访问。</p>
+<p>IPV6和IPV4的对比优势</p>
+<p><img src="/../images/Network_Layer/21.png"></p>
+<p>IPV6地址表示方法</p>
+<p>IPV6地址总长度为128bit（即16字节），分为8段，每段为16bit，每段使用16进制数来表示，每段与每段之间使用“：”分隔。</p>
+<p>举例：2021:0726:0123:4567:89AB:CDEF:0000:0010&#x2F;64</p>
+<p>IPV6地址压缩表示方法</p>
+<p>为了方便记忆以及便于书写，IPV6地址支持地址压缩格式，压缩规则如下：</p>
+<p>①每段的前导0可以省略</p>
+<p>②地址中包含的连续两个或多个均为0的段，可以用双冒号“::”来代替</p>
+<p>举例：</p>
+<p>①2021:0726:0123:4567:89AB:CDEF:0000:0010&#x2F;64</p>
+<p>②2021:0726:0000:0000:0123:4567:89AB:CDEF&#x2F;64</p>
+<p>IPV6压缩后的书写格式：</p>
+<p>①2021:0726:0123:4567:89AB:CDEF:0:10&#x2F;64</p>
+<p>②2021:0726::0123:4567:89AB:CDEF&#x2F;64</p>
+<p>注意：在一个IPv6地址中只能使用一次双冒号“::”，否则当计算机将压缩后的地址恢复成128位时，无法确定每个“::”代表0的个数</p>
+<p>IPV6地址组成的结构</p>
+<p>一个IPv6地址由两部分组成：网络前缀和接口标识。</p>
+<p>① 网络前缀：n比特，相当于IPv4地址中的网络ID</p>
+<p>② 接口标识：128-n比特，相当于IPv4地址中的主机ID</p>
+<p>接口标识的生成方式有三种：手工配置、系统通过软件自动生成、IEEE EUI-64规范生成。</p>
+<p>①手工配置：一般是管理员手工指定接口ID，例如，2021:1111:1111:1111:1111:1111::1&#x2F;64</p>
+<p>注释：该地址的网络前缀2021:1111:1111:1111:1111:1111，接口ID为 ::1，64这个值表示的就是前缀的长度。</p>
+<p>② 系统通过软件自动动生成：一般应用于PC的windows系统</p>
+<p>③ IEEE EUI-64规范生成</p>
+<p>IEEE EUI-64规范生成一般最为常用，IEEE EUI-64标准采用接口的MAC地址生成IPv6接口ID。MAC地址只有48位，而接口ID却要求64位。MAC地址的前24位代表厂商ID，后24位代表制造商分配的唯一扩展标识。MAC地址的第七高位是一个U&#x2F;L位，值为0时表示MAC地址全局唯一，值为1时表示MAC地址本地唯一。</p>
+<p>在MAC地址向EUI-64格式的转换过程中，MAC地址的前24位和后24位之间插入了16比特的FFFE，并将U&#x2F;L位的值从0变成了1，这样就生成了一个64比特的接口ID，且接口ID的值全局唯一。接口前缀和接口ID一起组成接口地址。</p>
+<p>生成如下图：</p>
+<p><img src="/../images/Network_Layer/22.png"></p>
+<p>举例：路由器某接口启动了IPV6协议栈之后，只配置全球单播地址前缀，该接口的全球单播地址和链路本地地址可以根据EUI-64自动生成，假设该接口MAC地址为：707b-e83e-5007，全球单播前缀配置2021:: &#x2F;64，</p>
+<p>通过EUI-64生成的全球单播地址为：2021::727b:e8ff:fe3e:5007，</p>
+<p>链路本地地址为：FE80::727b:e8ff:fe3e:5007 。</p>
+<p>IPv6地址分为单播地址、任播地址（Anycast Address）、组播地址三种类型。和IPv4相比，取消了广播地址类型，以更丰富的组播地址代替，同时增加了任播地址类型，IPV6单播地址分为未指定地址、环回地址、全球单播地址、唯一本地地址、链路本地地址，特殊地址。</p>
+<p>IPv6中的未指定地址即 0:0:0:0:0:0:0:0&#x2F;128 或者::&#x2F;128。该地址可以表示某个接口或者节点还没有IP地址，可以作为某些报文的源IP地址（例如在NS报文的重复地址检测中会出现），源IP地址是::的报文不会被路由设备转发。</p>
+<p>IPv6中的环回地址即 0:0:0:0:0:0:0:1&#x2F;128 或者::1&#x2F;128。环回与IPv4中的127.0.0.1作用相同，主要用于设备给自己发送报文。该地址通常用来作为一个虚接口的地址（如Loopback接口）。实际发送的数据包中不能使用环回地址作为源IP地址或者目的IP地址。</p>
+<p>全球单播地址是带有全球单播前缀的IPv6地址，其作用类似于IPv4中的公网地址。这种类型的地址允许路由前缀的聚合，从而限制了全球路由表项的数量。全球单播地址由全球路由前缀（Global routing prefix）、子网ID（Subnet ID）和接口标识（Interface ID）组成。</p>
+<p>全球路由前缀：由提供商（Provider）指定给一个组织机构，通常全球路由前缀至少为48位。目前已经分配的全球路由前缀的前3bit均为001。</p>
+<p>子网ID：组织机构可以用子网ID来构建本地网络（Site），子网ID通常最多分配到第64位，子网ID和IPv4中的子网号作用相似。</p>
+<p>接口标识：用来标识一个设备（Host）。</p>
+<p>全球单播地址格式如下：</p>
+<p><img src="/../images/Network_Layer/23.png"></p>
+<p>举例：2001:1111:2222:ABCD::1&#x2F;64，该地址全球路由前缀为2001:1111:2222，子网ID为：ABCD，接口ID为::1，网络前缀为：2001:1111:2222:ABCD。</p>
+<p>链路本地地址是IPv6中的应用范围受限制的地址类型，只能在连接到同一本地链路的节点之间使用。它使用了特定的本地链路前缀FE80::&#x2F;10（最高10位值为1111111010），同时将接口标识添加在后面作为地址的低64比特。</p>
+<p>当一个节点启动IPv6协议栈时，节点的每个接口会自动配置一个链路本地地址，该地址的格式为：固定的前缀+EUI-64规则形成的接口标识，这种机制使得两个连接到同一链路的IPv6节点不需要做任何配置就可以通信，所以链路本地地址广泛应用于邻居发现，无状态地址配置等应用。</p>
+<p>链路本地地址格式如下：</p>
+<p>链路本地地址生成的方式有三种：</p>
+<p>①当网络设备的忘一个接口配置了一个全球单播地址，会伴随生成一个链路本地地址，生成的方式为：固定前缀+EUI-64</p>
+<p>②管理员手工在接口指定一个链路本地地址，配置命令：IPV6 address FE80::1 link-local</p>
+<p>③管理员在接口指定一条命令自动生成一个链路本地地址，配置命令：IPV6 address auto link-loacl</p>
+<p>唯一本地地址是另一种应用范围受限的地址，它仅能在一个站点内使用。类似于IPv4中的私网地址，唯一本地地址只能在本地网络内部被路由转发而不会在全球网络中被路由转发。前缀固定为FC00::&#x2F;7，FD00::&#x2F;8。</p>
+<p>唯一本地地址格式如下：</p>
+<p><img src="/../images/Network_Layer/24.png"></p>
+<p>举例：FC33:1111:2222:ABCD::1&#x2F;64，该地址网络前缀为：FC33:1111:2222:ABCD，接口ID为::1。</p>
+<p>注意：一般在现网中，私网地址都是用户自己规划配置的，全局标识和子网标识没有实际的意义，因为该地址不在公网进行路由</p>
+<p>IPv6的组播与IPv4相同，用来标识一组接口，一般这些接口属于不同的节点，一个节点可能属于0到多个组播组，发往组播地址的报文被组播地址标识的所有接口接收。一个IPv6组播地址由前缀，标志（Flag）字段、范围（Scope）字段以及组播组ID（Global ID）4个部分组成：</p>
+<p>前缀：IPv6组播地址的前缀是FF00::&#x2F;8。</p>
+<p>标志字段（Flag）：长度4bit，当值为0时，表示当前的组播地址是由IANA所分配的一个永久分配地址；当值为1或者2时，表示ASM范围的组播地址，当值为3时，表示SSM范围的组播地址。</p>
+<p>范围字段（Scope）：长度4bit，用来限制组播数据流在网络中发送的范围</p>
+<p>组播组ID（Group ID）：长度112bit，用以标识组播组。目前建议仅使用该112位的最低32位作为组播组ID，将剩余的80位都置0，这样每个组播组ID都映射到一个唯一的以太网组播MAC地址</p>
+<p><img src="/../images/Network_Layer/25.png"></p>
+<p>FF01::1 ，表示当前节点所有接口地址</p>
+<p>FF02::1，表示当前链路所有节点的接口地址</p>
+<p>FF02::2，表示当前链路所有路由器的接口地址</p>
+<p>FF02::5，表示当前链路所有运行OSPF协议路由器的接口地址</p>
+<p>FF05::1，表示当前站点内所有节点的接口地址</p>
+<p>FF1X::1111，X为一个变量，取值不能等于1或2，这是一个基于ASM模型的组播地址</p>
+<p>FF3X::1111，X为一个变量，取值不能等于1或2，这是一个基于SSM模型的组播地址</p>
+<p>注释：以上组播地址所表示的含义我们可以通俗的理解为，当一台网络设备或者设备的某个接口收到一个以以上组播地址为目的IP的报文，设备该如何处理，假设设备可以处理以上组播地址为目的IP的报文，那么处理之后的转发范围如上述所说。简单用一个案例来解释，假设有一台设备收到一份以FF02::5为目的地址的报文，该设备处理的方式为首先判断本机是否加入了FF02::5这个组播组，如果该设备运行OSPFV3的进程，会默认加入FF02::5这个组播组，反之则没有加入，那最终的结果就是丢弃或者接收，接收之后过程此处省略。</p>
+<p>被请求节点组播地址是通过节点的单播或任播地址生成的，当一个节点具有了单播或任播地址，就会对应生成一个被请求节点组播地址，并且加入这个组播组。一个单播地址或任播地址对应一个被请求节点组播地址。该地址主要用于邻居发现机制和地址重复检测功能。</p>
+<p>被请求节点组播地址的格式如下：</p>
+<p>固定前缀104bit（FF02::1:FF00:0&#x2F;104）+单播地址的最后24bit</p>
+<p>注释：IPv6中取消了广播地址，但是仍然需要从IP地址解析到MAC地址的功能，IPV6的地址仍然需要做地址冲突检测，所以在IPv6中，这个功能通过使用ICMPV6协议中的邻居请求NS（Neighbor Solicitation）报文完成，并且在ICMPV6中取消ARP协议的使用，当一个节点需要解析某个IPv6地址对应的MAC地址时，会发送NS报文，该报文的目的IP就是需要解析的IPv6地址对应的被请求节点组播地址；只有具有该组播地址的节点会检查处理。</p>
+<p>注意：被请求节点组播地址的前缀FF02::1:FF00:0&#x2F;104，这是一个128bit长度的IPV6组播地址的格式，实际前缀为FF02::1:FF。</p>
+<p>举例：2012:0727:0123::4567:89AB:CDEF:0001:1111，当我们需要对该地址进行DAD检测时，需要将NS报文发送到该地址对应的被请求节点组播组地址：FF02::1:FF01:1111，</p>
+<p>转换的规则为：2012:0727:0123::4567:89AB:CDEF:00对应FF02::1:FF，01:1111补充到后24位。</p>
+<p>任播地址标识一组网络接口（通常属于不同的节点）。目标地址是任播地址的数据包将发送给其中路由意义上最近的一个网络接口。</p>
+<p>任播地址设计用来在给多个主机或者节点提供相同服务时提供冗余功能和负载分担功能。目前，任播地址的使用通过共享单播地址方式来完成。将一个单播地址分配给多个节点或者主机，这样在网络中如果存在多条该地址路由，当发送者发送以任播地址为目的IP的数据报文时，发送者无法控制哪台设备能够收到，这取决于整个网络中路由协议计算的结果。这种方式可以适用于一些无状态的应用，例如DNS等。</p>
+<p>IPv6中没有为任播规定单独的地址空间，任播地址和单播地址使用相同的地址空间。目前IPv6中任播主要应用于移动IPv6。</p>
+<p>IPV6基本报头格式</p>
+<p>IPv6基本报头有8个字段，固定大小为40字节，每一个IPv6数据报都必须包含报头。基本报头提供报文转发的基本信息，会被转发路径上面的所有设备解析。</p>
+<p><img src="/../images/Network_Layer/26.png"></p>
+<p>Version：版本号，长度为4bit。对于IPv6，该值为6。</p>
+<p>Traffic Class：流类别，长度为8bit，等同于IPv4中的TOS字段，表示IPv6数据报文的分类或优先级，主要应用于QoS。</p>
+<p>Flow Label：流标签，长度为20bit。IPv6中的新增字段，用于区分实时流量，不同的流标签+源地址可以唯一确定一条数据流，中间网络设备可以根据这些信息更加高效率的区分数据流。流可以理解为特定应用或进程的来自某一源地址发往一个或多个目的地址的连续单播、组播或任播报文。IPv6中的流标签字段、源地址字段和目的地址字段一起为特定数据流指定了网络中的转发路径。这样，报文在IP网络中传输时会保持原有的顺序，提高了处理效率。随着三网合一的发展趋势，IP网络不仅要求能够传输传统的数据报文，还需要能够传输语音、视频等报文。这种情况下，流标签字段的作用就显得更加重要.</p>
+<p>Payload Length：有效载荷长度，长度为16bit。有效载荷是指紧跟IPv6报头的数据报的其它部分（即扩展报头和上层协议数据单元）。该字段只能表示最大长度为65535字节的有效载荷。如果有效载荷的长度超过这个值，该字段会置0，而有效载荷的长度用逐跳选项扩展报头中的超大有效载荷选项来表示。</p>
+<p>Next Header：下一个报头，长度为8bit。该字段定义紧跟在IPv6报头后面的第一个扩展报头（如果存在）的类型，或者上层协议数据单元中的协议类型。</p>
+<p>Hop Limit：跳数限制，长度为8bit。该字段类似于IPv4中的Time to Live字段，它定义了IP数据报所能经过的最大跳数。每经过一个设备，该数值减去1，当该字段的值为0时，数据报将被丢弃。</p>
+<p>Source Address：源地址，长度为128bit，表示发送方的地址。</p>
+<p>Destination Address：目的地址，长度为128bit，表示接收方的地址。</p>
+<p>IPV6与IPV4基本报头对比</p>
+<p><img src="/../images/Network_Layer/27.png"></p>
+<p>以上IPV4报头中画斜线的字段都是在IPV6中被取消的，IPV6报头中增加了Flow Lable。</p>
+<p>一个IPv6报文可以包含0个、1个或多个扩展报头，仅当需要设备或目的节点做某些特殊处理时，才由发送方添加一个或多个扩展头。与IPv4不同，IPv6扩展头长度任意，不受40字节限制，这样便于日后扩充新增选项，这一特征加上选项的处理方式使得IPv6选项能得以真正的利用。但是为了提高处理选项头和传输层协议的性能，扩展报头总是8字节长度的整数倍。</p>
+<p><img src="/../images/Network_Layer/28.png"></p>
+<p>IPv6扩展报头出现的规则顺序</p>
+<p>当超过一种扩展报头被用在同一个分组里时，报头必须按照下列顺序出现：</p>
+<p>IPv6基本报头</p>
+<p>逐跳选项扩展报头</p>
+<p>目的选项扩展报头</p>
+<p>路由扩展报头</p>
+<p>分段扩展报头</p>
+<p>认证扩展报头</p>
+<p>封装安全有效载荷扩展报头</p>
+<p>目的选项扩展报头</p>
+<p>上层协议数据报文</p>
+<p>路由设备转发时根据基本报头中Next Header值来决定是否要处理扩展头，并不是所有的扩展报头都需要被转发路由设备查看和处理的。除了目的选项扩展报头可能出现一次或两次（一次在路由扩展报头之前，另一次在上层协议数据报文之前），其余扩展报头只能出现一次。以下为部分扩展报头截图：</p>
+<p><img src="/../images/Network_Layer/29.png"></p>
+<p><img src="/../images/Network_Layer/30.png"></p>
+<p><img src="/../images/Network_Layer/31.png"></p>
+<h2 id="OSPF"><a href="#OSPF" class="headerlink" title="OSPF"></a>OSPF</h2><p>OSPF的概念</p>
+<p>链路状态路由选择协议又被称为最短路径优先协议，它基SPF（shortest path first ）算法。他比距离矢量协议复杂的多。路由器的链路状态的信息称为链路状态，包括：接口的IP地址和子网掩码，网络类型，（如以太网链路或串行点对点链路），该链路的开销，该链路上的所有的相邻路由器。</p>
+<p>OSPF特点</p>
+<p>链路状态路由协议是层次式的，网络中的路由器并不向邻居传递“路由项”，而是通告给邻居一些链路状态。链路状态协议只是通告给邻居的一些链路状态。运行该路由协议的路由器不是简单地从相邻的路由器学习路由，而是把路由器分成区域，收集区域的所有的路由器的链路状态信息，根据状态信息生产网络拓扑结构，每一个路由器再根据拓扑结构计算出路由。</p>
+<p>OSPF工作过程</p>
+<p>（1）了解直连网络。</p>
+<p>（2）向邻居发送hello包（邻居指启用了相同链路状态路由协议的其他任何路由器）。</p>
+<p>（3）建立链路状态数据包。</p>
+<p>（4）将链路状态数据包泛洪给邻居 路由器将其链路状态信息泛洪到路由区域内的其他所有链路状态路由器，他一旦收到来自邻居的LSP，不经过中间计算，立即将这个LSP从除接收该LSP口以外的所有接口发出，此过程在整个路由区域内的所有路由器上形成LSP的泛洪效应。</p>
+<p>LSP在路由器初始启动期间，或路由协议启动过程期间，或在每次拓扑发生更改（包括链路接通和断开）时，或是邻接关系建立，破裂时发送，并不需要定期发送。</p>
+<p>PS：距离矢量路由协议则不同，她必须首先运行贝尔曼-福特算法来处理路由更新，然后才将他们发送至其他路由器，而链路状态协议则是再泛洪完成后在计算SPF算法，因此到达收敛的速度比距离矢量路由协议速度要快。</p>
+<p>（5）每台路由器使用数据库建立一个完整的拓扑图并计算通向每个目的网络的最佳路径。</p>
+<p>OSPF的网络类型</p>
+<p>点到点连接</p>
+<p>将一对路由器连接起来的网络，使用的是PPP HDLC协议。</p>
+<p>使用组播224.0.0.5来发送各种数据包。</p>
+<p>没有DR&#x2F;BDR的选举，直接形成full邻接关系，不用手动指邻居。</p>
+<p><img src="/../images/Network_Layer/32.png"></p>
+<p>广播</p>
+<p>多路访问网络，如以太网，需要DR和BDR的选举，不用手动指邻居。</p>
+<p>通常以组播发送HELLO报文，LSU报文，和LSACK报文，以单播形式发送DD和LSR报文。</p>
+<p>DR和BDR给非指定路由器发送消息使用的是组播224.0.0.5。</p>
+<p>非指定路由器给DR和BDR发送消息使用的是组播224.0.0.6。</p>
+<p><img src="/../images/Network_Layer/33.png"></p>
+<p>非广播多路访问（NBMA， Non-Broadcast Multiple Access）</p>
+<p>连接的路由器超过两台但是没有广播功能，帧中继网络和ATM网络。</p>
+<p>所有数据包均单播发送，有DR的选举，需要手动指定邻居。</p>
+<p><img src="/../images/Network_Layer/34.png"></p>
+<p>点到多点</p>
+<p>Hello包以组播形式发送，其他类型数据包由单播发送。</p>
+<p>不选举DR，不用手动指邻居。</p>
+<p>OSPF报文<br>OSPF报头格式</p>
+<p>OSPF直接封装在IP数据包中。</p>
+<p>OSPF数据包</p>
+<p>Hello包</p>
+<p>作用：建立邻居关系。</p>
+<p>各字段功能：</p>
+<p>Network Mask ：发送数据包的源IP地址对应的子网掩码。<br>Hellointerval：Hello时间间隔，默认10S，失效间隔默认为Hello间隔的3倍。<br>Rtr Pri：路由器优先级用于选举DR和BDR。<br>DR：指定路由器的IP地址，开始时为空。<br>BDR：备份指定路由器的IP地址，开始是也为空。<br>Neighbor：里面标识了邻居的路由器ID，可以表示多个邻居。<br>Stub and Flag ：末节标识符。</p>
+<p>邻居关系建立条件：HELLO和失效间隔要一致，区域号要相同，区域末节标识符要相同，有认证的话，认证要相同，区域ID要相同，子网掩码要一致。</p>
+<p>DBD包（Datebase Description）</p>
+<p>作用：在OSPF邻居关系建立之后，DBD包负责描述本地的LSDB，接收到的路由器通过和自己的LSDB做比对，进而同步区域中的LSDB。</p>
+<p>各字段功能：</p>
+<p>I：该位置1表示这是发送的第一个数据包，开启了LSDB同步过程。<br>M：该位置1表示之后还有DD包要发送，若置0则表示没有数据包要发送了。<br>MS：用来表示谁是主（Master）谁是从（Slave）由主路由器引导进行LSDB的同步。<br>DD Sequence Number：利用序号来确保传输的完整性和可靠性。<br>LSA Headers：LSA头部信息摘要，可以有多个LSA头部摘要信息。</p>
+<p>LSR包（Link-State Request）</p>
+<p>作用：用来查询本LSDB中没有或者哪些LSA是已经失效的。</p>
+<p>各字段功能：</p>
+<p>LS type：指定所请求的LSA类型，一共有7类。<br>Link State ID：用来表示LSA，根据LSA种类的不同，有不同的含义。<br>Advertising Router：用来表示产生此LSA的路由器ID。</p>
+<p>LSU（Link-State Update）</p>
+<p>作用：对LSR进行回应，或者定时发送LSU来更新区域中的LSDB，发送的是真正需要的LSA的内容。</p>
+<p>各字段功能：</p>
+<p>Number of LSA：指定此报文中共发送的LSA数量。<br>LSAs：一条条具体的LSA完整的信息，可以有多个LSA的信息。</p>
+<p>LSAck</p>
+<p>作用：用来在收到对端发送的LSU之后返回的确认报文，内容是需要确认的LSA头部。</p>
+<p>各字段功能：</p>
+<p>LSA Headers：LSA头部信息。<br>一个ACK可以确认多个LSA。<br>OSPF邻居建立过程（重点！）</p>
+<p>首先对邻居关系，和邻接关系要区分开，两台路由器互相之间的状态是2-way则表明邻居关系建立，当邻居关系为FULL是表明邻接关系建立。</p>
+<p>关系变化过程</p>
+<p>down-&gt;init-&gt;2-way-&gt;exstart-&gt;exchange-&gt;loading-&gt;full。</p>
+<p>down:表示还没有建立起邻接关系，没有检测到活动邻居。</p>
+<p>init：表示从对端收到的HELLO包中，没有自己的路由器ID信息。</p>
+<p>2-way：表示从对端收到的HELLO包中，已经有自己的路由器ID信息了，已建立邻居关系可以共享链路状态数据。</p>
+<p>exstart:表示正在确定主从关系，即谁先发送DBD。<br>exchange：在主的带领下开始交换DBD。<br>loading：请求更详细的信息。<br>full：已建立完全邻接关系 完成更新过程 其数据库与邻居完全相同。</p>
+<p>过程详解</p>
+<p>邻居建立过程（down-&gt;init-&gt;2-way）</p>
+<p>希望建立完全OSPF邻居邻接关系的路由器之间交换OSPF HELLO包（组播224.0.0.5），双方的邻居此时都处于down状态，这是邻居会话的初始状态，当路由器从邻居收到了一个Hello包，但是没有在邻居Hello包中看到自己的路由器ID时，他将转化为INIT状态，当路由器从邻居收到Hello包中看到自己的路由器ID时，他将转为2-Way状态。表示邻居之间已经建立了双向通信。</p>
+<p>交换LSDB过程（exstart-&gt;exchange）</p>
+<p>路由器开始准备交换彼此的LSDB，正式交换LSDB前，会选举出主&#x2F;从路由器，这个阶段即为exstart状态。</p>
+<p>首先一条链路上的路由器都会认为自己是主路由器，此时将邻居视为exstart状态，发送空的DBD包（不含LSA的索引，含有RID，MS（主）标记位，M（多），1（初始）标记位都会标记为1），来比较他们的RID，RID大的将成为主路由器。被认为从路由器的那一方需要再发送一个DBD包（MS置为0，I置为0，序列号为主路由器发来的DBD中存在的序列号）来响应。这样主从关系就确定下来。</p>
+<p>随后，路由器都进入EXCHANGE状态，开始互换LSDB中的信息，这个过程总是由主路由器来引导，有以下两条规则：</p>
+<p>1.主路由器发送的DBD包，从路由器总要做出响应（主路由器发送的DBD包与从路由器发送的DBD包相同）——-如果从路由器没有LSA需要通告了，那么就会响应回空的DBD。</p>
+<p>2.从路由器发送的DBD包，只能用作对主路由器发送的DBD包的响应（从路由器无法自主的发送DBD包）——-如果主路由没有LSA需要通告了，而从路由器有LSA需要通告，那么此时从路由器发回的响应的DBD包中的M位（MORE）置为1，即告诉主路由我还有LSA要发送，这样主路由器就会继续发送DBD，直到从路由器将所有LSA都通告完（这时M位就为0了）。</p>
+<p>路由器会将收到的DBD中的信息而自己LSDB中不存在的LSA头部加入到链路请求列表中，进入LOADING状态后会根据这个列表来发送请求信息。</p>
+<p>同步链路状态数据库过程（Loading-&gt;Full）</p>
+<p>这时路由器就有了邻居的LSA索引列表，路由器都将进入LOADING状态，来请求自己LSDB中还没有的LSA的信息。路由器会发送LSR来请求一个或者多个LSA的信息，对端会发送回LSU来告诉路由器他想要的信息。OSPF有以下两种机制来确认对端收到了数据包。</p>
+<p>1.对端发送回相同的LSU，即可表明对端收到了信息。</p>
+<p>2.对端发送回LSACK表明已经收到了LSU（LSACK中带有LSA头部的信息不再发送和接收LSU和LSR，路由器就进入了FULL状态，此时他们的LSDB是相同的，就可以进行SPF算法来计算路径了。）</p>
+<p>OSPF邻居关系不能正常建立的原因和解决方法</p>
+<p>接口上没有激活ospf。<br>物理层或者是数据链路层协议down。<br>建立邻居的接口被passive掉。<br>OSPF的hello组播地址被ACL Block。<br>在 broadcast链路上的子网掩码不匹配。<br>Hello&#x2F;dead间隔不匹配。<br>认证方式或者是认证密码不匹配。<br>使用debug ip ospf adj来查看,可以自己使用不同的情况来验证。<br>两台路由器处于不同的AREA。<br>Stub&#x2F;transit&#x2F;NSSA区域类型不匹配。<br>DR和BDR的选举</p>
+<p>DR，BDR存在意义</p>
+<p>DR BDR存在于多路访问网络中，作用是减少区域内的同步次数，降低路由器的内存消耗，减少了路由流量更新，确保同一区域内的路由器拥有相同的LSDB。</p>
+<p>选举过程</p>
+<p>选举可能出现的时刻：整个网络刚搭建好，SW开启之后，LAN因故障失效之后，DR，BDR失效之后都存在选举的过程。</p>
+<p>OSPF priority 最高者为DR（缺省所有OSPF路由器为1,通过ip ospf priority 接口配置命令更改，priority为0表示不参与选举），如果priority相同，则具有最高的Router-ID的路由器被选举为DR。</p>
+<p>LSA(重点！！）<br>LSA基本概念</p>
+<p>Link State Advertisement，链路状态通告，路由器发出的关于网络结构的通告，描述了链路或接口的状态及每条链路的成本。</p>
+<p>LSA是一种数据结构，保存在LSDB中，承载在LSU中然后发送出去，LSDB中会存储与网络有关的一系列属性。</p>
+<p>LSA只能由发起这个LSA的路由器进行操作和更新或者是撤销，别的路由器不得对其进行操作，只能对其进行泛洪，不能阻塞这个LSA，也不能在这个LSA的最大时长计时器前丢弃这个LSA。</p>
+<p>最新LSA的判定</p>
+<p>更高的序列号：每30（1800S）分钟扩散一次。<br>校验和：每隔五分钟重新校验 除Age字段之外进行校验，越大越新。<br>老化时间：默认60分钟 时间计数，每经过一台路由器时间+1。</p>
+<p>LSA类型</p>
+<p>LSA1路由器LSA（Router LSA）。<br>LSA2网络LSA（Network LSA）。<br>LSA3网络汇总LSA（Network summary LSA）。<br>LSA4ASBR汇总LSA（ASBR summary LSA）。<br>LSA5自治系统外部LSA（Autonomous system external LSA）。<br>LSA6组成员LSA（Group membership LSA） *目前不支持组播OSPF （MOSPF协议）。<br>LSA7 NSSA外部LSA（NSSA External LSA）。</p>
+<p>类型1：路由器LSA Router Link States</p>
+<p>链路状态ID（LSID）：源路由器ID。</p>
+<p>通告范围：只在特定区域内泛洪。</p>
+<p>通告内容：</p>
+<p>1.路由器在区域内的接口和接口所连接的邻居（包含链路的开销）路由器链路状态。直连链路信息。</p>
+<p>2.网络连接类型。</p>
+<p>点到点的连接，描述的是邻居路由器ID。<br>中转网络的连接，描述的是DR接口的地址。<br>末节网络的连接，描述的是IP网络的子网。<br>虚链路，描述的是邻居路由器ID。</p>
+<p>3.链路开销。</p>
+<p>4.是否为ABR。</p>
+<p>类型2LSA：网络LSA Net Link States。</p>
+<p>链路状态ID：DR的IP接口地址。</p>
+<p>通告范围：在特定的区域内泛洪，只有在存在DR和BDR的网络中才会存在。</p>
+<p>通告内容：列出了构成中转网络的所有路由器，包括链路的子网掩码，链路状态等信息。</p>
+<p>类型3LSA：汇总LSA Summary Net Link States（OIA）。</p>
+<p>链路状态ID：目的网络的地址。</p>
+<p>通告范围：区域间通告，由一个区域通告到另一个区域。</p>
+<p>通告者：ABR。</p>
+<p>通告内容：ABR将从一个区域中学习到的信息汇总成链路状态通告。</p>
+<p>与3类LSA有关的计算。</p>
+<p>（1）区域内开销出现变化时。</p>
+<p>假设区域1内某链路开销出现了变化，该区域内的路由器重新进行SPF算法来更改路径。再次重新收敛后，该区域的ABR（假设该区域只有一个ABR）会向区域0发送一个更新的LSA来通告这一变化，此时区域0和其他收到这个汇总LSA的区域不会重新进行SPF算法，只会将这个LSA放入自己的LSDB中去，将去往目的网络的开销更改。</p>
+<p>（2）类型3LSA的生成和传播规则。</p>
+<p>ABR只会将来自骨干区域的 3类LSA，进行SPF算法，得出路由表从而再创建3类LSA发送到非骨干区域中，而不会对来自非骨干区域的LSA进行操作（一个区域中有两个ABR，两个ABR都会通告3类LSA，这样ABR就会得到另一个ABR发送的三类LSA）。但这些LSA会存在与非骨干区域的LSDB中，并且在非骨干区域中泛洪（保证LSDB的同一性）。</p>
+<p>当ABR创建并泛洪3类LSA，想要将这个区域内的网络通告到另一个区域时，如果是从非骨干区域通告到骨干区域，ABR只会考虑区域内的路由（路由表中不带IA的），如果是从骨干区域通告到非骨干区域，会同时考虑区域内的路由和区域间的路由（即会告诉非骨干区域去往其他区域的信息）所有路由器都会有相同的LSDB，根据LSDB来构建自己的路由表。</p>
+<p>类型4LSA：ASBR汇总LSA</p>
+<p>链路状态ID：ASBR的路由器ID。</p>
+<p>通告范围：除了末节区域的整个OSPF域中。</p>
+<p>通告内容：如何到达ASBR。</p>
+<p>通告者：ABR。</p>
+<p>与4类LSA有关的计算</p>
+<p>（1）4类LSA在区域中的泛洪。</p>
+<p>有外部路由接入的区域的ABR生成最原始的类型4LSA，将这个LSA通告入骨干区域，其中的开销是这个ABR到达ASBR的开销，类似于三类LSA，骨干区域内的ABR路由器接收到这个类型的LSA后，会将这个类型的LSA加入到SPF算法中，生成新的4类LSA，通告到非骨干区域中去，这个类型4的LSA声明的开销为LSDB中的LSA的开销加该路由器到原始ABR的距离，非骨干区域内路由器计算去往ASBR的距离时，就是该路由器到ABR的距离，加上收到的类型4LSA中通告的距离。</p>
+<p>类型5LSA：自治系统LSA</p>
+<p>链路状态ID：外部网络号。</p>
+<p>通告范围：除了末节区域的整个OSPF自治系统中。</p>
+<p>通告内容：如何通过ASBR到达外部网络。</p>
+<p>通告者：ASBR的路由器ID。</p>
+<p>PS：LSA 5的通告路由器在穿越ABR的时候是不会改变的。</p>
+<p>类型7LSA：NSSA外部LSA</p>
+<p>链路状态ID：外部网络号。</p>
+<p>通告范围：只存在于NSSA区域，在ABR处被当作5类LSA泛洪出去。</p>
+<p>7类ASBR，转化为5类LSA后，保留一个地址，保留的地址是ASBR的接口地址，其他区域内到外部的路径实际上是去到保留地址的路径。两个ABR时，路由器ID大的负责将7类LSA转为5类LSA。</p>
+<p>其他有关LSA的特性及操作</p>
+<p>（1）接口失效后，LSA的运作情况。</p>
+<p>首先他会发送新的类型1LSA，告诉他的邻居，他已经没有了那条链路的信息，其次因为down掉的是LAN中的DR接口，所以路由器会撤销之前发送的类型2LSA，通过发送改变LSA时长但是并不改变序列号的二类LSA的方法，可以快速的撤回该类型的LSA。这时区域的ABR也感知到了拓扑发生的变化，他根据路由表发生的变化发送新的LSA来告知骨干区域和其他区域，其他区域再采取相应的措施（去除路由条目，或者有备份路径）。</p>
+<p>（2）产生LSA的路由器身份。</p>
+<p>①区域内路由器产生1类LSA和2类LSA。②ABR产生3类和4类LSA。③ASBR生成5类和7类LSA。</p>
+<p>（3）3类LSA的操作。</p>
+<p>① ABR会忽略来自非骨干区域的三类LSA，此举可以消除三类LSA由骨干区域进入非骨干区域而又由非骨干区域进入骨干区域的问题。</p>
+<p>②完全末节区域中有默认路由的3类LSA。</p>
+<p>OSPF区域类型和结构（重点！）</p>
+<p>区域类型</p>
+<p>（1）骨干区域：所有区域必须连接骨干区域。</p>
+<p>（2）标准区域：接收所有内部和外部的路由信息。</p>
+<p>（3）末节区域：不接受自治系统外部的路由信息（不接受4类和5类LSA），通过一条默认的全0三类LSA前往自治系统外部。</p>
+<p>（4）完全末节区域：只接收区域内部路由信息 ，通过默认路由和别的区域相连（不接受3，4，5类LSA，通过默认路由与外部网络通信）。</p>
+<p>（5）NSSA：接收区域路由和有限的外部路由信息 限制自治系统外信息，NSSA区域中可以有ASBR，存在1&#x2F;2&#x2F;3&#x2F;7类LSA（3类还有一条全0的特殊3类）。</p>
+<p>（6）完全NSSA：只接收区域内的路由信息和有限的外部路由信息，存在1&#x2F;2&#x2F;7类LSA，一条全0的特殊3类。</p>
+<p>配置 NSSA Area后要在区域内手工配置一条默认路由（以便访问OSPF中其他区域的网络）。</p>
+<p>OSPF末节区域的默认路由</p>
+<p>（1）末节区域，完全末节区域，完全NSSA区域会自动生成一条区域间的默认路由，NSSA区域不会自动生成，需要手动配置一下。</p>
+<p>（2）如果有两个ABR，会产生次优路由，用一条默认路由代替一堆路由，其本质也可以是看作路由汇总，路由汇总一直都会损失掉一部分粒度。</p>
+<p>OSPF路径选择<br>OSPF路由类型</p>
+<p>O，区域内路由。<br>OIA，区域间路由。<br>OE2，外部路由，开销值在区域内传播时不改变。<br>OE1，外部路由，开销值在区域内传播时改变。<br>ON2，在NSSA区域中存在，类似OE2。<br>ON1，在NSSA区域中存在，类似OE1。<br>OIA，区域间默认路由。<br>ON2，NSSA区域中默认路由。</p>
+<p>选路规则</p>
+<p>以下按优先级排列，先出现的优先级最高。</p>
+<p>区域内路由&gt;区域间路由&gt;E1&#x2F;N1路由(这两类路由被看作是平等的)&gt;E2&#x2F;N2路由。</p>
+<p>区域内和区域间路由的选取（同一区域内多台ABR时）</p>
+<p>为了避免区域边界单点故障的情况，多数网络中会至少会使用两台ABR，以防止ABR出现故障而造成的网络瘫痪。ABR可以同时从区域内路由器和另一台ABR学到某个特定子网的信息。ABR可以学到一条区域内的路由（来自所连接区域），和一条区域间路由（来自另一台ABR，不是直接到达网络所在区域而是先到ABR1再通过ABR1到另一个区域，通过了两个区域所以算作区域间路由）。即使区域间路由的开销值要比区域内路由的开销值小，也会优选选取区域内的路由。</p>
+<p>OSPF虚链路</p>
+<p>定义</p>
+<p>指一条通过一个非骨干区域连接到骨干区域的链路。</p>
+<p>目的</p>
+<p>通过一个非骨干区域连接一个区域到骨干区域。</p>
+<p>通过一个非骨干区域连接一个分段的骨干区域。</p>
+<p>特点及规则</p>
+<p>(1)虚链路必须配置在两台ABR路由器之间。</p>
+<p>(2)传送区域不能是一个末梢区域。</p>
+<p>(3)虚链路的稳定性取决于其经过的区域的稳定性。</p>
+<p>(4)虚链路有助于提供逻辑冗余。</p>
+<p>思考：为什么OSPF的骨干区域要是连续的？</p>
+<p>因为所有域间流量都要通过area 0转发，非骨干区域可以配置成各种类型，例如末节区域，nssa，他可能并不知道所有的外部路由，如果要转发给那些未知目的地，非骨干区域的做法就是把数据转发给骨干区域，让骨干区域去做转发，所以骨干区域的功能是核心转发，所以要都和骨干区域相连接。</p>
+<h2 id="路由"><a href="#路由" class="headerlink" title="路由"></a>路由</h2><p>这里就不上网抄了，自己写一段吧。</p>
+<p>路由的主要作用就是不同网络设备之间的通讯，和交换的区别是一个专注于二层（数据链路层），一个专注于三层（网络层）</p>
+<p>所以有一些所谓三层交换机也就是说它的系统具备根据三层来通讯，但是它的硬件是交换机的类型</p>
+<p>另外 路由策略和策略路由经常会有问到，这个属于文字题，不是一个技术题，用英文一看就知道了：</p>
+<p>路由策略： Routering Policy</p>
+<p>策略路由： Policy-base Routering</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/network/" rel="tag"># network</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/11/16/Data%20Link%20Layer/" rel="prev" title="Data_Link_Layer">
+                  <i class="fa fa-angle-left"></i> Data_Link_Layer
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/11/24/Transport_Layer/" rel="next" title="Transport_Layer">
+                  Transport_Layer <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">zhipeng.qi</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

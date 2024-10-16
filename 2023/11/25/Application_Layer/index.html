@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.freespaceblog.fun","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="应用层应用层是我们日常接触到的层次，比如：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Application_Layer">
+<meta property="og:url" content="https://www.freespaceblog.fun/2023/11/25/Application_Layer/index.html">
+<meta property="og:site_name" content="但行好事，莫问前程">
+<meta property="og:description" content="应用层应用层是我们日常接触到的层次，比如：">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Application_Layer/1.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Application_Layer/2.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Application_Layer/3.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Application_Layer/4.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Application_Layer/5.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Application_Layer/6.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Application_Layer/7.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Application_Layer/8.png">
+<meta property="article:published_time" content="2023-11-25T02:57:03.000Z">
+<meta property="article:modified_time" content="2024-09-17T02:34:32.818Z">
+<meta property="article:author" content="zhipeng.qi">
+<meta property="article:tag" content="network">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.freespaceblog.fun/images/Application_Layer/1.png">
+
+
+<link rel="canonical" href="https://www.freespaceblog.fun/2023/11/25/Application_Layer/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://www.freespaceblog.fun/2023/11/25/Application_Layer/","path":"2023/11/25/Application_Layer/","title":"Application_Layer"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Application_Layer | 但行好事，莫问前程</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">但行好事，莫问前程</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%B1%82"><span class="nav-number">1.</span> <span class="nav-text">应用层</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhipeng.qi</p>
+  <div class="site-description" itemprop="description">我的技术总结</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.freespaceblog.fun/2023/11/25/Application_Layer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhipeng.qi">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="但行好事，莫问前程">
+      <meta itemprop="description" content="我的技术总结">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Application_Layer | 但行好事，莫问前程">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Application_Layer
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-11-25 10:57:03" itemprop="dateCreated datePublished" datetime="2023-11-25T10:57:03+08:00">2023-11-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-09-17 10:34:32" itemprop="dateModified" datetime="2024-09-17T10:34:32+08:00">2024-09-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/network/" itemprop="url" rel="index"><span itemprop="name">network</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/network/%E7%90%86%E8%AE%BA/" itemprop="url" rel="index"><span itemprop="name">理论</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+           
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="应用层"><a href="#应用层" class="headerlink" title="应用层"></a>应用层</h1><p>应用层是我们日常接触到的层次，比如：</p>
+<span id="more"></span>
+
+<p><img src="/../images/Application_Layer/1.png"></p>
+<p>应用层体系结构<br>通常有三个模式<br>    C&#x2F;S 模式:<br>服务器:</p>
+<p>总是打开的主机<br>具有固定的、众所周知的IP地址<br>主机群集常被用于创建强大的虚拟服务器</p>
+<p>客户机:</p>
+<p>同服务器端通信<br>可以间断的同服务器连接<br>可以拥有动态IP地址<br>客户机相互之间不直接通信</p>
+<p><img src="/../images/Application_Layer/2.png"></p>
+<pre><code>P2P体系结构:
+</code></pre>
+<p>没有总是打开的服务器</p>
+<p>任意一对主机直接相互通信</p>
+<p>对等方间歇连接并且可以改变IP地址</p>
+<p>优点：自扩展性强</p>
+<p>缺点：难以管理</p>
+<p><img src="/../images/Application_Layer/3.png"></p>
+<pre><code>C/S P2P的混合模式（结合两者优点）如：
+</code></pre>
+<p><img src="/../images/Application_Layer/4.png"></p>
+<p><strong>应用层通信原理</strong></p>
+<p>网络应用实际上是端系统之间对等实体的进程在通信</p>
+<p><strong>进程通信</strong></p>
+<p>同一主机上的两个进程通过内部进程通信机制进行通信</p>
+<p>不同主机上的进程通过交换报文相互通信</p>
+<p>客户进程: 发起通信的进程</p>
+<p>服务器进程: 等待联系的进程</p>
+<p>注意:具有P2P体系结构的应用程序既有客户进程和服务器进程。</p>
+<p><strong>进程与计算机网络的接口：套接字 socket</strong></p>
+<p>在对等实体之间的进程通过套接字通信</p>
+<p><img src="/../images/Application_Layer/5.png"></p>
+<p>进程通过它的套接字在网络上发送和接收报文</p>
+<p>套接字又叫做应用程序编程接口API</p>
+<p>用户通过API对传输层的控制仅限于:</p>
+<p>(1) 选择传输协议</p>
+<p>(2) 能设定几个参数</p>
+<p><strong>浅谈进程寻址</strong></p>
+<pre><code>我们有那么多网络应用，QQ，微信。
+对等实体之间的进程通信怎么找到它的目的地呢？
+</code></pre>
+<p>为了一个进程能接收报文， 它需要一个标识</p>
+<p>主机有唯一的32位IP地址 问:主机的IP地址足够标识进程吗?</p>
+<p>答:不能。因为一台主机上 能够运行许多进程。</p>
+<p>主机上的进程标识包括IP地址 和端口号</p>
+<p>常用应用程序的端口号:</p>
+<p>Web服务:80</p>
+<p>邮件服务:25</p>
+<p>所以说网络应用进程寻址主要是通过IP+端口号实现的</p>
+<p><strong>应用层需要什么服务？</strong></p>
+<p><img src="/../images/Application_Layer/6.png"></p>
+<pre><code>不同应用的服务是不一样的，在下层传输层提供的服务是可能不一样的。	
+</code></pre>
+<p>比如：</p>
+<p><img src="/../images/Application_Layer/7.png"></p>
+<p><strong>因特网运输协议提供的服务</strong></p>
+<p><strong>TCP服务</strong></p>
+<p>面向连接的服务:在客户机程序和服务器 程序之间必须建立连接</p>
+<p>可靠的传输服务: 接收和发送进程间</p>
+<p>流量控制: 发送方不会淹没接收方</p>
+<p>拥塞控制: 网络出现拥塞时抑制发送进程</p>
+<p>没有提供:时延保证，最小带宽保证</p>
+<p><strong>UDP 服务</strong></p>
+<p>不可靠数据传输</p>
+<p>没有提供:</p>
+<p>建立连接</p>
+<p>可靠性</p>
+<p>流量控制</p>
+<p>拥塞控制</p>
+<p>时延和带宽保证</p>
+<p>应用层 根据所需确定下层服务</p>
+<p>关于传输层的安全性</p>
+<p><img src="/../images/Application_Layer/8.png"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/network/" rel="tag"># network</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/11/25/Presentation_Layer/" rel="prev" title="Presentation_Layer">
+                  <i class="fa fa-angle-left"></i> Presentation_Layer
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/11/27/switch_start/" rel="next" title="交换机连接">
+                  交换机连接 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">zhipeng.qi</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

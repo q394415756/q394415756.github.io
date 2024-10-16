@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.freespaceblog.fun","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="交换机实操俗话说，光说不练假把式，是骡子是马牵出来溜溜。我们现在开始搞交换机">
+<meta property="og:type" content="article">
+<meta property="og:title" content="交换机连接">
+<meta property="og:url" content="https://www.freespaceblog.fun/2023/11/27/switch_start/index.html">
+<meta property="og:site_name" content="但行好事，莫问前程">
+<meta property="og:description" content="交换机实操俗话说，光说不练假把式，是骡子是马牵出来溜溜。我们现在开始搞交换机">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Switch_start/1.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Switch_start/2.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Switch_start/3.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Switch_start/4.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Switch_start/5.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Switch_start/6.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Switch_start/7.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Switch_start/8.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Switch_start/9.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Switch_start/10.png">
+<meta property="article:published_time" content="2023-11-27T05:40:01.000Z">
+<meta property="article:modified_time" content="2024-09-17T02:34:33.182Z">
+<meta property="article:author" content="zhipeng.qi">
+<meta property="article:tag" content="network">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.freespaceblog.fun/images/Switch_start/1.png">
+
+
+<link rel="canonical" href="https://www.freespaceblog.fun/2023/11/27/switch_start/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://www.freespaceblog.fun/2023/11/27/switch_start/","path":"2023/11/27/switch_start/","title":"交换机连接"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>交换机连接 | 但行好事，莫问前程</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">但行好事，莫问前程</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%A4%E6%8D%A2%E6%9C%BA%E5%AE%9E%E6%93%8D"><span class="nav-number">1.</span> <span class="nav-text">交换机实操</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%A4%E6%8D%A2%E6%9C%BA%E7%A1%AC%E4%BB%B6%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.1.</span> <span class="nav-text">交换机硬件介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E6%9E%B6%E6%9E%84%E7%9A%84%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.2.</span> <span class="nav-text">网络架构的介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%A4%E6%8D%A2%E6%9C%BA%E8%BF%9E%E6%8E%A5"><span class="nav-number">1.3.</span> <span class="nav-text">交换机连接</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#console%E5%8F%A3%E8%BF%9E%E6%8E%A5"><span class="nav-number">1.3.1.</span> <span class="nav-text">console口连接</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BD%93%E5%87%BA%E7%8E%B0%E5%A6%82%E4%B8%8B%E7%8A%B6%E6%80%81%E6%97%B6%E8%AF%B7%E6%A3%80%E6%9F%A5console%E7%BA%BF%E7%9A%84%E8%BF%9E%E6%8E%A5%E7%8A%B6%E6%80%81"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">当出现如下状态时请检查console线的连接状态</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BD%93%E5%87%BA%E7%8E%B0%E5%A6%82%E4%B8%8B%E7%8A%B6%E6%80%81%E6%97%B6%E6%98%BE%E7%A4%BA%E6%AD%A3%E5%B8%B8%EF%BC%8C%E8%BE%93%E5%85%A5%E5%AF%86%E7%A0%81%E5%8F%AF%E7%99%BB%E5%BD%95%E5%88%B0%E4%BA%A4%E6%8D%A2%E6%9C%BA"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">当出现如下状态时显示正常，输入密码可登录到交换机</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B0%E4%BA%A4%E6%8D%A2%E6%9C%BA%E6%88%96%E8%80%85%E6%97%A7%E4%BA%A4%E6%8D%A2%E6%9C%BA%E8%B7%B3%E5%AF%86%E7%A0%81"><span class="nav-number">1.3.2.</span> <span class="nav-text">新交换机或者旧交换机跳密码</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhipeng.qi</p>
+  <div class="site-description" itemprop="description">我的技术总结</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.freespaceblog.fun/2023/11/27/switch_start/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhipeng.qi">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="但行好事，莫问前程">
+      <meta itemprop="description" content="我的技术总结">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="交换机连接 | 但行好事，莫问前程">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          交换机连接
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-11-27 13:40:01" itemprop="dateCreated datePublished" datetime="2023-11-27T13:40:01+08:00">2023-11-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-09-17 10:34:33" itemprop="dateModified" datetime="2024-09-17T10:34:33+08:00">2024-09-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/network/" itemprop="url" rel="index"><span itemprop="name">network</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/network/%E5%AE%9E%E6%93%8D/" itemprop="url" rel="index"><span itemprop="name">实操</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/network/%E5%AE%9E%E6%93%8D/SWITCH/" itemprop="url" rel="index"><span itemprop="name">SWITCH</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+           
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="交换机实操"><a href="#交换机实操" class="headerlink" title="交换机实操"></a>交换机实操</h1><p>俗话说，光说不练假把式，是骡子是马牵出来溜溜。我们现在开始搞交换机</p>
+<span id="more"></span>
+<h2 id="交换机硬件介绍"><a href="#交换机硬件介绍" class="headerlink" title="交换机硬件介绍"></a>交换机硬件介绍</h2><p>说到交换机，感觉很高端的样子，其实并没有那么神秘，最早的手摇电话说转接谁谁谁的就是人工交换机的原理，后来转换成了机器的而已，所以，从交换机的型号上来讲，最大的区别就是接口数量和性能。</p>
+<p><img src="/../images/Switch_start/1.png"></p>
+<p>上图就是两个华为交换机的对比图，最大的区别就是包转发率和接口速度，直接理解成人工转接线和转接台的数量就好了。^_^ 那下边的高可用和其他功能就理解成转接人员的额外服务是否到位了。也就是多了一些高可用和监控还有流量管理和一些三层的功能。</p>
+<p>普遍意义上来讲的交换机长这样</p>
+<p><img src="/../images/Switch_start/2.png"></p>
+<p>每个接口都是对接办公室的一台电脑，所有的电脑和上端的连接都是在这里汇聚起来去连接另一台路由器</p>
+<h2 id="网络架构的介绍"><a href="#网络架构的介绍" class="headerlink" title="网络架构的介绍"></a>网络架构的介绍</h2><p>这里除了我们前面介绍的OSI七层模型以外，网工还有一个三层的归类：</p>
+<p><strong>接入层</strong></p>
+<p>负责连接每一个终端设备的设备，有这么几类：最便宜的HUB傻瓜交换机、基础的交换机等等，接口数量很多</p>
+<p><strong>汇聚层</strong></p>
+<p>接入层设备的上级设备，这一层开始链接了多个接入层设备，所以开始有了一些简单的流量管理功能，接口数量看需求，但是功能比接入层</p>
+<p><strong>核心层</strong></p>
+<p>汇聚层的上层连接设备，这一层设备硬件配置要求比较高（下边所有的管理都要到这里，还有下边转发的公网访问也是走这里），接口数量比较少</p>
+<p>所以一些网络工程师经常说的大二层指的是网络架构的汇聚层，不是OSI的数据链路层，是两个东西</p>
+<h2 id="交换机连接"><a href="#交换机连接" class="headerlink" title="交换机连接"></a>交换机连接</h2><h3 id="console口连接"><a href="#console口连接" class="headerlink" title="console口连接"></a>console口连接</h3><p>一、Console口登录交换机简介</p>
+<p>通过Console口登录交换机是指使用专门的Console通信线缆将用户PC的串口与交换机的Console口相连，在进行相应的配置后实现在本地管理交换机。该方式是登录交换机的最基本方式，适用于首次登录交换机或无法远程登录交换机的场景。</p>
+<p>二、材料准备</p>
+<p>1、USB转RJ-45调试线（如果有此线可无需看第二步）</p>
+<p><img src="/../images/Switch_start/3.png"></p>
+<p>2、如果只有console线和USB转接线需要中间com口对接</p>
+<p><img src="/../images/Switch_start/4.png"></p>
+<p><img src="/../images/Switch_start/5.png"></p>
+<p>将RJ-45接口插到交换机console口，将USB接口连接到电脑USB接口。</p>
+<p><img src="/../images/Switch_start/6.png"></p>
+<p>三、配置步骤</p>
+<p>1、查看连接的COM接口以及通信参数（COM接口，接口数需打开计算机管理-设备管理器进行查看。如下图所示查看端口：（Win10可能会出现无法查看端口的情况，可以去产品官网下载专用的驱动软件）</p>
+<p><img src="/../images/Switch_start/7.png"></p>
+<p>2、在PC上打开SecureCRTPortable 终端仿真软件，新建连接，设置终端软件的通信参数与设备的缺省值保持一致设置参数分别如下为：传输速率波特率为9600bit&#x2F;s8位数据位1位停止位流控可以适当的进行切换</p>
+<p><img src="/../images/Switch_start/8.png"></p>
+<p>3、交换机连接电源，会自动开机。当出现登录界面的时候输入console口管理密码，华为交换机默认密码为：<a href="mailto:&#x41;&#100;&#109;&#x69;&#x6e;&#64;&#104;&#x75;&#x61;&#119;&#101;&#x69;&#46;&#99;&#x6f;&#109;">&#x41;&#100;&#109;&#x69;&#x6e;&#64;&#104;&#x75;&#x61;&#119;&#101;&#x69;&#46;&#99;&#x6f;&#109;</a></p>
+<h4 id="当出现如下状态时请检查console线的连接状态"><a href="#当出现如下状态时请检查console线的连接状态" class="headerlink" title="当出现如下状态时请检查console线的连接状态"></a>当出现如下状态时请检查console线的连接状态</h4><p><img src="/../images/Switch_start/9.png"></p>
+<h4 id="当出现如下状态时显示正常，输入密码可登录到交换机"><a href="#当出现如下状态时显示正常，输入密码可登录到交换机" class="headerlink" title="当出现如下状态时显示正常，输入密码可登录到交换机"></a>当出现如下状态时显示正常，输入密码可登录到交换机</h4><p><img src="/../images/Switch_start/10.png"></p>
+<h3 id="新交换机或者旧交换机跳密码"><a href="#新交换机或者旧交换机跳密码" class="headerlink" title="新交换机或者旧交换机跳密码"></a>新交换机或者旧交换机跳密码</h3><p>疑惑1：交换机的缺省密码都是什么呢？</p>
+<p>登录交换机时小伙伴们可要擦亮眼睛看下当前交换机是哪个版本，用什么方式登录。版本不一样或者登录方式不一样缺省密码可能是有差别滴。对于Telnet方式登录交换机，缺省情况下设备上没有配置Telnet用户，需要小伙伴们自己配置。要是小伙伴们用Console口登录交换机可是没有缺省密码值的哦。</p>
+<p>疑惑2：忘记密码了肿么办？</p>
+<p>如果小伙伴们没有更改交换机的缺省密码，密码忘记了瞅瞅上面的表格就轻松解决啦~</p>
+<p>如果小伙伴们更改了缺省密码，还有就是木有缺省密码情况下，可以通过恢复密码的方式来解决，不过要注意不同登录方式下恢复密码的方法是不一样的</p>
+<p>不同交换机的操作界面可能不同哦。</p>
+<p>1、恢复Console口登录密码</p>
+<p>方法一： 通过Telnet登录交换机修改Console口密码。</p>
+<p>如果小伙伴们拥有Telnet账号，并且具有管理员权限，则可以通过Telnet登录到交换机后修改Console口密码，然后保存配置。</p>
+<p>步骤1： 用Telnet账号登录交换机。</p>
+<p>步骤2： 修改Console用户的密码。</p>
+<p>以修改为password认证，密码为“Huawei@123”为例。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line"></span><br><span class="line">[HUAWEI]user-interfaceconsole0</span><br><span class="line"></span><br><span class="line">[HUAWEI-ui-console0]authentication-modepassword</span><br><span class="line"></span><br><span class="line">[HUAWEI-ui-console0]setauthenticationpasswordcipherHuawei@123</span><br><span class="line"></span><br><span class="line">[HUAWEI-ui-console0]return</span><br></pre></td></tr></table></figure>
+
+<p>步骤3： 用save命令保存配置，防止重启后配置丢失。</p>
+<p>方法二： 通过 BootROM清除Console口密码登录后，修改Console口密码。</p>
+<p>（要是交换机是双主控，小伙伴们就需要在重启交换机之前将备主控板拔下，待按照下面的操作执行完后，将备主控板插上，再执行save操作保证主用主控板和备用主控板配置一致。）</p>
+<p>交换机的BootROM提供了清除Console口密码的功能，可以在用户使用Console口登录的时候跳过密码检查。交换机启动后修改Console口密码，然后保存配置。</p>
+<p>步骤1： 通过Console口连接交换机，然后重启交换机。当出现“Press Ctrl+B to enter Boot Menu…”打印信息时，按下组合键“Ctrl+B”并输入BootROM密码（缺省为“<a href="mailto:&#65;&#100;&#x6d;&#105;&#x6e;&#x40;&#104;&#x75;&#x61;&#119;&#101;&#105;&#46;&#x63;&#111;&#x6d;">&#65;&#100;&#x6d;&#105;&#x6e;&#x40;&#104;&#x75;&#x61;&#119;&#101;&#105;&#46;&#x63;&#111;&#x6d;</a>”），进入BootROM主菜单。</p>
+<p>步骤2： 在BootROM主菜单下选择“Clear password for console user”清除Console口登录密码。</p>
+<p>步骤3： 根据交换机的提示，在BootROM主菜单下选择“Boot with default mode”启动设备。 (不可以凭自己的想象选择”Reboot”哦，否则此次清除密码将失效。)</p>
+<p>步骤4： 完成系统启动后，通过Console口登录时不需要认证，登录后配置Console口密码，以修改为password认证，并修改密码为“Huawei@123”为例。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line"></span><br><span class="line">[HUAWEI]user-interfaceconsole0</span><br><span class="line"></span><br><span class="line">[HUAWEI-ui-console0]authentication-modepassword</span><br><span class="line"></span><br><span class="line">[HUAWEI-ui-console0]setauthenticationpasswordcipherHuawei@123</span><br><span class="line"></span><br><span class="line">[HUAWEI-ui-console0]return</span><br></pre></td></tr></table></figure>
+
+<p>步骤5： 用save命令保存配置，防止重启后配置丢失。</p>
+<p>2、恢复Telnet登录密码</p>
+<p>telnet登录密码丢失，可以通过其他方式（例如Console口）登录交换机后重新进行配置。</p>
+<p>步骤1： 通过其他方式（例如Console）登录交换机。</p>
+<p>步骤2： 修改用户密码。</p>
+<p>以针对VTY0～4配置AAA验证方式，原用户名为“huawei”，密码配置为“Huawei@123”为例。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line"></span><br><span class="line">[HUAWEI]user-interfacevty04</span><br><span class="line"></span><br><span class="line">[HUAWEI-ui-vty0-4]authentication-modeaaa</span><br><span class="line"></span><br><span class="line">[HUAWEI-ui-vty0-4]quit</span><br><span class="line"></span><br><span class="line">[HUAWEI]aaa</span><br><span class="line"></span><br><span class="line">[HUAWEI-aaa]local-userhuaweipasswordirreversible-cipherHuawei@123</span><br><span class="line"></span><br><span class="line">[HUAWEI-aaa]local-userhuaweiservice-typetelnet</span><br><span class="line"></span><br><span class="line">[HUAWEI-aaa]local-userhuaweiprivilegelevel3</span><br></pre></td></tr></table></figure>
+
+<p>3、恢复Web登录密码</p>
+<p>Web登录密码丢失，可以通过其他方式（例如Console口）登录交换机后重新进行配置。</p>
+<p>步骤1： 通过其他方式（例如Console）登录交换机。</p>
+<p>步骤2： 修改用户密码。</p>
+<p>以使用AAA认证方式，用户名为“huawei”，修改后的密码为“Huawei@123”为例。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">system-view</span><br><span class="line"></span><br><span class="line">[HUAWEI]aaa</span><br><span class="line"></span><br><span class="line">[HUAWEI-aaa]local-userhuaweipasswordirreversible-cipherHuawei@123</span><br><span class="line"></span><br><span class="line">[HUAWEI-aaa]local-userhuaweiservice-typehttp</span><br><span class="line"></span><br><span class="line">[HUAWEI-aaa]local-userhuaweiprivilegelevel3</span><br></pre></td></tr></table></figure>
+
+<p>4、恢复BootROM登录密码</p>
+<p>通过Console口登录交换机重置BootROM密码。</p>
+<p>步骤1： 通过Console口登录交换机。</p>
+<p>步骤2： 在任意视图下使用命令 reset boot password恢复BootROM密码为缺省密码（缺省为<a href="mailto:&#65;&#x64;&#x6d;&#105;&#110;&#64;&#x68;&#x75;&#x61;&#x77;&#x65;&#105;&#x2e;&#99;&#x6f;&#x6d;">&#65;&#x64;&#x6d;&#105;&#110;&#64;&#x68;&#x75;&#x61;&#x77;&#x65;&#105;&#x2e;&#99;&#x6f;&#x6d;</a>）。</p>
+<p>步骤3： 在用户视图下使用命令 reboot重启交换机。</p>
+<p>步骤4： 当重启过程中出现“Press Ctrl+B to enter Boot Menu…”打印信息时，按组合键“Ctrl+B”，输入缺省密码后进入BootROM主菜单。</p>
+<p>步骤5： 在BootROM主菜单下选择“Modify BootROM password”并按照提示修改密码。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/network/" rel="tag"># network</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/11/25/Application_Layer/" rel="prev" title="Application_Layer">
+                  <i class="fa fa-angle-left"></i> Application_Layer
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/11/27/Switch_vlan/" rel="next" title="VLAN划分">
+                  VLAN划分 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">zhipeng.qi</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

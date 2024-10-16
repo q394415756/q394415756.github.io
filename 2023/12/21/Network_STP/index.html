@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.freespaceblog.fun","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="交换机STP配置我们前面讲了交换机连接和vlan的划分，在现实场景中，一般不会只有一台交换机或者连接设备，都是有很多台设备来做冗余，在这个时候就会有如下场景： A交换机发起了一个arp请求，询问某个计算机在哪里 ，B交换机收到这个请求查询本地后发现不在自己这里，就会转发并询问其他交换机C是否找到这个计算机的MAC地址，然后C交换机收到以后发现自己也没有，就会继续询问，本来这个逻辑是没有问题的，但是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="STP配置">
+<meta property="og:url" content="https://www.freespaceblog.fun/2023/12/21/Network_STP/index.html">
+<meta property="og:site_name" content="但行好事，莫问前程">
+<meta property="og:description" content="交换机STP配置我们前面讲了交换机连接和vlan的划分，在现实场景中，一般不会只有一台交换机或者连接设备，都是有很多台设备来做冗余，在这个时候就会有如下场景： A交换机发起了一个arp请求，询问某个计算机在哪里 ，B交换机收到这个请求查询本地后发现不在自己这里，就会转发并询问其他交换机C是否找到这个计算机的MAC地址，然后C交换机收到以后发现自己也没有，就会继续询问，本来这个逻辑是没有问题的，但是">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/1.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/2.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/3.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/4.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/5.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/6.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/7.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/8.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/9.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/10.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/11.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/12.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/13.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/14.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/15.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/16.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/17.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/18.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/19.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/20.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/21.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/22.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/23.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/24.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/25.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/26.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/27.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/28.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/29.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/30.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/31.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/32.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/33.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/34.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/35.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/36.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/37.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/38.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/39.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/40.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/41.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/42.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/43.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/44.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/45.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/46.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/47.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/48.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/49.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/50.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/51.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/52.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/53.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/54.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/55.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/56.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/57.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/58.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/59.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/60.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/61.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/62.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/63.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/64.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/65.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/66.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/67.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/68.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/69.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/70.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/71.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Network_STP/72.png">
+<meta property="article:published_time" content="2023-12-21T06:45:23.000Z">
+<meta property="article:modified_time" content="2024-09-17T02:34:33.166Z">
+<meta property="article:author" content="zhipeng.qi">
+<meta property="article:tag" content="network">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.freespaceblog.fun/images/Network_STP/1.png">
+
+
+<link rel="canonical" href="https://www.freespaceblog.fun/2023/12/21/Network_STP/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://www.freespaceblog.fun/2023/12/21/Network_STP/","path":"2023/12/21/Network_STP/","title":"STP配置"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>STP配置 | 但行好事，莫问前程</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">但行好事，莫问前程</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%A4%E6%8D%A2%E6%9C%BASTP%E9%85%8D%E7%BD%AE"><span class="nav-number">1.</span> <span class="nav-text">交换机STP配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#STP%E7%94%9F%E6%88%90%E6%A0%91"><span class="nav-number">1.1.</span> <span class="nav-text">STP生成树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E6%A0%91%E5%8D%8F%E8%AE%AE%E7%AE%80%E4%BB%8B"><span class="nav-number">1.1.1.</span> <span class="nav-text">生成树协议简介</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%94%9F%E6%88%90%E6%A0%91%E5%8D%8F%E8%AE%AE"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">什么是生成树协议</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E6%A0%91%E5%8D%8F%E8%AE%AE%E4%B8%A4%E4%B8%AA%E4%B8%BB%E8%A6%81%E5%8A%9F%E8%83%BD"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">生成树协议两个主要功能</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%8D%E8%AF%8D%E8%A7%A3%E9%87%8A"><span class="nav-number">1.1.1.3.</span> <span class="nav-text">名词解释</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E6%A0%91%E5%8D%8F%E8%AE%AE%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-number">1.1.1.4.</span> <span class="nav-text">生成树协议工作原理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-%E4%BA%A4%E6%8D%A2%E7%BD%91%E7%BB%9C%E4%B8%AD%E9%80%89%E4%B8%BE1%E5%8F%B0%E6%A0%B9%E6%A1%A5%EF%BC%88%E4%BA%A4%E6%8D%A2%E6%9C%BA%EF%BC%89"><span class="nav-number">1.1.1.4.1.</span> <span class="nav-text">1.交换网络中选举1台根桥（交换机）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-%E9%9D%9E%E6%A0%B9%E6%A1%A5%EF%BC%88%E4%BA%A4%E6%8D%A2%E6%9C%BA%EF%BC%89%E9%80%89%E4%B8%BE1%E4%B8%AA%E6%A0%B9%E7%AB%AF%E5%8F%A3"><span class="nav-number">1.1.1.4.2.</span> <span class="nav-text">2.非根桥（交换机）选举1个根端口</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-%E9%80%89%E4%B8%BE%E6%8C%87%E5%AE%9A%E7%AB%AF%E5%8F%A3"><span class="nav-number">1.1.1.4.3.</span> <span class="nav-text">3.选举指定端口</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%8C%87%E5%AE%9A%E7%AB%AF%E5%8F%A3%E4%B8%BE%E4%BE%8B%E8%AF%B4%E6%98%8E"><span class="nav-number">1.1.1.4.3.1.</span> <span class="nav-text">指定端口举例说明</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-%E9%98%BB%E5%A1%9E%E5%89%A9%E4%BD%99%E7%AB%AF%E5%8F%A3"><span class="nav-number">1.1.1.4.4.</span> <span class="nav-text">4.阻塞剩余端口</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.1.2.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RSTP"><span class="nav-number">1.2.</span> <span class="nav-text">RSTP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%BF%E4%BB%A3%E6%8E%A5%E5%8F%A3%EF%BC%88-Alternate-Port-%EF%BC%8CAP-%EF%BC%89"><span class="nav-number">1.2.1.</span> <span class="nav-text">替代接口（ Alternate Port ，AP ）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%87%E4%BB%BD%E6%8E%A5%E5%8F%A3%EF%BC%88-Backup-Port-%EF%BC%8CBP-%EF%BC%89"><span class="nav-number">1.2.2.</span> <span class="nav-text">备份接口（ Backup Port ，BP ）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%B9%E7%BC%98%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.2.3.</span> <span class="nav-text">边缘接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#P-A-%E6%9C%BA%E5%88%B6"><span class="nav-number">1.2.4.</span> <span class="nav-text">P&#x2F;A 机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%9D%E6%8A%A4%E5%8A%9F%E8%83%BD"><span class="nav-number">1.2.5.</span> <span class="nav-text">保护功能</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MSTP"><span class="nav-number">1.3.</span> <span class="nav-text">MSTP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Smart-Link"><span class="nav-number">1.3.1.</span> <span class="nav-text">Smart Link</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#iStack-CSS"><span class="nav-number">1.3.2.</span> <span class="nav-text">iStack&#x2F;CSS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A0%E4%BA%8C%E5%B1%82%E7%8E%AF%E8%B7%AF%E5%9C%BA%E6%99%AF"><span class="nav-number">1.3.3.</span> <span class="nav-text">无二层环路场景</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhipeng.qi</p>
+  <div class="site-description" itemprop="description">我的技术总结</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.freespaceblog.fun/2023/12/21/Network_STP/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhipeng.qi">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="但行好事，莫问前程">
+      <meta itemprop="description" content="我的技术总结">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="STP配置 | 但行好事，莫问前程">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          STP配置
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-12-21 14:45:23" itemprop="dateCreated datePublished" datetime="2023-12-21T14:45:23+08:00">2023-12-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-09-17 10:34:33" itemprop="dateModified" datetime="2024-09-17T10:34:33+08:00">2024-09-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/network/" itemprop="url" rel="index"><span itemprop="name">network</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/network/%E5%AE%9E%E6%93%8D/" itemprop="url" rel="index"><span itemprop="name">实操</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/network/%E5%AE%9E%E6%93%8D/SWITCH/" itemprop="url" rel="index"><span itemprop="name">SWITCH</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+           
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="交换机STP配置"><a href="#交换机STP配置" class="headerlink" title="交换机STP配置"></a>交换机STP配置</h1><p>我们前面讲了交换机连接和vlan的划分，在现实场景中，一般不会只有一台交换机或者连接设备，都是有很多台设备来做冗余，在这个时候就会有如下场景：</p>
+<p>A交换机发起了一个arp请求，询问某个计算机在哪里 ，B交换机收到这个请求查询本地后发现不在自己这里，就会转发并询问其他交换机C是否找到这个计算机的MAC地址，然后C交换机收到以后发现自己也没有，就会继续询问，本来这个逻辑是没有问题的，但是！如果A和C也连接了会出现一个什么问题呢？如下图</p>
+<span id="more"></span>
+
+<p><img src="/../images/Network_STP/1.png"></p>
+<p>好了，这个ARP在周期内无限的来回问，整个交换机就啥也别干了，就一直在这里问来问去，还有一种类似的情况，就是用一根网线接到交换机的两个口上，类似这样：</p>
+<p><img src="/../images/Network_STP/2.png"></p>
+<p>这样也会导致环路的出现，这里有个链接，是b站上有个网工的处理：</p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1xw411W7Kd/">https://www.bilibili.com/video/BV1xw411W7Kd/</a></p>
+<p>目前最新的交换机默认都开启了stp的功能，但是在实际生产中如果配置不当，也需要对这个问题进行排查和修复，所以就引入了我们后面的功能</p>
+<h2 id="STP生成树"><a href="#STP生成树" class="headerlink" title="STP生成树"></a>STP生成树</h2><p>这里放一下引用地址：<a target="_blank" rel="noopener" href="https://blog.csdn.net/lehe99/article/details/132857807">https://blog.csdn.net/lehe99/article/details/132857807</a></p>
+<h3 id="生成树协议简介"><a href="#生成树协议简介" class="headerlink" title="生成树协议简介"></a>生成树协议简介</h3><h4 id="什么是生成树协议"><a href="#什么是生成树协议" class="headerlink" title="什么是生成树协议"></a>什么是生成树协议</h4><p>  STP（Spanning Tree Protocol）是一种由交换机运行的、用来解决交换网络中环路问题的数据链路层协议。为提高网络可靠性，交换网络中通常会使用冗余链路，但是冗余链路会给交换网络带来环路风险，导致广播风暴以及MAC地址表不稳定等问题，影响用户通信质量。生成树协议STP可以在提高可靠性的同时又能避免环路带来的各种问题。<br>    注：屏蔽双绞线（ShieldedTwisted Pair）、信令转接点（SignalTransfer Point）等术语的缩写也是STP，应分清此 STP与彼 STP。<br><img src="/../images/Network_STP/3.png"><br>没有冗余链路时，如上图所示某条链路出现故障，该链路交换机下的终端业务会中断。<br><img src="/../images/Network_STP/4.png"><br><img src="/../images/Network_STP/5.png"><br>有冗余链路时，如上图所示某条链路出现故障，该链路交换机下的终端业务会中断,因为还有冗余链路保障网络连通；但是产生了环路。</p>
+<h4 id="生成树协议两个主要功能"><a href="#生成树协议两个主要功能" class="headerlink" title="生成树协议两个主要功能"></a>生成树协议两个主要功能</h4><pre><code>1. 消除环路：通过阻断冗余链路来消除网络中可能存在的环路。
+2. 链路备份：当活动路径发生故障时，激活备份链路，及时恢复网络通信。
+</code></pre>
+<p>网络环路产生的问题<br>        在有环路的交换网络中，会导致Mac地址表翻摆、广播风暴、多帧复制等问题。</p>
+<h4 id="名词解释"><a href="#名词解释" class="headerlink" title="名词解释"></a>名词解释</h4><pre><code>    桥（网桥）：交换机早期的名字；
+    桥（交换机）的Mac地址：每台交换机都有多个转发端口，每个端口有1个Mac地址，通常把端口编号最小的那个端口的Mac地址作为交换机的Mac地址；
+    桥ID（BID）：由桥优先级（2个字节，即16位二进制数）和桥Mac地址（6个字节，即48位二进制数）组成，优先级可以人为设置，取值范围是0～65535，步长为4096，默认为0x8000（十进制为32768）；
+    端口ID（PID）：运行STP交换机的每个端口都有一个端口ID， 端口ID由端口优先级和端口号（即端口编号，如Ethernet0/0/3的端口编号为3）组成。 端口优先级取值范围是0到240， 步长为16， 即取值必须为16的整数倍，默认端口优先级为128；
+    STP交换机：运行生成树协议的交换机；
+    BPDU（Bridge Protocol Data Unit）网桥协议数据单元：是STP交换机相互交互的数据帧，BPDU是由STP交换机产生、交互和处理的，不是计算机等终端设备。
+</code></pre>
+<h4 id="生成树协议工作原理"><a href="#生成树协议工作原理" class="headerlink" title="生成树协议工作原理"></a>生成树协议工作原理</h4><pre><code>    STP协议的基本原理：在一个具有物理环路的交换网络中，交换机通过运行STP协议，自动生成一个没有环路的工作拓扑。该无环工作拓扑也称为STP树(STPTree)，树节点为某些特定的交换机，树枝为某些特定的链路。一棵STP树包含唯一的一个根节点，任何一个节点到根节点的工作路径不但是唯一的，而且是最优的。当网络拓扑发生变化时，STP树也会发生相应变化。
+</code></pre>
+<p>生成树的产生过程</p>
+<p>​        交换网络中选举1台根桥（交换机） –&gt; 非根桥（交换机）选举1个根端口 –&gt; 选举指定端口 –&gt; 阻塞剩余端口。</p>
+<h5 id="1-交换网络中选举1台根桥（交换机）"><a href="#1-交换网络中选举1台根桥（交换机）" class="headerlink" title="1.交换网络中选举1台根桥（交换机）"></a>1.交换网络中选举1台根桥（交换机）</h5><p>​        根桥：网桥ID最小的为根桥，根桥是整个交换网络的逻辑中心，但不一定是物理中心，当网络拓扑发生变化时，根桥也可能发生变化。</p>
+<p><img src="/../images/Network_STP/6.png"></p>
+<p><img src="/../images/Network_STP/7.png"></p>
+<p>如上图所示，交换机默认优先级为32768，所有交换机优先级相同，则需要通过比较交换机Mac地址确定根桥，经过比较，交换机SW的BID最小，所以选举为根桥。</p>
+<p><img src="/../images/Network_STP/8.png"></p>
+<p>如上图所示，对部分交换机优先级修改，交换机SW优先级最高（即，优先级值最小），交换机SW被选举为根桥。</p>
+<h5 id="2-非根桥（交换机）选举1个根端口"><a href="#2-非根桥（交换机）选举1个根端口" class="headerlink" title="2.非根桥（交换机）选举1个根端口"></a>2.非根桥（交换机）选举1个根端口</h5><p>​    <strong>根端口：</strong>是STP协议为非根桥选举出来的连接向根桥的端口，每台非根桥只能有1个根端口，根桥没有根端口。<br>​    每台非根桥的STP交换机有多个用于连接网络的端口，通过比较每个连接网络端口的端口开销、端口<code>对端</code>网桥ID、端口<code>对端</code>端口ID来选举出1个根端口，以保证这个端口上的链路为到根桥的唯一1条最优路径。</p>
+<p>​    <strong>非根桥：</strong>没有被选举为根桥的STP交换机称为非根桥。<br>​    <strong>端口的根路径开销（RPC-Root Path Cost）：</strong>在运行STP协议的网络中，STP交换机端口到根桥的累计路径开销称为这个端口的根路径开销。<br>​    端口的根路径开销与链路上的各个端口转发速率有关，端口转发速率越高开销越小。<br>​    <strong>BID选举规则：</strong>先比较交换机优先级后比较交换机Mac地址，如果有1个优先级最高（优先级值最小）的交换机，则不需要再比较交换机Mac地址部分；如果有多个优先级最高（优先级值最小）的交换机，则需要再比较交换机Mac地址部分。<br>​    <strong>PID选举规则：</strong>先比较交换机端口优先级后比较交换机端口号，如果有1个优先级最高（优先级值最小）的交换机端口，则不需要再比较交换机端口号部分；如果有多个优先级最高（优先级值最小）的交换机端口，则需要再比较交换机端口号部分。</p>
+<p><img src="/../images/Network_STP/9.png"></p>
+<p><strong>SW4交换机根端口选举</strong><br><img src="/../images/Network_STP/10.png"><br>如上图所示，SW4交换机到根桥SW有3条路径，路径开销分别为：</p>
+<p>1.SW4：GE 0&#x2F;0&#x2F;1–&gt;SW：GE 0&#x2F;0&#x2F;2，SW4的E0&#x2F;0&#x2F;1端口路径开销为20000。<br><img src="/../images/Network_STP/11.png"><br><img src="/../images/Network_STP/12.png"></p>
+<p>2.SW4：GE 0&#x2F;0&#x2F;2–&gt;SW2：GE0&#x2F;0&#x2F;2–&gt;SW2：GE 0&#x2F;0&#x2F;1–&gt;SW：GE 0&#x2F;0&#x2F;1<br>SW4的E0&#x2F;0&#x2F;2端口路径开销为20000+20000&#x3D;40000</p>
+<p><img src="/../images/Network_STP/13.png"><br><img src="/../images/Network_STP/14.png"><br>3.SW4：Ethernet 0&#x2F;0&#x2F;3–&gt;SW3：Ethernet 0&#x2F;0&#x2F;2–&gt;SW3：Ethernet 0&#x2F;0&#x2F;3–&gt;SW2：Ethernet 0&#x2F;0&#x2F;2–&gt;SW2：GE 0&#x2F;0&#x2F;1–&gt;SW：GE 0&#x2F;0&#x2F;1<br>SW4的E0&#x2F;0&#x2F;1端口路径开销为200000+200000+20000&#x3D;420000<br><img src="/../images/Network_STP/15.png"><br><img src="/../images/Network_STP/16.png"><br>       注：从最后1条路径可以看出，路径开销不是SW4交换机和SW交换机之间的4个端口（SW3：Ethernet 0&#x2F;0&#x2F;2、SW3：Ethernet 0&#x2F;0&#x2F;3、SW2：Ethernet 0&#x2F;0&#x2F;2、SW2：GE 0&#x2F;0&#x2F;1）各自开销的累加，而是SW4交换机和SW交换机之间各个交换机之间路径（SW4-SW3、SW3-SW2、SW2-SW共3条路径）开销累加之和。</p>
+<p>从3条路径开销得知SW4的GE 0&#x2F;0&#x2F;1端口路径开销最小，所以SW4交换机的根端口为GE 0&#x2F;0&#x2F;1。</p>
+<p><strong>SW3交换机根端口选举</strong><br><img src="/../images/Network_STP/17.png"><br>如上图所示，SW3交换机到根桥SW有4条路径，路径开销分别为：</p>
+<p>1.SW3：E 0&#x2F;0&#x2F;2–&gt;SW4：E 0&#x2F;0&#x2F;3–&gt;SW4：GE 0&#x2F;0&#x2F;1–&gt;SW：GE 0&#x2F;0&#x2F;2<br> SW3的E 0&#x2F;0&#x2F;2端口路径开销为200000+20000&#x3D;220000<br><img src="/../images/Network_STP/18.png"><br><img src="/../images/Network_STP/19.png"><br>2.SW3：E 0&#x2F;0&#x2F;3–&gt;SW2：E 0&#x2F;0&#x2F;2–&gt;SW2：E 0&#x2F;0&#x2F;1–&gt;SW：E 0&#x2F;0&#x2F;1<br> SW3的E 0&#x2F;0&#x2F;3端口路径开销为200000+20000&#x3D;220000<br><img src="/../images/Network_STP/20.png"><br><img src="/../images/Network_STP/21.png"><br>3.SW3：E 0&#x2F;0&#x2F;3–&gt;SW2：E 0&#x2F;0&#x2F;2–&gt;SW2：GE 0&#x2F;0&#x2F;2–&gt;SW4：GE 0&#x2F;0&#x2F;2–&gt;SW4：GE 0&#x2F;0&#x2F;1–&gt;SW：  GE 0&#x2F;0&#x2F;2<br> SW3的E 0&#x2F;0&#x2F;3端口路径开销为200000+20000+20000&#x3D;240000<br><img src="/../images/Network_STP/22.png"><br><img src="/../images/Network_STP/23.png"><br>4.SW3：E 0&#x2F;0&#x2F;2–&gt;SW4：E 0&#x2F;0&#x2F;3–&gt;SW4：GE 0&#x2F;0&#x2F;2–&gt;SW2：GE 0&#x2F;0&#x2F;2–&gt;SW2：GE 0&#x2F;0&#x2F;1–&gt;SW：GE 0&#x2F;0&#x2F;1<br> SW3的E 0&#x2F;0&#x2F;2端口路径开销为200000+20000+20000&#x3D;240000<br><img src="/../images/Network_STP/24.png"><br><img src="/../images/Network_STP/25.png"><br>从4条路径开销得知SW4的E0&#x2F;0&#x2F;1端口路径开销最小的有2个，开销值都为220000，则需要比较BID（桥ID）来确定根端口。</p>
+<p>SW3交换机去往根桥方向的相邻交换机ID为：SW2的ID为32768.4c1f-cc6b-343a，SW4的ID为32768.4c1f-cc6b-641e，SW2的BID小，则与SW2相连的SW3的E 0&#x2F;0&#x2F;3端口为SW3的根端口。<br><strong>SW7交换机根端口选举</strong><br><img src="/../images/Network_STP/26.png"><br> SW7交换机到根桥SW有4条路径（跟SW3交换机相似，此处省略），端口路径开销和BID都相同，则需比较端口ID（PID）来确定根端口。</p>
+<pre><code>    SW7交换机去往根桥方向的相邻交换机端口ID为：SW3的Ethernet0/0/1端口ID为128.1，SW3的Ethernet0/0/4端口ID为128.4，SW3的Ethernet0/0/1端口ID小，则与SW3相连的SW7的E 0/0/1端口为SW7的根端口；
+    如果手动修改SW3的Ethernet0/0/1端口ID为64.1，SW3的Ethernet0/0/4端口ID为48.4，SW3的Ethernet0/0/4端口优先级高（48&lt;64），则与SW3相连的SW7的E 0/0/2端口为SW7的根端口；
+</code></pre>
+<p><img src="/../images/Network_STP/27.png"><br>注：上图中，如果SW3和SW7之间用集线器HUB相连，则 SW7交换机Ethernet0&#x2F;0&#x2F;1端口和Ethernet0&#x2F;0&#x2F;2端口去往根桥方向的相邻交换机端口ID都为SW3的Ethernet0&#x2F;0&#x2F;1端口，PID是相同的，这种情况下则需要比较SW7自己的Ethernet0&#x2F;0&#x2F;1端口和Ethernet0&#x2F;0&#x2F;2端口PID来确定根端口。因为集线器HUB在实际应用中很少用，在此不再赘述。<br><img src="/../images/Network_STP/28.png"></p>
+<h5 id="3-选举指定端口"><a href="#3-选举指定端口" class="headerlink" title="3.选举指定端口"></a>3.选举指定端口</h5><pre><code>    指定端口用于确定除了根端口外要保留通信的端口，即连接两台STP交换机的两个端口，其中一个是指定端口，另外一个是根端口或者是阻塞端口。
+</code></pre>
+<p><img src="/../images/Network_STP/29.png"></p>
+<h6 id="指定端口举例说明"><a href="#指定端口举例说明" class="headerlink" title="指定端口举例说明"></a>指定端口举例说明</h6><p><img src="/../images/Network_STP/30.png"><br>        上图按照根桥端口和根端口对端端口都是指定端口，标记出了部分指定端口；还剩下SW4:E0&#x2F;0&#x2F;3—SW3:E0&#x2F;0&#x2F;2、SW4:GE0&#x2F;0&#x2F;2—SW2:GE0&#x2F;0&#x2F;2、SW3:E0&#x2F;0&#x2F;1—SW7:E0&#x2F;0&#x2F;1共3条链路还没确定指定端口。</p>
+<p>按照端口根路径开销确定指定端口：<br>        SW4:E0&#x2F;0&#x2F;3—SW3:E0&#x2F;0&#x2F;2链路：SW4:E0&#x2F;0&#x2F;3的RPC为20000，SW3:E0&#x2F;0&#x2F;2的RPC为220000，SW4:E0&#x2F;0&#x2F;3的RPC&lt;SW3:E0&#x2F;0&#x2F;2的RPC，SW4:E0&#x2F;0&#x2F;3为指定端口。<br><img src="/../images/Network_STP/31.png"><br><img src="/../images/Network_STP/32.png"><br>        SW4:GE0&#x2F;0&#x2F;2—SW2:GE0&#x2F;0&#x2F;2链路：SW4:GE0&#x2F;0&#x2F;2的RPC为20000，SW2:GE0&#x2F;0&#x2F;2的RPC为20000，SW4:GE0&#x2F;0&#x2F;2的RPC&#x3D;SW3:GE0&#x2F;0&#x2F;2的RPC，需要比较各自交换机ID才能确定指定端口。SW2的ID为32768.4c1f-cc6b-343a，SW4的ID为32768.4c1f-cc6b-641e，SW2的BID小，则SW2:GE0&#x2F;0&#x2F;2为指定端口。<br><img src="/../images/Network_STP/33.png"><br><img src="/../images/Network_STP/34.png"><br>        SW3:E0&#x2F;0&#x2F;1—SW7:E0&#x2F;0&#x2F;1链路：SW3:E0&#x2F;0&#x2F;1的RPC为220000，SW7:E0&#x2F;0&#x2F;1的RPC为420000，SW3:E0&#x2F;0&#x2F;1的RPC&lt;SW7:E0&#x2F;0&#x2F;1的RPC，SW3:E0&#x2F;0&#x2F;1为指定端口。<br><img src="/../images/Network_STP/35.png"><br><img src="/../images/Network_STP/36.png"><br><img src="/../images/Network_STP/37.png"></p>
+<h5 id="4-阻塞剩余端口"><a href="#4-阻塞剩余端口" class="headerlink" title="4.阻塞剩余端口"></a>4.阻塞剩余端口</h5><pre><code>    阻塞端口用于切断网络环路，在交换网络中，STP交换机通过交互BPDU消息，如果发现有环路，则选择地阻塞某些端口，最终将环路网络修改成逻辑上无环路的树形网络结构。
+</code></pre>
+<p><img src="/../images/Network_STP/38.png"></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>1.所有的交换机先选举根交换机和非根交换机<br>2.根交换机的所有接口都是指定端口，非根交换机和根交换机链接的自己这边的接口都是根端口，再对所有的根端口比较大小以后确定指定接口，然后所有的指定接口再比较，开销大的那个就是阻塞端口<br>3.比较的方式有几轮，交换机链路开销、交换机ID、交换机MAC地址 交换机接口ID 交换机接口，这个是不会存在相同的情况（不同的网络设备mac地址肯定不一样，总有个大小王能给你比较）<br>4.如果需要手动修改链路状态，可以修改端口的优先级数值，这样的话比较下来就可以做一些STP的控制<br>5.传统的STP在连接起来以后有五个状态：<br><em>stp接口转变过程：</em><br>1、禁用：当交换机接口被关闭，的时候这个接口就是禁用状态<br>2、堵塞：当交换机端口被激活之后，这个端口就会进入堵塞状态，堵塞状态会监听BPDU（BPDU是stp的数据帧类型）<br>3、侦听：当交换机端口要被选举为根端口或者指定端口的时候，就会从堵塞状态转换成侦听状态，这个状态会保持15s。（这个15s是为了给stp一个反应时间，让全网BPDU进行统一，BPDU会通过组播泛洪全网完成拓扑更新这也是需要时间的，否则会导致全网临时的环路）（如果侦听状态下本端口没有被选成根端口或者指定端口还会直接变成堵塞端口）<br>4、学习：stp这个接口状态是为了学习最新的mac地址表，以免导致广播风暴，学习状态会保持15s。（侦听业务数据帧，不参与发送和转发）（在侦听业务数据帧的时候如果发现自己不能成为指定和根端口，那么也会直接变成堵塞）<br>5、转发：本接口状态可以处理业务数据帧，也可以进行BPDU的处理，只有根端口或者指定端口才可以是转发状态。<br><img src="/../images/Network_STP/39.png"><br>这个时间是这样计算的：<br><img src="/../images/Network_STP/40.png"><br>STP 接口的禁用、阻塞、侦听状态类似，功能高度重合。<br><img src="/../images/Network_STP/41.png"><br>拓扑变化依赖计时器：根交换机发送配置 BPDU 的 Hello Time 是 2 秒，非根交换机即使没收到 BPDU ，也要在 Max Age 的 20 秒后，才会重新计算 STP 。<br><img src="/../images/Network_STP/42.png"><br>什么是收敛？<br>收敛是指网络进入稳定状态。比如在 STP 中所有接口获得接口角色，进入转发或阻塞状态。收敛时间是指网络从发生变化到进入稳定状态的时间。</p>
+<p>可以看到stp在建立连接以后需要等待30~50秒以后才能计算完成。如果架构里边交换机越多，计算的越慢，而且接口状态不合理：那这个就又引出了问题，能不能更快一点呢？⬇</p>
+<h2 id="RSTP"><a href="#RSTP" class="headerlink" title="RSTP"></a>RSTP</h2><p>鉴于 STP 的优缺点都很明显，弃之又觉得可惜，还是抢救一下吧。于是升级版的 RSTP 出现了，对 STP 进行了大量的改进。<br>RSTP增加新的接口角色，其中的替代接口可在交换机的根接口失效时，立即成为新的根接口，获取新的路径到达根桥。RSTP 使用 P&#x2F;A 机制，让指定接口能够快速进入转发状态，而不用像 STP 那样经过 Forward Delay 时间。RSTP 还新增边缘接口的概念，让交换机接入终端设备的接口立即进入转发状态。<br>RSTP 接口角色<br>RSTP 在 STP 的基础上增加了接口角色，4 种接口角色分别是：根接口（ RP ）、指定接口（ DP ）、替代接口（ Alternate Port ，AP ）和备份接口（ Backup Port ，BP ）。根接口和指定接口与 STP 中定义相同，对于 STP 的非根非指定接口，RSTP 将其分为两种，一种是替代接口，另一种是备份接口。<br><img src="/../images/Network_STP/43.png"></p>
+<h3 id="替代接口（-Alternate-Port-，AP-）"><a href="#替代接口（-Alternate-Port-，AP-）" class="headerlink" title="替代接口（ Alternate Port ，AP ）"></a>替代接口（ Alternate Port ，AP ）</h3><p>替代接口就是根接口的备份，由于收到其它交换机发送的更优 BPDU 而被阻塞的接口。如果根接口发生故障，那么替代接口会成为新的根接口。接口切换过程中，无需延时，无需 BPDU 交互，立马进入到转发状态。<br>一台交换机如果是非根桥，那么它有且只有一个根接口，但是这台交换机可以没有替代接口，也可以有，当有替代接口时，可以有一个或多个。当交换机的根接口发生故障时，最优的替代接口将成为新的根接口。<br><img src="/../images/Network_STP/44.png"><br>如上图所示，SW1 是网络中的根桥，SW3 有两个接口接入到网络中，由于 G0&#x2F;11 比 G0&#x2F;12 到达根桥的 RPC 更小，G0&#x2F;11 成为 SW3 的根接口。G0&#x2F;12 收到 SW2 发送的 BPDU ，经过 SW3 计算后决定阻塞，成为 SW3 的替代接口。</p>
+<h3 id="备份接口（-Backup-Port-，BP-）"><a href="#备份接口（-Backup-Port-，BP-）" class="headerlink" title="备份接口（ Backup Port ，BP ）"></a>备份接口（ Backup Port ，BP ）</h3><p>备份接口也是指定接口的备份，备份接口是交换机收到了自己发送的 BPDU 而被阻塞的接口。如果一台交换机的多个接口在同一个物理网段内，其中一个选举为指定接口，其它接口选举为备份接口且处于丢弃状态，备份接口作为这个网段到达根桥的冗余接口。如果交换机的指定接口发生故障，最优的备份接口成为新的指定接口，为根交换机与这条链路提供另一条转发通道，实现与这个网段的数据交互。<br>备份接口通常在这两种情况下出现，一种是交换机的多个接口连接到一台集线器（ Hub ）上，但是集线器和共享网络几乎绝迹。另一种情况是同一台交换机的两个接口通过一条网线连接起来，这种通常是人为的误操作。因此备份接口比较少见。<br><img src="/../images/Network_STP/45.png"><br>如上图所示，SW1 是网络中的根桥，SW2 的 G0&#x2F;11 和 G0&#x2F;12 接口形成自环，RSTP 能够检测到这个环路，并在这两个接口中选择一个进行阻塞。由于 G0&#x2F;11 接口的接口 ID 更小，成为 SW2 的指定接口，而 G0&#x2F;12 接口成为备份接口，备份接口被阻塞。<br><img src="/../images/Network_STP/46.png"><br>如上图所示，SW2 的两个接口连接在同一台集线器（ Hub ）上，集线器收到数据后会拷贝到其它所有接口，而且集线器不支持 STP&#x2F;RSTP ，因此 SW2 从 G0&#x2F;11 接口发出的 BPDU 会被集线器发送到 SW2 的 G0&#x2F;12 接口，反之亦然。当 SW2 的指定接口 G0&#x2F;11 出现故障时，备份接口 G0&#x2F;12 将接替它的工作，负责与相应的网段实现数据交互。<br>RSTP 接口状态<br>STP 有 5 种接口状态，分别是禁用、阻塞、侦听、学习和转发，而 RSTP 对接口状态进行了简化，把禁用、阻塞、侦听状态合并为丢弃状态（ Discarding ）。因为这三类状态的功能区别不大，接口都不学习 MAC 地址，也不转发数据，这也是丢弃状态接口的处理方式。那么 RSTP 就是 3 种状态，即丢弃状态（ Discarding ）、学习状态（ Learning ）和转发状态（ Forwarding ）。学习和转发状态保持不变，和 STP 中的定义相同。<br><img src="/../images/Network_STP/47.png"></p>
+<h3 id="边缘接口"><a href="#边缘接口" class="headerlink" title="边缘接口"></a>边缘接口</h3><p>如果交换机的接口连接的是终端设备，比如 PC 、服务器、打印机等，而不是其它交换机的接口，那么这些接口不太可能造成环路。我们就可以将交换机的接口配置为边缘接口（ Edge Port ），边缘接口默认不参加生成树计算。当边缘接口被开启后，立即切换到转发状态并开始收发数据流量，而不用经历转发延迟时间，提升网络效率。边缘接口的开启和关闭都不会触发 RSTP 拓扑变更。<br><img src="/../images/Network_STP/48.png"></p>
+<h3 id="P-A-机制"><a href="#P-A-机制" class="headerlink" title="P&#x2F;A 机制"></a>P&#x2F;A 机制</h3><p>在 STP 中，交换机的一个接口成为指定接口后，还需要经过侦听和学习状态，即经过 30 秒时间，才能进入转发状态。而 RSTP 引入P&#x2F;A 机制（ Proposal&#x2F;Agreement ，握手&#x2F;赞同），让指定接口与对端接口进行握手，并逐级进行传递避免环路，这个过程不使用计时器。也就是说，完成握手的 RSTP 指定接口从丢弃状态直接进入到转发状态，而不需要经过其它状态，加速生成树的收敛。<br><img src="/../images/Network_STP/49.png"><br>Proposal 消息和 Agreement 消息都是 BPDU 。交换机通过 BPDU 中的 Flag（标记）字段来标识 BPDU 的不同类型，包括 Proposal BPDU 和 Agreement BPDU 。<br><img src="/../images/Network_STP/50.png"><br>如上图所示，在 SW1 和 SW2 新增一条链路，由于 SW1 的桥优先级最高，成为这个网络中的根桥，SW1 的 G0&#x2F;1 接口成为指定接口，SW2 的 G0&#x2F;2 接口成为根接口。如果是运行 STP ，那么指定接口和根接口必须经历侦听和学习状态才能进入转发状态。<br>如果网络中运行的是 RSTP ，当 SW1 与 SW2 之间新增一条链路后。<br>SW1 和 SW2 马上在各自的接口上发送 BPDU ，开始的时候双方都认为自己是根桥。<br><img src="/../images/Network_STP/51.png"><br>经过 BPDU 交互后，SW2 认为 SW1 才是根桥。这时 SW1 的 G0&#x2F;1 接口成为指定接口，SW2 的 G0&#x2F;2 接口则成为根接口，并马上停止发送 BPDU 。这两个接口都处于丢弃状态。<br><img src="/../images/Network_STP/52.png"><br>接下来 P&#x2F;A 过程会发生在 SW1 和 SW2 之间。SW1 从 G0&#x2F;1 接口发送 Proposal 消息，希望自己能够立刻进入转发状态。<br><img src="/../images/Network_STP/53.png"><br>而 SW2 在收到 Proposal 消息后，首先会判断接收 Proposal 消息的接口是不是根接口。在确认自己收到 Proposal 的接口是根接口后，SW2 为了避免出现环路，阻塞自己所有非边缘的指定接口，使这些接口都进入到丢弃状态，这个操作称为 P&#x2F;A 同步机制。边缘接口不参与这个过程。<br><img src="/../images/Network_STP/54.png"><br>在 SW2 所有接口完成同步后，SW2 清楚的知道自己的接口不存在环路，马上将根接口 G0&#x2F;2 切换到转发状态，并从根接口向 SW1 发送 Agreement 消息。<br><img src="/../images/Network_STP/55.png"><br>SW1 在 G0&#x2F;1 接口上收到 Agreement 消息后，立刻将 G0&#x2F;1 接口切换成转发状态，这时 PC1 和 PC2 就可以通信了。<br><img src="/../images/Network_STP/56.png"><br>整个 P&#x2F;A 过程很快就完成了，在新增链路后的极短时间内，PC2 就可以和 PC1 通信。另外，由于 SW2 的指定接口 G0&#x2F;4 还是处于丢弃状态，那么这个接口也会向下游交换机发起一个 P&#x2F;A 过程。</p>
+<h3 id="保护功能"><a href="#保护功能" class="headerlink" title="保护功能"></a>保护功能</h3><p>交换机有多种保护功能，用于提升生成树协议的稳定性。<br>1、BPDU 保护（ BPDU Protection ）<br>当边缘接口收到 BPDU 后，会马上变成一个普通的 RSTP 接口，可能引发网络中 RSTP 重新计算，从而对网络造成影响。通常边缘接口连接终端设备，应该不会收到 BPDU ，但是如果误接了交换机，那么这个边缘接口就有可能收到 BPDU ，会引入环路隐患。还有一种情况是恶意用户连接边缘接口后，发起 BPDU 攻击，也会对网络造成很大影响。<br>通过在交换机上开启BPDU 保护功能就可以解决这个问题。当交换机开启这个功能后，如果边缘接口收到 BPDU ，那么交换机马上把接口关闭，置为 Error-Down ，同时触发告警。<br><img src="/../images/Network_STP/57.png"><br>如果受到保护的边缘接口因为收到 BPDU 而被关闭，默认情况下是不会自动恢复的，需要在交换机上手动执行命令开启来恢复接口。除此之外，还可以手动设置接口自动恢复功能，在指定时间后自动恢复。<br>2、根保护（ Root Protection ）<br>RSTP 根据根桥计算出无环拓扑，根桥是很重要的。在已经完成收敛的 RSTP 网络中，如果根桥发生变化，那么 RSTP 就会重新计算，重新计算时网络将不可用。通常我们会选择网络中性能最好和位置最重要的设备作为根桥，将其优先级设置为最小值 0 ，但是这个措施并不能保证这个设备永远是网络中的根桥，毕竟根桥的角色是可以抢占的。如果网络中新接入的交换机优先级被配置为 0 ，恰好 MAC 地址比根桥更小，那么新交换机将抢占成为新的根桥，还会造成网络的 RSTP 重新计算，从而对网络造成影响。<br><img src="/../images/Network_STP/58.png"><br>在交换机的相关接口部署根保护功能，就可以规避这个问题。当根桥的指定接口开启根保护功能后，这个指定接口如果收到更优的 BPDU ，就会过滤这个 BPDU ，并将接口切换至丢弃状态，这样根桥的地位就可以保持。如果这个指定接口不再收到更优的 BPDU，那么两倍的转发延迟时间后，接口自动恢复到转发状态。<br>3、环路保护（ Loop Protection ）<br>当网络中出现线路单向故障或者网络拥塞时，交换机的根接口和丢弃状态的替代接口将无法正常接收 BPDU ，就会导致交换机重新进行 RSTP 重新计算，接口的角色和状态会发生变化，可能会在网络中引入环路。<br><img src="/../images/Network_STP/59.png"><br>如上图所示，SW1 是根桥，SW3 的 G0&#x2F;11 是根接口，G0&#x2F;12 是替代接口处于丢弃状态。SW3 的 G0&#x2F;12 接口虽然处于丢弃状态，但是会持续侦听 BPDU 。当网络正常时，SW3 会在 G0&#x2F;12 接口上周期性的收到 BPDU 。如果 SW2 和 SW3 的链路出现单向故障，从 SW2 到 SW3 不通，从 SW3 到 SW2 正常。那么 SW3 的 G0&#x2F;12 接口无法收到 SW2 发送的 BPDU ，导致 SW3 认为 G0&#x2F;12 接口的上游设备故障。过了 Max Age 时间后，SW3 的 G0&#x2F;12 接口会成为指定接口，并切换到转发状态，然后开始发送流量。但是 SW2 并未发生故障，因此一旦 SW3 的 G0&#x2F;12 接口切换到转发状态，网络中便出现了环路。<br>使用环路保护功能可以规避这个问题：<br>在根接口上开启环路保护功能后，如果根接口长时间没有收到 BPDU ，交换机会重新选举根接口，原来的根接口调整为指定接口，且接口状态切换成丢弃状态，从而避免出现环路。<br>在替代接口上开启环路保护功能后，如果替代接口长时间没有收到 BPDU ，交换机会把替代接口调整为指定接口，且接口状态保持在丢弃状态，从而避免出现环路。<br>4、拓扑变更保护（ TC Protection ）<br>一个稳定的网络是不会频繁出现拓扑变更的，一旦网络拓扑出现变更，TC BPDU（ TC 置位的 BPDU ）会泛洪到全网，而 TC BPDU 会让交换机执行 MAC 地址表删除的操作。如果网络环境很不稳定，导致 TC BPDU 频繁的泛洪，或者是网络中存在恶意用户，发送大量的 TC BPDU 对网络进行攻击，那么会极大消耗交换机的性能。<br>交换机开启拓扑变更保护功能后，默认将在 2 秒内只进行一次的 TC BPDU 处理，如果在 2 秒内收到了 2 个及以上的 TC BPDU ，那么交换机只会处理一次，对于超出的部分，必须等待 2 秒后才进行处理。<br>BPDU<br>RSTP 的配置 BPDU称为 RST BPDU（ Rapid Spanning Tree BPDU ），它的格式和 STP 的配置 BPDU 差不多，只有个别字段做了修改。RST BPDU 的 “ 协议版本 ID ” 字段值是 0x02 ，“ BPDU 类型 ”字段值是 0x02 。主要变化是在 “ 标志 ” 字段，这个字段一共 8 bit ，STP 只使用了最高比特位和最低比特位，而 RSTP 使用了剩余的 6 个比特位，并对这些比特位分别进行了定义。<br><img src="/../images/Network_STP/60.png"><br>RST BPDU 的 Aggrement（同意）和 Proposal（提议）比特位用于 P&#x2F;A（ Proposal&#x2F;Aggrement ）机制。Port Role（接口角色）比特位是 2 bit ，用于标识 RST BPDU 发送接口的接口角色，01 表示根接口，10 表示替代接口，11 表示指定接口，而 00 保留使用。最后的 Forwarding（转发）和 Learning（学习）比特位表示 RST BPDU 发送接口的接口状态。<br>RSTP 与 STP 不同，在网络收敛后，无论是根桥还是非根桥，都会周期性的发送配置 BPDU，对于非根桥，不需要在根接口收到 BPDU 之后而产生自己的配置 BPDU ，而是自发的、周期性发送 BPDU 。</p>
+<h2 id="MSTP"><a href="#MSTP" class="headerlink" title="MSTP"></a>MSTP</h2><p>虽然 RSTP 对 STP 进行了改进，但是还有一个缺陷，那就是所有 VLAN 共用一棵生成树。这样就无法实现负载分担，导致线路带来利用率低、设备资源利用率低。<br><img src="/../images/Network_STP/61.png"><br>如果有一种生成树协议，基于 VLAN 进行生成树的计算，那么这种技术有哪些优缺点？优点很明显，交换机为每一个 VLAN 单独计算一棵生成树，可以实现流量的负载分担。但是也有一个缺陷，如果网络中的 VLAN 数量很多，那么所有交换机都要为每一个 VLAN 计算一棵生成树，那么设备的资源消耗巨大，甚至会影响到正常流量的处理。<br><img src="/../images/Network_STP/62.png"><br>为了解决这个问题，MSTP（ Multiple Instances Spanning Tree Protocol ）出现了，兼容 STP 和 RSTP 。生成树不是基于 VLAN 运行的，而是基于 Instance（实例）运行的。Instance 是一个或多个 VLAN 的集合。<br>我们可以将一个或多个 VLAN 映射到一个 Instance ，然后 MSTP 基于 Instance 计算生成树。基于 Instance 的生成树称为MSTI（ Multiple Spanning Tree Instance ，多生成树实例），MSTP 为每一个 Instance 维护独立的 MSTI 。映射到同一个 Instance 的 VLAN 共享一棵生成树。可根据实际需求，在交换机上创建多个 Instance ，然后将指定的 VLAN 映射到相应的 Instance 。一个 Instance 可以包含多个 VLAN ，但是一个 VLAN 只能被映射到一个 Instance 。<br>在创建 Instance 后，我们可以对 MSTI 进行主根桥、次根桥、接口优先级或 Cost 等配置。如果网络中有大量 VLAN ，那么我们可以将 VLAN 按照一定规律分别映射到不同的 Instance 中，从而实现负载分担，而交换机仅对这几个 Instance 进行生成树计算，设备资源消耗大大降低。<br><img src="/../images/Network_STP/63.png"><br>MSTP 引入了域（ Region ）的概念，我们可以将网络划分成多个MST 域（ Multiple Spanning Tree Region ，多生成树域），一个 MST 域可以包含一台或多台交换机，同一个 MST 域的交换机必须配置相同的域名（ Region Name ）、相同的修订级别（ Revision Level ），以及相同的 VLAN 与 Instance 的映射关系。<br>替代方案<br>学完 STP&#x2F;RSTP&#x2F;MSTP 后，解决网络中的二层环路问题，想到的解决方案就是生成树协议。但是生成树协议有天生的缺陷，收敛速度慢，虽然 RSTP&#x2F;MSTP 对 STP 进行了改进，但是在毫秒级切换的要求下，生成树就不适用了。而且生成树的原理是将环路中的接口进行阻塞，导致被阻塞的线路无法承载流量，造成网络资源的浪费。MSTP 在这方面进行了优化，让不同 VLAN 的流量可以在不同线路进行负载分担，可是对于单个 VLAN 来说，始终会有一些线路无法承载流量。现在已经有许多其它技术或解决方案用于替代生成树协议。</p>
+<h3 id="Smart-Link"><a href="#Smart-Link" class="headerlink" title="Smart Link"></a>Smart Link</h3><p>Smart Link 是为双上行组网定做的解决方案。<br><img src="/../images/Network_STP/64.png"><br>如上图所示，交换机 SW3 一条上行链路连接 SW1 ，另一条上行链路连接 SW2 。在 SW3 上创建 Smart Link 组，将 SW3 的两个上行接口添加到这个组里，G0&#x2F;1 口指定为 Master 接口、G0&#x2F;2 口指定为 Slave 接口。默认只有 Master 接口是活跃的（ Active ），这个接口可以正常收发流量，而 G0&#x2F;2 接口会被阻塞（ Inactive ）。这样网络中的二层环路将被打破。<br><img src="/../images/Network_STP/65.png"><br>如上图所示，当 SW3 的 G0&#x2F;1 接口发生故障，或者线路发生故障，Smart Link 会马上感知到，并且实现毫秒级的快速切换，G0&#x2F;2 接口将立即切换到 Active 状态，并开始收发流量。在 Smart Link 切换过程中，SW3 还可以使用 Flush 报文去刷新上联设备，即 SW1 和 SW2 的 MAC 地址表等数据，加快网络收敛。<br>Smart Link 配置简单，切换时间快。由于工作机制的限制，只能适用于特定的双上行组网场景。SW1 、SW2 和 SW3 使用 Smart Link 防环后，也就不需要使用生成树协议了。</p>
+<h3 id="iStack-CSS"><a href="#iStack-CSS" class="headerlink" title="iStack&#x2F;CSS"></a>iStack&#x2F;CSS</h3><p>iStack 是华为盒式交换机的堆叠技术。而 CSS（ Cluster Switch System ，集群交换系统）是华为框式交换机的集群技术。<br>什么是堆叠？<br>所谓堆叠，是指多台物理交换机通过特定的线缆连接，并通过相应的配置，组成逻辑上的一台设备的技术。<br><img src="/../images/Network_STP/66.png"><br>STP&#x2F;RSTP&#x2F;MSTP 或 Smart Link 都是采用阻塞特定接口的方式实现网络的无环化，使得网络资源得不到充分利用。一旦使用堆叠&#x2F;集群技术，情况就不一样了。如上图所示，假设 SW1 和 SW2 都是盒式交换机，且都支持 iStack ，那么可以使用堆叠线缆把 SW1 和 SW2 连接起来，然后组建堆叠系统，建立完成后，SW1 和 SW2 不再是两台单独的交换机，而是一个有两个槽位的框式交换机。那么网络结构将大大简化，由于 SW1 和 SW2 在逻辑上是一台设备，设备的管理和配置将变得简单。SW3 分别与 SW1 、SW2 互联的线路，现在可以看做是两台交换机之间的两条链路，我们可以将这两条链路进行聚合，这样网络中将不存在二层环路，也无需部署防环技术。而且所有的链路都处于工作状态，没有接口被阻塞，设备资源和链路资源的利用率将最大化。</p>
+<h3 id="无二层环路场景"><a href="#无二层环路场景" class="headerlink" title="无二层环路场景"></a>无二层环路场景</h3><p><img src="/../images/Network_STP/67.png"><br>在一些网络中，我们会人为的将网络中的二层环路打破，从而规避防环技术的应用。如上图所示，汇聚层交换机 DSW1 、DSW2 与接入层交换机 ASW1 、ASW2 构成一个倒 U 型组网，ASW1 和 ASW2 之间未连线，因此这四台交换机组成的网络中，并不存在二层环路，也就无需使用生成树技术或其它防环技术了。<br>这个网络中，服务器使用了双上行链路，服务器的两张网卡以主备的方式运行，假设连接 ASW1 的网卡为主网卡。如果 ASW1 和 DSW1 的链路发生故障，服务器是无法感知到的，依然会从主网卡发送数据，而数据到达 ASW1 后被丢弃。一种解决方案就是在服务器上部署相应的应用程序，周期性的从主网卡发出探测报文，来探测到默认网关的可达性，DSW1 和 DSW2 上配置服务器的默认网关，如果发现主网卡到默认网关不可达，则自动将流量切换到备网卡。<br>另一种解决方案就是使用华为的Monitor Link技术。Monitor Link 是一种接口联动技术，交换机部署后会持续监控 Monitor Link 的上行接口（可指定接口），当上行接口发生故障时，交换机马上将下行接口（可指定接口）关闭。ASW1 可部署 Monitor Link 技术，将 DSW1 的接口配置为上行接口，将连接服务器网卡的接口配置为下行接口。这样的话，当 ASW1 的上行接口发生故障，交换机立马将连接服务器的下行接口关闭，从而使得服务器立即感知到故障的发生，然后将连接 ASW2 的网卡切换成主网卡，并在新的主网卡上发送数据。<br>结尾<br>STP可以在网络中形成一棵无环路的树，解决环路故障并实现冗余备份。<br><img src="/../images/Network_STP/68.png"><br>RSTP在 STP 功能基础上，通过替代接口让根接口快速进入转发状态、采用 P&#x2F;A 机制和设置边缘接口等方法，实现了更快的收敛速度。<br><img src="/../images/Network_STP/69.png"><br>MSTP则在大规模、多 VLAN 环境下形成多个生成树实例，从而提供多 VLAN 负载均衡。<br><img src="/../images/Network_STP/70.png"><br>MSTP 同时兼容STP 、RSTP ，运行 MSTP 的设备可以识别 STP 、RSTP 两种协议报，并应用于生成树计算。<br>另外 RSTP&#x2F;MSTP 与 STP 的接口状态不同，从 STP 的 5 种变成 3 种。<br><img src="/../images/Network_STP/71.png"><br>RSTP&#x2F;MSTP 中，把禁用、阻塞、侦听三种状态合并为丢弃状态，减少状态数量，简化生成树计算，加快收敛速度。<br><img src="/../images/Network_STP/72.png"><br>RSTP&#x2F;MSTP 有更快的收敛速度，简化的端口状态；MSTP 能够实现不同 VLAN 的负载分担。因此尽量使用 MSTP 来避免环路。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/network/" rel="tag"># network</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/12/19/Network_Vlan_Control/" rel="prev" title="VLAN管理配置">
+                  <i class="fa fa-angle-left"></i> VLAN管理配置
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/01/04/Network_LACP/" rel="next" title="LACP配置">
+                  LACP配置 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">zhipeng.qi</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

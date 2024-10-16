@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.freespaceblog.fun","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="powershell_5 对象终于开始到对象了，之前一直不理解这个东西，现在可以好好来看看是个啥了这里其实可以用一个命令来查看 12#获取当前的进程命令，然后导出到C:\temp\process.html文件中get-process | convertto-html | out-file c:\temp\processes.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Powershell_5">
+<meta property="og:url" content="https://www.freespaceblog.fun/2024/04/02/powershell_5/index.html">
+<meta property="og:site_name" content="但行好事，莫问前程">
+<meta property="og:description" content="powershell_5 对象终于开始到对象了，之前一直不理解这个东西，现在可以好好来看看是个啥了这里其实可以用一个命令来查看 12#获取当前的进程命令，然后导出到C:\temp\process.html文件中get-process | convertto-html | out-file c:\temp\processes.html">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/powershell_5/1.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/powershell_5/2.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/powershell_5/3.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/powershell_5/4.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/powershell_5/5.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/powershell_5/6.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/powershell_5/7.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/powershell_5/8.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/powershell_5/9.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/powershell_5/10.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/powershell_5/11.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/powershell_5/12.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/powershell_5/13.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/powershell_5/14.png">
+<meta property="article:published_time" content="2024-04-02T03:43:15.000Z">
+<meta property="article:modified_time" content="2024-09-17T02:34:32.990Z">
+<meta property="article:author" content="zhipeng.qi">
+<meta property="article:tag" content="windows">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.freespaceblog.fun/images/powershell_5/1.png">
+
+
+<link rel="canonical" href="https://www.freespaceblog.fun/2024/04/02/powershell_5/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://www.freespaceblog.fun/2024/04/02/powershell_5/","path":"2024/04/02/powershell_5/","title":"Powershell_5"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Powershell_5 | 但行好事，莫问前程</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">但行好事，莫问前程</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#powershell-5-%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.</span> <span class="nav-text">powershell_5 对象</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E5%88%97%E5%90%8D"><span class="nav-number">1.1.</span> <span class="nav-text">获取列名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%97%E5%90%8D%E6%8E%92%E5%BA%8F%E6%98%BE%E7%A4%BA"><span class="nav-number">1.2.</span> <span class="nav-text">列名排序显示</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B9%E6%8D%AE%E5%90%8D%E5%AD%97%E6%8E%92%E5%BA%8F"><span class="nav-number">1.2.1.</span> <span class="nav-text">根据名字排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B9%E6%8D%AE%E5%90%8D%E5%AD%97%E5%80%92%E5%BA%8F"><span class="nav-number">1.2.2.</span> <span class="nav-text">根据名字倒序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B9%E6%8D%AECPU%E6%B6%88%E8%80%97%E5%80%92%E5%BA%8F"><span class="nav-number">1.2.3.</span> <span class="nav-text">根据CPU消耗倒序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E5%88%97"><span class="nav-number">1.2.4.</span> <span class="nav-text">选择列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E4%B8%AA%E7%AE%A1%E9%81%93%E7%AD%9B%E9%80%89"><span class="nav-number">1.2.5.</span> <span class="nav-text">多个管道筛选</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A8%E6%89%8B%E5%AE%9E%E9%AA%8C"><span class="nav-number">1.3.</span> <span class="nav-text">动手实验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AD%94%E6%A1%88"><span class="nav-number">1.4.</span> <span class="nav-text">答案</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhipeng.qi</p>
+  <div class="site-description" itemprop="description">我的技术总结</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.freespaceblog.fun/2024/04/02/powershell_5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhipeng.qi">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="但行好事，莫问前程">
+      <meta itemprop="description" content="我的技术总结">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Powershell_5 | 但行好事，莫问前程">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Powershell_5
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-04-02 11:43:15" itemprop="dateCreated datePublished" datetime="2024-04-02T11:43:15+08:00">2024-04-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-09-17 10:34:32" itemprop="dateModified" datetime="2024-09-17T10:34:32+08:00">2024-09-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/windows/" itemprop="url" rel="index"><span itemprop="name">windows</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/windows/powershell/" itemprop="url" rel="index"><span itemprop="name">powershell</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+           
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="powershell-5-对象"><a href="#powershell-5-对象" class="headerlink" title="powershell_5 对象"></a>powershell_5 对象</h1><p>终于开始到对象了，之前一直不理解这个东西，现在可以好好来看看是个啥了<br>这里其实可以用一个命令来查看</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#获取当前的进程命令，然后导出到C:\temp\process.html文件中</span><br><span class="line">get-process | convertto-html | out-file c:\temp\processes.html</span><br></pre></td></tr></table></figure>
+
+
+<span id="more"></span>
+
+
+
+<p><img src="/../images/powershell_5/1.png"><br>从图上我们可以看到 object就是对象，也就是我们通俗来讲的行名字，在做一些筛选的时候就可以使用 管道+对象来做这个筛选</p>
+<h2 id="获取列名"><a href="#获取列名" class="headerlink" title="获取列名"></a>获取列名</h2><p>例如前面的get-process，如果我们想要获取它的列名，就可以使用如下命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">get-process | get-member</span><br></pre></td></tr></table></figure>
+<p><img src="/../images/powershell_5/2.png"></p>
+<p>那列名叫什么呢？对象标签，也可以视为是这行的属性，当然，每一行也有自己的属性</p>
+<h2 id="列名排序显示"><a href="#列名排序显示" class="headerlink" title="列名排序显示"></a>列名排序显示</h2><h3 id="根据名字排序"><a href="#根据名字排序" class="headerlink" title="根据名字排序"></a>根据名字排序</h3><p>我们前面知道了怎么显示列名，那如果在筛选过程中得到了很多的列名，如何对这些列名进行排序呢？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">get-process | sort-object -property name</span><br></pre></td></tr></table></figure>
+<p><img src="/../images/powershell_5/3.png"></p>
+<h3 id="根据名字倒序"><a href="#根据名字倒序" class="headerlink" title="根据名字倒序"></a>根据名字倒序</h3><p>那如果要倒序排序呢？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">get-process | sort-object -property name -descending</span><br></pre></td></tr></table></figure>
+<p><img src="/../images/powershell_5/4.png"></p>
+<h3 id="根据CPU消耗倒序"><a href="#根据CPU消耗倒序" class="headerlink" title="根据CPU消耗倒序"></a>根据CPU消耗倒序</h3><p>当然，我们筛选可以不仅仅是依赖name这一个参数，也可以根据内存 cpu来进行排序</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">get-process | sort-object -property cpu -descending</span><br></pre></td></tr></table></figure>
+<p><img src="/../images/powershell_5/5.png"></p>
+<h3 id="选择列"><a href="#选择列" class="headerlink" title="选择列"></a>选择列</h3><p>PowerShell的输出结果，默认是按照列来输出的，我们可以使用Select-Object来选择我们想要的列</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">get-process | select-object name,cpu,id</span><br></pre></td></tr></table></figure>
+<p><img src="/../images/powershell_5/6.png"></p>
+<h3 id="多个管道筛选"><a href="#多个管道筛选" class="headerlink" title="多个管道筛选"></a>多个管道筛选</h3><p>多个管道筛选，其实也就是多个筛选条件，我们只需要在筛选条件之间加上|即可</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">get-process | select-object name,cpu,id | sort-object -property cpu -descending</span><br></pre></td></tr></table></figure>
+<p><img src="/../images/powershell_5/7.png"></p>
+<h2 id="动手实验"><a href="#动手实验" class="headerlink" title="动手实验"></a>动手实验</h2><p>1.找出生成随机数字的cmdlet。<br>2.找出显示当前时间和日期的cmdlet。<br>3.任务#2的cmdlet产生的对象类型是什么（由cmdlet产生的对象类型是什么？）<br>4.使用任务#2中的cmdlet和select-object ，仅显示星期几。<br>5.找出可以在windows中显示已安装的补丁（hotfix）的cmdlet<br>6.使用任务#5的cmdlet显示已安装的补丁列表，按照安装日期对列表进行排序，并仅显示如下几列： 安装日志、补丁id、安装用户。请记住，在命令默认输出显示的列头并不一定是属性的实际名称————你需要查找实际的属性名称来确保这一点。<br>7.重复任务#6，但这次按照补丁描述对结果进行排序，并输出描述、补丁id、安装日期列，最终将结果保存到HTML文件。<br>8.从安全时间日志中显示最新的50条列表（如果安全事件裂帛啊为空，你也可以使用其他日志，比如系统或应用程序日志）。按照事件对日志进行排序，同时也按照索引排序。显示索引、时间以及每条记录的来源。将这些信息存入文本文件（不是HTML文件，而是纯文本文件）。你可以尝试使用select-object以及他们的-first或-last参数实现本任务；但请不要这么做，还会有更好的方法。同时，目前请避免使用get-winevent；可以使用一个更好的cmdlet完成本任务。</p>
+<h2 id="答案"><a href="#答案" class="headerlink" title="答案"></a>答案</h2><ol>
+<li><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">get-random</span><br></pre></td></tr></table></figure>
+<img src="/../images/powershell_5/8.png"></li>
+<li><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">get-date</span><br></pre></td></tr></table></figure>
+<img src="/../images/powershell_5/9.png"></li>
+<li></li>
+</ol>
+<p>get-date输出的是一个对象，对象类型是datetime  </p>
+<ol start="4">
+<li><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">get-date | select-object dayofweek</span><br></pre></td></tr></table></figure>
+<img src="/../images/powershell_5/10.png"></li>
+<li><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">get-hotfix</span><br></pre></td></tr></table></figure>
+<img src="/../images/powershell_5/11.png"></li>
+<li><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">get-hotfix | sort installedon | select installedon,installedby,hotfixid</span><br></pre></td></tr></table></figure>
+<img src="/../images/powershell_5/12.png"></li>
+<li><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">get-hotfix | sort description | select description,installedon,installedby,hotfixid | convertto-html -title &quot;hotfixreport&quot;  | out-file c:\temp\hotfixreport.html</span><br></pre></td></tr></table></figure>
+<img src="/../images/powershell_5/13.png"></li>
+<li><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">get-eventlog -logname system -newest 50 | sort timegenerated,index | select index,timegenerated,source | out-file c:\temp\elogs.txt</span><br></pre></td></tr></table></figure>
+<img src="/../images/powershell_5/14.png"></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/windows/" rel="tag"># windows</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/03/25/powershell_4/" rel="prev" title="Powershell_4">
+                  <i class="fa fa-angle-left"></i> Powershell_4
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/04/10/powershell_6/" rel="next" title="Powershell_6">
+                  Powershell_6 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">zhipeng.qi</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

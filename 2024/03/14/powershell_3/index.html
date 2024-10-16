@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.freespaceblog.fun","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="powershell_3 管道：连接命令这章其实讲来讲去的就一个意思，在原生的“-参数”以外，可以进行一些额外的操作，例如“ | explorer-files c:\temp”就可以导出文件到C盘的temp文件夹另外可以做一下类似四则运算的控制，例如先括号后外边，然后总的再来一个大的框架的执行。另外就是执行导出的命令不同，导出或者导入的信息也不一样，对比出来的结果也不一样 示例练习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Powershell_3">
+<meta property="og:url" content="https://www.freespaceblog.fun/2024/03/14/powershell_3/index.html">
+<meta property="og:site_name" content="但行好事，莫问前程">
+<meta property="og:description" content="powershell_3 管道：连接命令这章其实讲来讲去的就一个意思，在原生的“-参数”以外，可以进行一些额外的操作，例如“ | explorer-files c:\temp”就可以导出文件到C盘的temp文件夹另外可以做一下类似四则运算的控制，例如先括号后外边，然后总的再来一个大的框架的执行。另外就是执行导出的命令不同，导出或者导入的信息也不一样，对比出来的结果也不一样 示例练习">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/powershell_3/1.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/powershell_3/2.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/powershell_3/3.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/powershell_3/4.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/powershell_3/5.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/powershell_3/6.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/powershell_3/7.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/powershell_3/8.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/powershell_3/9.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/powershell_3/10.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/powershell_3/11.png">
+<meta property="article:published_time" content="2024-03-14T02:48:20.000Z">
+<meta property="article:modified_time" content="2024-09-17T02:34:31.751Z">
+<meta property="article:author" content="zhipeng.qi">
+<meta property="article:tag" content="windows">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.freespaceblog.fun/images/powershell_3/1.png">
+
+
+<link rel="canonical" href="https://www.freespaceblog.fun/2024/03/14/powershell_3/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://www.freespaceblog.fun/2024/03/14/powershell_3/","path":"2024/03/14/powershell_3/","title":"Powershell_3"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Powershell_3 | 但行好事，莫问前程</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">但行好事，莫问前程</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#powershell-3-%E7%AE%A1%E9%81%93%EF%BC%9A%E8%BF%9E%E6%8E%A5%E5%91%BD%E4%BB%A4"><span class="nav-number">1.</span> <span class="nav-text">powershell_3 管道：连接命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B%E7%BB%83%E4%B9%A0"><span class="nav-number">1.1.</span> <span class="nav-text">示例练习</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%AF%BC%E5%87%BA%E5%BD%93%E5%89%8D%E8%BF%9B%E7%A8%8B%E5%88%B0xml%E6%96%87%E4%BB%B6%EF%BC%8C%E5%B9%B6%E5%9C%A8%E5%8F%A6%E4%B8%80%E5%8F%B0%E6%9C%BA%E5%99%A8%E5%AF%BC%E5%85%A5"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.导出当前进程到xml文件，并在另一台机器导入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C%E6%98%BE%E7%A4%BA"><span class="nav-number">1.1.2.</span> <span class="nav-text">结果显示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E6%AF%94%E4%B8%8D%E4%B8%8D%E5%90%8C%E6%9C%BA%E5%99%A8%E7%9A%84%E8%BF%9B%E7%A8%8B"><span class="nav-number">1.1.3.</span> <span class="nav-text">对比不不同机器的进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C%E6%98%BE%E7%A4%BA-1"><span class="nav-number">1.1.4.</span> <span class="nav-text">结果显示</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AF%94%E8%BE%83-%E2%80%9C-out-file-%E2%80%9C%E5%92%8C-%E2%80%9C-export-files%E2%80%9D%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">1.1.5.</span> <span class="nav-text">比较 “ | out-file “和 “| export-files”的区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0"><span class="nav-number">1.2.</span> <span class="nav-text">练习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%83%E4%B9%A0%E7%AD%94%E6%A1%88"><span class="nav-number">1.3.</span> <span class="nav-text">练习答案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%88%9B%E5%BB%BA%E4%B8%A4%E4%B8%AA%E7%B1%BB%EF%BC%8C%E4%BD%86%E6%98%AF%E4%B8%8D%E5%90%8C%E7%9A%84%E6%96%87%E6%9C%AC%E6%96%87%E4%BB%B6%EF%BC%8C%E4%BD%BF%E7%94%A8diff%E5%AF%B9%E6%AF%94%E4%BB%96%E4%BB%AC"><span class="nav-number">1.3.1.</span> <span class="nav-text">1.创建两个类，但是不同的文本文件，使用diff对比他们</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%9C%A8%E6%8E%A7%E5%88%B6%E5%8F%B0%E8%BF%90%E8%A1%8C%E2%80%9Cget-service-export-csv-services-csv-out-file%E2%80%9D%E4%BC%9A%E5%8F%91%E7%94%9F%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">1.3.2.</span> <span class="nav-text">2.在控制台运行“get-service | export-csv services.csv | out-file”会发生什么？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E9%99%A4%E4%BA%86%E8%8E%B7%E5%8F%96%E4%B8%80%E4%B8%AA%E6%88%96%E5%A4%9A%E4%B8%AA%E6%9C%8D%E5%8A%A1%E5%8F%8A%E4%BB%A5%E7%AE%A1%E9%81%93%E6%96%B9%E5%BC%8F%E4%BC%A0%E8%BE%93%E5%88%B0%E2%80%9Dstop-service%E2%80%9D%E4%B9%8B%E5%A4%96%EF%BC%8C%E2%80%9Cstop-service%E2%80%9D%E6%9C%8D%E5%8A%A1%E8%BF%98%E6%8F%90%E4%BE%9B%E4%BA%86%E5%85%B6%E4%BB%96%E4%BB%80%E4%B9%88%E6%96%B9%E5%BC%8F%E8%AE%A9%E4%BD%A0%E6%8C%87%E5%AE%9A%E6%9C%8D%E5%8A%A1%E6%88%96%E5%81%9C%E6%AD%A2%E6%9C%8D%E5%8A%A1%EF%BC%9F%E6%9C%89%E4%BB%80%E4%B9%88%E6%96%B9%E5%BC%8F%E5%8F%AF%E4%BB%A5%E5%9C%A8%E4%B8%8D%E4%BD%BF%E7%94%A8%E2%80%9Cget-service%E2%80%9D%E7%9A%84%E5%89%8D%E6%8F%90%E4%B8%8B%E5%81%9C%E6%AD%A2%E4%B8%80%E4%B8%AA%E6%9C%8D%E5%8A%A1%EF%BC%9F"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.除了获取一个或多个服务及以管道方式传输到”stop-service”之外，“stop-service”服务还提供了其他什么方式让你指定服务或停止服务？有什么方式可以在不使用“get-service”的前提下停止一个服务？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%A6%82%E4%BD%95%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AB%96%E7%BA%BF%E5%88%86%E5%89%B2%E7%AC%A6%E6%96%87%E4%BB%B6%E6%9B%BF%E4%BB%A3%E4%B8%80%E4%B8%AA%E9%83%BD%E5%A5%BD%E5%88%86%E9%9A%94%E7%AC%A6%EF%BC%88CSV%EF%BC%89%E6%96%87%E4%BB%B6%EF%BC%9F%E4%BD%A0%E5%8F%AF%E4%BB%A5%E4%BE%9D%E6%97%A7%E4%BD%BF%E7%94%A8%E2%80%9Cexport-CSV%E2%80%9D%E5%91%BD%E4%BB%A4%EF%BC%8C%E4%BD%86%E6%98%AF%E5%BA%94%E8%AF%A5%E4%BD%BF%E7%94%A8%E4%BB%80%E4%B9%88%E5%8F%82%E6%95%B0%EF%BC%9F"><span class="nav-number">1.3.4.</span> <span class="nav-text">4.如何创建一个竖线分割符文件替代一个都好分隔符（CSV）文件？你可以依旧使用“export-CSV”命令，但是应该使用什么参数？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E5%8F%AF%E4%BB%A5%E5%9C%A8%E5%B7%B2%E5%AF%BC%E5%87%BA%E7%9A%84CSV%E6%96%87%E4%BB%B6%E5%A4%B4%E9%83%A8%E5%BF%BD%E7%95%A5-%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%90%97%EF%BC%9F%E8%BF%99%E4%B8%80%E8%A1%8C%E9%80%9A%E5%B8%B8%E5%8C%85%E5%90%AB%E4%BA%86%E7%B1%BB%E5%9E%8B%E4%BF%A1%E6%81%AF%EF%BC%8C%E4%BD%86%E6%98%AF%E5%A6%82%E6%9E%9C%E4%BD%A0%E6%83%B3%E4%BB%8E%E4%B8%80%E4%B8%AA%E7%89%B9%E5%AE%9A%E6%96%87%E4%BB%B6%E4%B8%AD%E8%8E%B7%E5%8F%96%E5%B9%B6%E5%BF%BD%E7%95%A5%E6%97%B6%E8%A6%81%E6%80%8E%E4%B9%88%E5%81%9A%EF%BC%9F"><span class="nav-number">1.3.5.</span> <span class="nav-text">5.可以在已导出的CSV文件头部忽略#命令行吗？这一行通常包含了类型信息，但是如果你想从一个特定文件中获取并忽略时要怎么做？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E2%80%9Cexport-clixml%E2%80%9D%E5%92%8C%E2%80%9Cexport-csv%E2%80%9D%E9%83%BD%E5%8F%AF%E4%BB%A5%E9%80%9A%E8%BF%87%E5%88%9B%E5%BB%BA%E5%B9%B6%E8%A6%86%E7%9B%96%E6%96%87%E4%BB%B6%E6%9D%A5%E4%BF%AE%E6%94%B9%E7%B3%BB%E7%BB%9F%EF%BC%8C%E4%BD%A0%E5%8F%AF%E4%BB%A5%E7%94%A8%E4%BB%80%E4%B9%88%E5%8F%82%E6%95%B0%E6%9D%A5%E9%98%BB%E6%AD%A2%E4%BB%96%E4%BB%AC%E8%A6%86%E7%9B%96%E7%8E%B0%E6%9C%89%E6%96%87%E4%BB%B6%EF%BC%9F%E8%BF%98%E6%9C%89%E4%BB%80%E4%B9%88%E5%8F%82%E6%95%B0%E5%8F%AF%E4%BB%A5%E5%9C%A8%E4%BD%A0%E8%BE%93%E5%87%BA%E6%96%87%E4%BB%B6%E5%89%8D%E6%8F%90%E9%86%92%E5%B9%B6%E8%AF%B7%E6%B1%82%E7%A1%AE%E8%AE%A4%EF%BC%9F"><span class="nav-number">1.3.6.</span> <span class="nav-text">6.“export-clixml”和“export-csv”都可以通过创建并覆盖文件来修改系统，你可以用什么参数来阻止他们覆盖现有文件？还有什么参数可以在你输出文件前提醒并请求确认？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-windows%E7%BB%B4%E6%8A%A4%E5%B0%91%E6%95%B0%E5%B1%80%E9%83%A8%E9%85%8D%E7%BD%AE%EF%BC%8C%E5%8C%85%E6%8B%AC%E4%B8%80%E4%B8%AA%E9%BB%98%E8%AE%A4%E5%88%86%E9%9A%94%E7%AC%A6%E5%88%97%E8%A1%A8%E3%80%82%E5%9C%A8%E7%BE%8E%E5%9B%BD%E7%B3%BB%E7%BB%9F%E4%B8%AD%EF%BC%8C%E5%88%86%E9%9A%94%E7%AC%A6%E6%98%AF%E9%80%97%E5%8F%B7%E3%80%82%E4%BD%A0%E5%A6%82%E4%BD%95%E8%AE%A9%E2%80%9Cexport-csv%E2%80%9D%E4%BD%BF%E7%94%A8%E5%BD%93%E5%89%8D%E7%B3%BB%E7%BB%9F%E9%BB%98%E8%AE%A4%E7%9A%84%E5%88%86%E9%9A%94%E7%AC%A6%E8%80%8C%E4%B8%8D%E6%98%AF%E9%80%97%E5%8F%B7%EF%BC%9F"><span class="nav-number">1.3.7.</span> <span class="nav-text">7.windows维护少数局部配置，包括一个默认分隔符列表。在美国系统中，分隔符是逗号。你如何让“export-csv”使用当前系统默认的分隔符而不是逗号？</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhipeng.qi</p>
+  <div class="site-description" itemprop="description">我的技术总结</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">36</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.freespaceblog.fun/2024/03/14/powershell_3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhipeng.qi">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="但行好事，莫问前程">
+      <meta itemprop="description" content="我的技术总结">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Powershell_3 | 但行好事，莫问前程">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Powershell_3
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-03-14 10:48:20" itemprop="dateCreated datePublished" datetime="2024-03-14T10:48:20+08:00">2024-03-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-09-17 10:34:31" itemprop="dateModified" datetime="2024-09-17T10:34:31+08:00">2024-09-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/windows/" itemprop="url" rel="index"><span itemprop="name">windows</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/windows/powershell/" itemprop="url" rel="index"><span itemprop="name">powershell</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+           
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="powershell-3-管道：连接命令"><a href="#powershell-3-管道：连接命令" class="headerlink" title="powershell_3 管道：连接命令"></a>powershell_3 管道：连接命令</h1><p>这章其实讲来讲去的就一个意思，在原生的“-参数”以外，可以进行一些额外的操作，例如“ | explorer-files c:\temp”就可以导出文件到C盘的temp文件夹<br>另外可以做一下类似四则运算的控制，例如先括号后外边，然后总的再来一个大的框架的执行。<br>另外就是执行导出的命令不同，导出或者导入的信息也不一样，对比出来的结果也不一样</p>
+<h2 id="示例练习"><a href="#示例练习" class="headerlink" title="示例练习"></a>示例练习</h2><span id="more"></span>
+<h3 id="1-导出当前进程到xml文件，并在另一台机器导入"><a href="#1-导出当前进程到xml文件，并在另一台机器导入" class="headerlink" title="1.导出当前进程到xml文件，并在另一台机器导入"></a>1.导出当前进程到xml文件，并在另一台机器导入</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 1.导出当前进程到xml文件</span><br><span class="line">Get-Process | Export-Clixml -Path C:\temp\process.xml</span><br><span class="line"># 2.导入xml文件到其他机器</span><br><span class="line">Import-Clixml -Path C:\temp\process.xml</span><br></pre></td></tr></table></figure>
+
+<h3 id="结果显示"><a href="#结果显示" class="headerlink" title="结果显示"></a>结果显示</h3><p><img src="/../images/powershell_3/1.png"></p>
+<h3 id="对比不不同机器的进程"><a href="#对比不不同机器的进程" class="headerlink" title="对比不不同机器的进程"></a>对比不不同机器的进程</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#对比不同的机器的进程</span><br><span class="line">diff -referenceobject (import-clixml C:\temp\process.xml) -differenceobject (get-process) -property name</span><br></pre></td></tr></table></figure>
+<h3 id="结果显示-1"><a href="#结果显示-1" class="headerlink" title="结果显示"></a>结果显示</h3><p><img src="/../images/powershell_3/2.png"></p>
+<p>通过对比我们可以看出来，第一个里面有但是第二个里面没有的用小于号表示，第二个里面有的但是第一个里面没有的用大于号表示。有点像excel里面的vlookup。</p>
+<h3 id="比较-“-out-file-“和-“-export-files”的区别"><a href="#比较-“-out-file-“和-“-export-files”的区别" class="headerlink" title="比较 “ | out-file “和 “| export-files”的区别"></a>比较 “ | out-file “和 “| export-files”的区别</h3><p>在PowerShell中，“| out-file” 是一个命令，用于将管道（|）传递过来的数据流重定向写入到一个文件中。当你想要将命令执行的结果保存到一个文本文件时，会经常用到 Out-File 命令。例如：</p>
+<p>Powershell<br>Get-Process | Out-File -FilePath “process_list.txt”<br>而“| export-files”并不是PowerShell的内置命令或cmdlet。在标准PowerShell环境中，并没有名为“export-files”的命令。</p>
+<p>如果你看到或使用了类似“export-files”的命令，那可能是某个自定义脚本或第三方模块提供的功能，它可能提供了一种特定格式的数据导出方式，比如导出为CSV、JSON或其他格式。但在原生PowerShell中，若要进行类似操作，通常会使用如 Export-Csv、Export-Clixml 或 Export-PSSession 这样的cmdlet来导出数据到特定格式的文件中。</p>
+<p>总结：</p>
+<p>Out-File 主要是将输出的内容以文本形式保存到指定文件。<br>“| export-files” 并非PowerShell标准命令，若存在可能是自定义或第三方模块提供的用于导出数据的功能。在标准PowerShell中应使用具体的导出cmdlet来完成类似任务。</p>
+<h2 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h2><p><img src="/../images/powershell_3/3.png"></p>
+<h2 id="练习答案"><a href="#练习答案" class="headerlink" title="练习答案"></a>练习答案</h2><h3 id="1-创建两个类，但是不同的文本文件，使用diff对比他们"><a href="#1-创建两个类，但是不同的文本文件，使用diff对比他们" class="headerlink" title="1.创建两个类，但是不同的文本文件，使用diff对比他们"></a>1.创建两个类，但是不同的文本文件，使用diff对比他们</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#创建文件1</span><br><span class="line">&quot;test1&quot; | out-file C:\temp\test1.txt</span><br><span class="line">#创建文件2</span><br><span class="line">&quot;test2&quot; | out-file C:\temp\test2.txt</span><br><span class="line">#获取两个文件内容</span><br><span class="line">$test1 = Get-Content C:\temp\test1.txt</span><br><span class="line">$test2 = Get-Content C:\temp\test2.txt</span><br><span class="line">比较两个文件内容</span><br><span class="line">diff -referenceobject $test1 -differenceobject $test2</span><br></pre></td></tr></table></figure>
+<p><img src="/../images/powershell_3/4.png"></p>
+<h3 id="2-在控制台运行“get-service-export-csv-services-csv-out-file”会发生什么？"><a href="#2-在控制台运行“get-service-export-csv-services-csv-out-file”会发生什么？" class="headerlink" title="2.在控制台运行“get-service | export-csv services.csv | out-file”会发生什么？"></a>2.在控制台运行“get-service | export-csv services.csv | out-file”会发生什么？</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#在控制台运行“get-service | export-csv services.csv | out-file&quot;会发生什么？ </span><br><span class="line">get-service | export-csv services.csv | out-file</span><br></pre></td></tr></table></figure>
+<p><img src="/../images/powershell_3/5.png"></p>
+<h3 id="3-除了获取一个或多个服务及以管道方式传输到”stop-service”之外，“stop-service”服务还提供了其他什么方式让你指定服务或停止服务？有什么方式可以在不使用“get-service”的前提下停止一个服务？"><a href="#3-除了获取一个或多个服务及以管道方式传输到”stop-service”之外，“stop-service”服务还提供了其他什么方式让你指定服务或停止服务？有什么方式可以在不使用“get-service”的前提下停止一个服务？" class="headerlink" title="3.除了获取一个或多个服务及以管道方式传输到”stop-service”之外，“stop-service”服务还提供了其他什么方式让你指定服务或停止服务？有什么方式可以在不使用“get-service”的前提下停止一个服务？"></a>3.除了获取一个或多个服务及以管道方式传输到”stop-service”之外，“stop-service”服务还提供了其他什么方式让你指定服务或停止服务？有什么方式可以在不使用“get-service”的前提下停止一个服务？</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#查询stop-service命令的参数</span><br><span class="line">get-help stop-service -full</span><br><span class="line">#停止服务</span><br><span class="line">stop-service -name &quot;winlogon&quot;</span><br></pre></td></tr></table></figure>
+<p><img src="/../images/powershell_3/6.png"></p>
+<h3 id="4-如何创建一个竖线分割符文件替代一个都好分隔符（CSV）文件？你可以依旧使用“export-CSV”命令，但是应该使用什么参数？"><a href="#4-如何创建一个竖线分割符文件替代一个都好分隔符（CSV）文件？你可以依旧使用“export-CSV”命令，但是应该使用什么参数？" class="headerlink" title="4.如何创建一个竖线分割符文件替代一个都好分隔符（CSV）文件？你可以依旧使用“export-CSV”命令，但是应该使用什么参数？"></a>4.如何创建一个竖线分割符文件替代一个都好分隔符（CSV）文件？你可以依旧使用“export-CSV”命令，但是应该使用什么参数？</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">get-service | export-csv c:\temp\services.csv -delimiter &quot;|&quot;</span><br></pre></td></tr></table></figure>
+<p><img src="/../images/powershell_3/7.png"><br>这里需要使用管理员来运行powershell，使用参数“-delimiter”来控制使用竖线分割符</p>
+<h3 id="5-可以在已导出的CSV文件头部忽略-命令行吗？这一行通常包含了类型信息，但是如果你想从一个特定文件中获取并忽略时要怎么做？"><a href="#5-可以在已导出的CSV文件头部忽略-命令行吗？这一行通常包含了类型信息，但是如果你想从一个特定文件中获取并忽略时要怎么做？" class="headerlink" title="5.可以在已导出的CSV文件头部忽略#命令行吗？这一行通常包含了类型信息，但是如果你想从一个特定文件中获取并忽略时要怎么做？"></a>5.可以在已导出的CSV文件头部忽略#命令行吗？这一行通常包含了类型信息，但是如果你想从一个特定文件中获取并忽略时要怎么做？</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#使用带有-notypeinformation参数的export-csv命令。</span><br><span class="line">get-service | export-csv c:\temp\services.csv -notypeinformation</span><br></pre></td></tr></table></figure>
+<p><img src="/../images/powershell_3/8.png"></p>
+<h3 id="6-“export-clixml”和“export-csv”都可以通过创建并覆盖文件来修改系统，你可以用什么参数来阻止他们覆盖现有文件？还有什么参数可以在你输出文件前提醒并请求确认？"><a href="#6-“export-clixml”和“export-csv”都可以通过创建并覆盖文件来修改系统，你可以用什么参数来阻止他们覆盖现有文件？还有什么参数可以在你输出文件前提醒并请求确认？" class="headerlink" title="6.“export-clixml”和“export-csv”都可以通过创建并覆盖文件来修改系统，你可以用什么参数来阻止他们覆盖现有文件？还有什么参数可以在你输出文件前提醒并请求确认？"></a>6.“export-clixml”和“export-csv”都可以通过创建并覆盖文件来修改系统，你可以用什么参数来阻止他们覆盖现有文件？还有什么参数可以在你输出文件前提醒并请求确认？</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#阻止导出文件覆盖现有文件</span><br><span class="line">get-service | export-clixml c:\temp\services.xml -noclobber</span><br><span class="line">#输出文件前请求确认</span><br><span class="line">get-service | export-csv c:\temp\services.csv -confirm</span><br></pre></td></tr></table></figure>
+<p><img src="/../images/powershell_3/9.png"></p>
+<p><img src="/../images/powershell_3/10.png"></p>
+<h3 id="7-windows维护少数局部配置，包括一个默认分隔符列表。在美国系统中，分隔符是逗号。你如何让“export-csv”使用当前系统默认的分隔符而不是逗号？"><a href="#7-windows维护少数局部配置，包括一个默认分隔符列表。在美国系统中，分隔符是逗号。你如何让“export-csv”使用当前系统默认的分隔符而不是逗号？" class="headerlink" title="7.windows维护少数局部配置，包括一个默认分隔符列表。在美国系统中，分隔符是逗号。你如何让“export-csv”使用当前系统默认的分隔符而不是逗号？"></a>7.windows维护少数局部配置，包括一个默认分隔符列表。在美国系统中，分隔符是逗号。你如何让“export-csv”使用当前系统默认的分隔符而不是逗号？</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#使用当前系统默认的分隔符</span><br><span class="line">get-service | export-csv c:\temp\services.csv -useCulture</span><br></pre></td></tr></table></figure>
+<p><img src="/../images/powershell_3/11.png"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/windows/" rel="tag"># windows</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/03/08/powershell_2/" rel="prev" title="Powershell_2">
+                  <i class="fa fa-angle-left"></i> Powershell_2
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/03/25/powershell_4/" rel="next" title="Powershell_4">
+                  Powershell_4 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">zhipeng.qi</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
