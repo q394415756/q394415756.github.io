@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.freespaceblog.fun","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Citrix VDA For MacOS历史努力citrix 在2402 LTSR版本说新增了发布MacOS系统的VDA，当时下载了所有安装包，卡在令牌那一步过不去，原来只是支持citrix cloud ，DaaS环境是不支持的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Citrix_VDA_For_MacOS">
+<meta property="og:url" content="https://www.freespaceblog.fun/2024/12/12/Citrix_VDA_For_MacOS/index.html">
+<meta property="og:site_name" content="但行好事，莫问前程">
+<meta property="og:description" content="Citrix VDA For MacOS历史努力citrix 在2402 LTSR版本说新增了发布MacOS系统的VDA，当时下载了所有安装包，卡在令牌那一步过不去，原来只是支持citrix cloud ，DaaS环境是不支持的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Citrix_MacOS_VDA/26.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Citrix_MacOS_VDA/27.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Citrix_MacOS_VDA/28.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Citrix_MacOS_VDA/29.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Citrix_MacOS_VDA/11.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Citrix_MacOS_VDA/12.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Citrix_MacOS_VDA/13.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Citrix_MacOS_VDA/14.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Citrix_MacOS_VDA/15.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Citrix_MacOS_VDA/16.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Citrix_MacOS_VDA/17.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Citrix_MacOS_VDA/18.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Citrix_MacOS_VDA/1.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Citrix_MacOS_VDA/2.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Citrix_MacOS_VDA/3.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Citrix_MacOS_VDA/4.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Citrix_MacOS_VDA/5.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Citrix_MacOS_VDA/6.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Citrix_MacOS_VDA/7.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Citrix_MacOS_VDA/8.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Citrix_MacOS_VDA/9.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Citrix_MacOS_VDA/10.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Citrix_MacOS_VDA/19.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Citrix_MacOS_VDA/20.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Citrix_MacOS_VDA/21.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Citrix_MacOS_VDA/22.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Citrix_MacOS_VDA/23.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Citrix_MacOS_VDA/24.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Citrix_MacOS_VDA/25.png">
+<meta property="og:image" content="https://www.freespaceblog.fun/images/Citrix_MacOS_VDA/30.png">
+<meta property="article:published_time" content="2024-12-12T02:40:18.000Z">
+<meta property="article:modified_time" content="2024-12-12T03:28:39.870Z">
+<meta property="article:author" content="zhipeng.qi">
+<meta property="article:tag" content="virtual 技术总结">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://www.freespaceblog.fun/images/Citrix_MacOS_VDA/26.png">
+
+
+<link rel="canonical" href="https://www.freespaceblog.fun/2024/12/12/Citrix_VDA_For_MacOS/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://www.freespaceblog.fun/2024/12/12/Citrix_VDA_For_MacOS/","path":"2024/12/12/Citrix_VDA_For_MacOS/","title":"Citrix_VDA_For_MacOS"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Citrix_VDA_For_MacOS | 但行好事，莫问前程</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">但行好事，莫问前程</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Citrix-VDA-For-MacOS"><span class="nav-number">1.</span> <span class="nav-text">Citrix VDA For MacOS</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%86%E5%8F%B2%E5%8A%AA%E5%8A%9B"><span class="nav-number">1.1.</span> <span class="nav-text">历史努力</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E6%96%B0%E5%8F%91%E5%B8%83"><span class="nav-number">1.2.</span> <span class="nav-text">重新发布</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DDC%E5%90%AF%E5%8A%A8%E6%9C%8D%E5%8A%A1"><span class="nav-number">1.2.1.</span> <span class="nav-text">DDC启动服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BC%E5%87%BADDC%E8%AF%81%E4%B9%A6"><span class="nav-number">1.2.2.</span> <span class="nav-text">导出DDC证书</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%8C%E6%88%90%E6%A3%80%E6%9F%A5"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">完成检查</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A4%E7%89%8C%E5%87%86%E5%A4%87"><span class="nav-number">1.2.3.</span> <span class="nav-text">令牌准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MacOS%E4%B8%8AVDA%E5%AE%89%E8%A3%85"><span class="nav-number">1.2.4.</span> <span class="nav-text">MacOS上VDA安装</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#NET%E7%BB%84%E4%BB%B6%E5%AE%89%E8%A3%85"><span class="nav-number">1.2.4.1.</span> <span class="nav-text">.NET组件安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#VDA%E5%AE%89%E8%A3%85"><span class="nav-number">1.2.4.2.</span> <span class="nav-text">VDA安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A4%E7%89%8C%E5%A1%AB%E5%86%99"><span class="nav-number">1.2.4.3.</span> <span class="nav-text">令牌填写</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%91%E5%B8%83MacOS%E6%A1%8C%E9%9D%A2"><span class="nav-number">1.2.5.</span> <span class="nav-text">发布MacOS桌面</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E4%BA%A4%E4%BB%98%E7%BB%84"><span class="nav-number">1.2.5.1.</span> <span class="nav-text">创建交付组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%AF%E7%94%A8%E5%8D%8F%E8%AE%AE%E7%AD%96%E7%95%A5"><span class="nav-number">1.2.5.2.</span> <span class="nav-text">启用协议策略</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C%E9%AA%8C%E8%AF%81"><span class="nav-number">1.3.</span> <span class="nav-text">结果验证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.4.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhipeng.qi</p>
+  <div class="site-description" itemprop="description">我的技术总结</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">40</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.freespaceblog.fun/2024/12/12/Citrix_VDA_For_MacOS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhipeng.qi">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="但行好事，莫问前程">
+      <meta itemprop="description" content="我的技术总结">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Citrix_VDA_For_MacOS | 但行好事，莫问前程">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Citrix_VDA_For_MacOS
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-12-12 10:40:18 / 修改时间：11:28:39" itemprop="dateCreated datePublished" datetime="2024-12-12T10:40:18+08:00">2024-12-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/citrix/" itemprop="url" rel="index"><span itemprop="name">citrix</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+           
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="Citrix-VDA-For-MacOS"><a href="#Citrix-VDA-For-MacOS" class="headerlink" title="Citrix VDA For MacOS"></a>Citrix VDA For MacOS</h1><h2 id="历史努力"><a href="#历史努力" class="headerlink" title="历史努力"></a>历史努力</h2><p>citrix 在2402 LTSR版本说新增了发布MacOS系统的VDA，当时下载了所有安装包，卡在令牌那一步过不去，原来只是支持citrix cloud ，DaaS环境是不支持的</p>
+<span id="more"></span>
+
+<p><img src="/../images/Citrix_MacOS_VDA/26.png"></p>
+<p>过了大半年，看到有同行发了类似的公众号，我自己也来试试，毕竟当时费了我一个星期，我要弄好。</p>
+<p><img src="/../images/Citrix_MacOS_VDA/27.png"></p>
+<p>在2407 CR版本已经开始有了本地令牌的功能，意味着可以自己发布MacOS的桌面了</p>
+<h2 id="重新发布"><a href="#重新发布" class="headerlink" title="重新发布"></a>重新发布</h2><h3 id="DDC启动服务"><a href="#DDC启动服务" class="headerlink" title="DDC启动服务"></a>DDC启动服务</h3><p>首先启用DDC服务器的WebSocket功能</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">New-ItemProperty &quot;HKLM:\SOFTWARE\Citrix\DesktopServer\WorkerProxy&quot; -Name &quot;WebSocket_Enabled&quot; -PropertyType &quot;DWord&quot; -Value 1 -Force</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/Citrix_MacOS_VDA/28.png"></p>
+<p>运行完成后需要重启DDC</p>
+<h3 id="导出DDC证书"><a href="#导出DDC证书" class="headerlink" title="导出DDC证书"></a>导出DDC证书</h3><p>由于DDC和VDA通讯需要使用令牌通讯，需要手动导出DDC的证书</p>
+<p>mmc→证书→个人→证书→右键导出→不导出密钥</p>
+<p>传到MacOS机器上，添加证书信任，选择完全信任</p>
+<p><img src="/../images/Citrix_MacOS_VDA/29.png"></p>
+<p>也可以用命令行导入证书</p>
+<p>将一个证书添加到系统钥匙串中，并信任它用于安全套接字层 （SSL） 和 X.509 基本策略。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">security add-trusted-cert -d -r trustRoot -p basic -p ssl -k /Library/Keychains/System.keychain &lt;cert file name&gt;</span><br></pre></td></tr></table></figure>
+<p>验证证书是否受信任。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">security verify-cert -c &lt;cert file name&gt;</span><br></pre></td></tr></table></figure>
+
+<h4 id="完成检查"><a href="#完成检查" class="headerlink" title="完成检查"></a>完成检查</h4><p>在 Mac 上设置时间和日期，以确保 VDA 和 DDC 之间的时间同步没有时间差错。</p>
+<p>将 DNS 服务器添加到 Mac 以解析 DDC 的 FQDN，或将 DDC 的新主机条目添加到 .&#x2F;etc&#x2F;hosts</p>
+<p>验证 DNS 配置和证书是否已正确设置。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -w &quot;\nStatus code: %&#123;http_code&#125;\n&quot; -vI https://&lt;FQDN of On-Premises Delivery Controllers&gt;</span><br></pre></td></tr></table></figure>
+
+<p>在继续下一步之前，请确保 curl 命令输出以消息 Status code： 200 结尾。</p>
+<p>如果状态码不是 200，则可能需要检查以下几点：</p>
+<p>检查证书，也可以在 “Server certificate” 下的 curl 输出中找到证书信息进行验证。<br>验证 DNS 服务器配置是否正确。<br>确保 VDA 和 DDC 之间的时间同步没有时间偏移。</p>
+<h3 id="令牌准备"><a href="#令牌准备" class="headerlink" title="令牌准备"></a>令牌准备</h3><p>建议登录到Mac上打开浏览器登录DDC的studio，这样令牌文件直接就在Mac机器上了</p>
+<p>创建计算机目录</p>
+<p><img src="/../images/Citrix_MacOS_VDA/11.png"></p>
+<p><img src="/../images/Citrix_MacOS_VDA/12.png"></p>
+<p><img src="/../images/Citrix_MacOS_VDA/13.png"></p>
+<p><img src="/../images/Citrix_MacOS_VDA/14.png"></p>
+<p>这里记得选高级别的VDA版本</p>
+<p><img src="/../images/Citrix_MacOS_VDA/15.png"></p>
+<p><img src="/../images/Citrix_MacOS_VDA/16.png"></p>
+<p><img src="/../images/Citrix_MacOS_VDA/17.png"></p>
+<p>这里要控制启动时间和令牌的终止时间，一般是14天需要更新一次，可以控制注册连接次数</p>
+<p><img src="/../images/Citrix_MacOS_VDA/18.png"></p>
+<p>保存令牌的txt文件，等会在安装完成VDA以后需要使用来对接DDC</p>
+<h3 id="MacOS上VDA安装"><a href="#MacOS上VDA安装" class="headerlink" title="MacOS上VDA安装"></a>MacOS上VDA安装</h3><h4 id="NET组件安装"><a href="#NET组件安装" class="headerlink" title=".NET组件安装"></a>.NET组件安装</h4><p>首先安装.NET组件，一般VDA版本和.NET版本是有对应的</p>
+<p><img src="/../images/Citrix_MacOS_VDA/1.png"></p>
+<p><img src="/../images/Citrix_MacOS_VDA/2.png"></p>
+<p>命令行检查.NET部署情况<br><img src="/../images/Citrix_MacOS_VDA/3.png"></p>
+<h4 id="VDA安装"><a href="#VDA安装" class="headerlink" title="VDA安装"></a>VDA安装</h4><p><img src="/../images/Citrix_MacOS_VDA/4.png"></p>
+<p><img src="/../images/Citrix_MacOS_VDA/5.png"></p>
+<p><img src="/../images/Citrix_MacOS_VDA/6.png"></p>
+<p><img src="/../images/Citrix_MacOS_VDA/7.png"></p>
+<p><img src="/../images/Citrix_MacOS_VDA/8.png"></p>
+<p><img src="/../images/Citrix_MacOS_VDA/9.png"></p>
+<p><img src="/../images/Citrix_MacOS_VDA/10.png"></p>
+<p>Mac系统需要允许VDA对系统控制权限</p>
+<h4 id="令牌填写"><a href="#令牌填写" class="headerlink" title="令牌填写"></a>令牌填写</h4><p><img src="/../images/Citrix_MacOS_VDA/19.png"></p>
+<p>启用前面的配置以后就需要填写令牌，这里要按照前面DDC的检查项先进行配置好，不然就会出现下面的效果</p>
+<p><img src="/../images/Citrix_MacOS_VDA/20.png"></p>
+<p>修改配置以后才行</p>
+<p><img src="/../images/Citrix_MacOS_VDA/21.png"></p>
+<h3 id="发布MacOS桌面"><a href="#发布MacOS桌面" class="headerlink" title="发布MacOS桌面"></a>发布MacOS桌面</h3><h4 id="创建交付组"><a href="#创建交付组" class="headerlink" title="创建交付组"></a>创建交付组</h4><p><img src="/../images/Citrix_MacOS_VDA/22.png"></p>
+<p><img src="/../images/Citrix_MacOS_VDA/23.png"></p>
+<h4 id="启用协议策略"><a href="#启用协议策略" class="headerlink" title="启用协议策略"></a>启用协议策略</h4><p>这条策略默认是禁用的，需要修改为启用<br><img src="/../images/Citrix_MacOS_VDA/24.png"></p>
+<h2 id="结果验证"><a href="#结果验证" class="headerlink" title="结果验证"></a>结果验证</h2><p><img src="/../images/Citrix_MacOS_VDA/25.png"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>我自己也没有Mac设备，整了一台虚拟机出来，citrix支持发布的VDA只有13 14 15 这几个版本，所以选择了14版本，显存只有128M，苹果设备的运行逻辑是优先动态效果，所以卡的要死，实际可以再研究显卡直通和使用无头的Mac来发布。</p>
+<p><img src="/../images/Citrix_MacOS_VDA/30.png"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/virtual-%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/" rel="tag"># virtual 技术总结</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/12/10/Block_MacOS_install/" rel="prev" title="黑苹果安装">
+                  <i class="fa fa-angle-left"></i> 黑苹果安装
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/05/26/powershell_7/" rel="next" title="Powershell_7">
+                  Powershell_7 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">zhipeng.qi</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
